@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240223212447_AddCompanyToDb")]
+    partial class AddCompanyToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,9 +40,6 @@ namespace DLL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IndustryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("LinkedinUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -62,8 +61,6 @@ namespace DLL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("IndustryId");
 
                     b.ToTable("Companies");
                 });
@@ -135,9 +132,6 @@ namespace DLL.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IndustryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProfileHeadline")
                         .HasColumnType("nvarchar(max)");
 
@@ -152,51 +146,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("IndustryId");
-
                     b.ToTable("Experiences");
-                });
-
-            modelBuilder.Entity("DLL.Data.Industry", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Namme")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Industries");
-                });
-
-            modelBuilder.Entity("DLL.Data.Post", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("DLL.Data.Skill", b =>
@@ -241,29 +191,6 @@ namespace DLL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            ConcurrencyStamp = "e836682b-d413-432a-a833-191a101aec74",
-                            Name = "user",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            ConcurrencyStamp = "a0ef73cb-586f-4cab-96b7-25c215d7d4f4",
-                            Name = "founder",
-                            NormalizedName = "FOUNDER"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            ConcurrencyStamp = "8f644a2d-705f-4340-b27d-b57331565728",
-                            Name = "recruiter",
-                            NormalizedName = "RECRUITER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -490,15 +417,7 @@ namespace DLL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DLL.Data.Industry", "Industry")
-                        .WithMany()
-                        .HasForeignKey("IndustryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("Industry");
                 });
 
             modelBuilder.Entity("DLL.Data.Education", b =>
@@ -513,25 +432,6 @@ namespace DLL.Migrations
                 });
 
             modelBuilder.Entity("DLL.Data.Experience", b =>
-                {
-                    b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DLL.Data.Industry", "Industry")
-                        .WithMany()
-                        .HasForeignKey("IndustryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Industry");
-                });
-
-            modelBuilder.Entity("DLL.Data.Post", b =>
                 {
                     b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()

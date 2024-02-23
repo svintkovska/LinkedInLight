@@ -8,20 +8,22 @@ using System.Threading.Tasks;
 
 namespace DLL.Models
 {
-	public class ApplicationUser : IdentityUser
-	{
-		[Required]
-		public string FirstName { get; set; }
-		[Required]
-		public string LastName { get; set; }
-		public string? AdditionalName { get; set; }
-		public string? Headline { get; set; }
-		public string? CurrentPosition { get; set; }
-		public string? Industry { get; set; }
-		[Required]
-		public string Country { get; set; }
-		[Required]
-		public string City { get; set; }
+    public class ApplicationUser : IdentityUser
+    {
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        public string? AdditionalName { get; set; }
+        public string? Headline { get; set; }
+        public string? CurrentPosition { get; set; }
+        public string? Industry { get; set; }
+        [Required]
+        public string Country { get; set; }
 
-	}
+        public string City { get; set; }
+        [Required]
+        public string About { get; set; }
+
+    }
 }
