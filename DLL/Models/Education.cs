@@ -21,15 +21,15 @@ namespace DLL.Data
 		public string FieldOfStudy{ get; set; }
 		[Required]
 		public DateTime StartDate { get; set; }
-		[Required]
-		public DateTime EndDate { get; set; }
+		public DateTime? EndDate { get; set; }
 		[Required]
 		public string? Grade { get; set; }
 		public string? Description { get; set; }
 
 		public string ApplicationUserId { get; set; }
-		[ForeignKey("ApplicationUserId")]
-		public ApplicationUser ApplicationUser { get; set; }
+
+		public virtual ApplicationUser ApplicationUser { get; set; }
+
 
 	}
 }

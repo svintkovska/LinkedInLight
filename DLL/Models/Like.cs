@@ -1,23 +1,22 @@
-﻿using DLL.Models;
+﻿using DLL.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DLL.Data
+namespace DLL.Models
 {
-	public class Skill
+	public class Like
 	{
 		[Key]
 		public int Id { get; set; }
-		[Required]
-		public string Name { get; set; }
+		public int? PostId { get; set; }
+		public virtual Post Post { get; set; }
+		public int? CommentId { get; set; }
+		public virtual Comment Comment { get; set; }
 		public string ApplicationUserId { get; set; }
 		public virtual ApplicationUser ApplicationUser { get; set; }
-
-
 	}
 }

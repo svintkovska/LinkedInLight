@@ -26,12 +26,13 @@ namespace DLL.Data
 		public string OrganizationType { get; set; }
 
 		public string? LogoImg { get; set; }
-		[ForeignKey("ApplicationUserId")]
-		public ApplicationUser ApplicationUser { get; set; }
+
+		public string ApplicationUserId { get; set; }
+
+		public virtual ApplicationUser ApplicationUser { get; set; }
 
 		public int IndustryId { get; set; }
-		[ForeignKey("IndustryId")]
-		public Industry Industry { get; set; }
+		public virtual Industry Industry { get; set; }
 
 	}
 }

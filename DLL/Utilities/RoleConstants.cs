@@ -2,8 +2,8 @@
 {
 	public static class RoleConstants
 	{
-		public const string User = "user";
-		public const string Founder = "founder";
-		public const string Recruiter = "recruiter";
+		public const string USER = "user";
+		public const string FOUNDER = "founder";
+		public const string RECRUITER = "recruiter";
 	}
 }
