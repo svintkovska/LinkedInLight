@@ -25,6 +25,8 @@ namespace DLL.Models
         public string City { get; set; }
         [Required]
         public string About { get; set; }
+		public string Image { get; set; }
+		public string Background { get; set; }
 		public virtual ICollection<Connection> Connections { get; set; }
         public virtual ICollection<ConnectionRequest> SentConnectionRequests { get; set; }
         public virtual ICollection<ConnectionRequest> ReceivedConnectionRequests { get; set; }

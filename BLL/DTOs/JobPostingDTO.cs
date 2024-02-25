@@ -1,12 +1,8 @@
-﻿using DLL.Data;
-using System;
-using System.Collections.Generic;
+﻿using BLL.DTOs;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DLL.Models
+
+namespace BLL.DTOs
 {
 	public class JobPostingDTO
 	{

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.DTOs;
 using DLL.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace BLL.Mapper
 		public MapProfile()
 		{
 			CreateMap<UserDTO, ApplicationUser>();
-			//CreateMap<ApplicationUser, UserDTO>();
+			CreateMap<ApplicationUser, UserDTO>();
 		}
 	}
 }

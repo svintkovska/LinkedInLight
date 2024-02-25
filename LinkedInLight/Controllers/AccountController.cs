@@ -1,8 +1,11 @@
-﻿using BLL.Services;
-using DLL.Models;
+﻿using BLL.Interfaces;
+using BLL.Services;
+using BLL.DTOs;
 using LinkedInLight.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace LinkedInLight.Controllers
 {
@@ -11,10 +14,12 @@ namespace LinkedInLight.Controllers
 	public class AccountController : ControllerBase
 	{
 		private readonly AuthenticationService _authenticationService;
+		private readonly IJwtTokenService _jwtTokenService;
 
-		public AccountController(AuthenticationService authenticationService)
+		public AccountController(AuthenticationService authenticationService, IJwtTokenService jwtTokenService)
 		{
 			_authenticationService = authenticationService;
+			_jwtTokenService = jwtTokenService;
 		}
 
 		[HttpPost("register")]
@@ -41,9 +46,10 @@ namespace LinkedInLight.Controllers
 			try
 			{
 				var result = await _authenticationService.Login(model.Email, model.Password);
-				if (result)
+				if (result.Success)
 				{
-					return Ok("Login successful");
+					
+					return Ok(new { token = result.Token, user = result.User, roles = result.User});
 				}
 				return BadRequest("Login failed");
 			}

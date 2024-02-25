@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace DLL.Models
+
+namespace BLL.DTOs
 {
 	public class JobApplicationDTO
 	{
@@ -19,6 +15,6 @@ namespace DLL.Models
 		public string CandidateId { get; set; }
 		public virtual UserDTO Candidate { get; set; }
 
-		public string Status { get; set; } // Pending, Accepted, Rejected, etc.
+		public string Status { get; set; } 
 	}
 }

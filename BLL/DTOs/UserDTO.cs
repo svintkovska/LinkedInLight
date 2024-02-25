@@ -1,13 +1,7 @@
-﻿using DLL.Data;
+﻿using BLL.DTOs;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DLL.Models
+namespace BLL.DTOs
 {
     public class UserDTO : IdentityUser
 	{
@@ -21,6 +15,8 @@ namespace DLL.Models
 
         public string City { get; set; }
         public string About { get; set; }
+		public string Image { get; set; }
+		public string Background { get; set; }
 		public ICollection<ConnectionDTO> Connections { get; set; } = new List<ConnectionDTO>();
 		public ICollection<ConnectionRequestDTO> SentConnectionRequests { get; set; } = new List<ConnectionRequestDTO>();
 		public ICollection<ConnectionRequestDTO> ReceivedConnectionRequests { get; set; } = new List<ConnectionRequestDTO>();
