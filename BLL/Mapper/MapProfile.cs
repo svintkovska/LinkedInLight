@@ -13,7 +13,7 @@ namespace BLL.Mapper
 		public MapProfile()
 		{
 			CreateMap<UserDTO, ApplicationUser>();
-			CreateMap<ApplicationUser, UserDTO>();
+			//CreateMap<ApplicationUser, UserDTO>();
 		}
 	}
 }

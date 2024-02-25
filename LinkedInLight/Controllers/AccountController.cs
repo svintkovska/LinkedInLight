@@ -20,23 +20,38 @@ namespace LinkedInLight.Controllers
 		[HttpPost("register")]
 		public async Task<IActionResult> Register(RegisterModel model)
 		{
-			var result = await _authenticationService.Register(model.Email, model.Password);
-			if (result)
+			try
 			{
-				return Ok("Registration successful");
+				var result = await _authenticationService.Register(model.Email, model.Password);
+				if (result)
+				{
+					return Ok("Registration successful");
+				}
+				return BadRequest("Registration failed");
 			}
-			return BadRequest("Registration failed");
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
 
 		[HttpPost("login")]
 		public async Task<IActionResult> Login(LoginModel model)
 		{
-			var result = await _authenticationService.Login(model.Email, model.Password);
-			if (result)
+			try
 			{
-				return Ok("Login successful");
+				var result = await _authenticationService.Login(model.Email, model.Password);
+				if (result)
+				{
+					return Ok("Login successful");
+				}
+				return BadRequest("Login failed");
 			}
-			return Unauthorized("Login failed");
+			catch (Exception ex)
+			{
+				return Unauthorized("Login failed. " + ex.Message);
+
+			}
 		}
 	}
 }
