@@ -1,4 +1,5 @@
 ﻿using DLL.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace DLL.Repositories.IRepository
 {
 	public interface IApplicationUserRepository : IRepository<ApplicationUser>
 	{
+		ApplicationUser GetByEmail(string email);
+
 	}
 }

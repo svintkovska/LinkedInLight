@@ -17,6 +17,9 @@ namespace DLL.Repositories
 			_db = db;
 		}
 
-
+		public ApplicationUser GetByEmail(string email)
+		{
+			return _db.ApplicationUsers.FirstOrDefault(u => u.Email == email);
+		}
 	}
 }
