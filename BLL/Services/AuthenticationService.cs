@@ -15,6 +15,7 @@ using BLL.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace BLL.Services
 {
@@ -82,7 +83,7 @@ namespace BLL.Services
 			};
 		}
 
-		public async Task<bool> GoogleRegistration(GoogleModel registrationModel)
+		public async Task<LoginResult> GoogleRegistration(GoogleModel registrationModel)
 		{
 			var payload = await _jwtTokenService.VerifyGoogleToken(registrationModel.Token);
 			if (payload == null)
@@ -98,8 +99,6 @@ namespace BLL.Services
 				user = await _userManager.FindByEmailAsync(payload.Email);
 				if (user == null)
 				{
-					
-
 					user = new ApplicationUser
 					{
 						Email = payload.Email,
@@ -115,8 +114,18 @@ namespace BLL.Services
 					}
 
 					await _userManager.AddToRoleAsync(user, RoleConstants.USER);
+					var token = await _jwtTokenService.CreateToken(user);
 
-					return resultCreate.Succeeded;
+					var roles = await _userManager.GetRolesAsync(user);
+
+					var loginResult = new LoginResult
+					{
+						Success = true,
+						User = _mapper.Map<UserDTO>(user),
+						Token = token,
+						Roles = roles
+					};
+					return (loginResult);
 
 				}
 			}
@@ -124,7 +133,7 @@ namespace BLL.Services
 			throw new Exception("Google registartion failed");
 		}
 
-		public async Task<GoogleModel> GoogleLogin(GoogleModel model)
+		public async Task<LoginResult> GoogleLogin(GoogleModel model)
 		{
 			var payload = await _jwtTokenService.VerifyGoogleToken(model.Token);
 			var token = "";
@@ -136,14 +145,11 @@ namespace BLL.Services
 			string provider = "Google";
 			var info = new UserLoginInfo(provider, payload.Subject, provider);
 			var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-			bool isNewUser = false;
 			if (user == null)
 			{
 				user = await _userManager.FindByEmailAsync(payload.Email);
 				if (user == null)
 				{
-					isNewUser = true;
-
 					user = new ApplicationUser
 					{
 						Email = payload.Email,
@@ -152,7 +158,24 @@ namespace BLL.Services
 						LastName = model.LastName,
 
 					};
-					return Ok(new { isNewUser, user, token });
+					var resultCreate = await _userManager.CreateAsync(user);
+					if (!resultCreate.Succeeded)
+					{
+						throw new Exception("Google registartion failed");
+					}
+
+					await _userManager.AddToRoleAsync(user, RoleConstants.USER);
+					token = await _jwtTokenService.CreateToken(user);
+					var roles = await _userManager.GetRolesAsync(user);
+
+					var loginResult = new LoginResult
+					{
+						Success = true,
+						User = _mapper.Map<UserDTO>(user),
+						Token = token,
+						Roles = roles
+					};
+					return (loginResult);
 
 				}
 
@@ -160,19 +183,23 @@ namespace BLL.Services
 				var resultuserLogin = await _userManager.AddLoginAsync(user, info);
 				if (!resultuserLogin.Succeeded)
 				{
-					return BadRequest();
+					throw new Exception("Google Log In failed");
 				}
 			}
-			string lockedRes = await IsLockedOut(user);
-			if (lockedRes != null)
-			{
-				return BadRequest(lockedRes);
-			}
+			
 			token = await _jwtTokenService.CreateToken(user);
 
-			var roles = await _userManager.GetRolesAsync(user);
+			var userRoles = await _userManager.GetRolesAsync(user);
 
-			return Ok(new { isNewUser, user, token, roles });
+			var loginResult2 = new LoginResult
+			{
+				Success = true,
+				User = _mapper.Map<UserDTO>(user),
+				Token = token,
+				Roles = userRoles
+			};
+			return (loginResult2);
+
 		}
 
 	}

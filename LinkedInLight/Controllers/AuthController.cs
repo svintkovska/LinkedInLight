@@ -13,11 +13,11 @@ namespace LinkedInLight.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class AccountController : ControllerBase
+	public class AuthController : ControllerBase
 	{
 		private readonly AuthenticationService _authenticationService;
 
-		public AccountController(AuthenticationService authenticationService)
+		public AuthController(AuthenticationService authenticationService)
 		{
 			_authenticationService = authenticationService;
 		}
@@ -66,9 +66,9 @@ namespace LinkedInLight.Controllers
 			try
 			{
 				var result = await _authenticationService.GoogleRegistration(model);
-				if (result)
+				if (result.Success)
 				{
-					return Ok("User registred successfully");
+					return Ok(new { token = result.Token, user = result.User, roles = result.User });
 				}
 				return BadRequest("Google registration failed");
 
@@ -76,6 +76,26 @@ namespace LinkedInLight.Controllers
 			catch (Exception ex)
 			{
 				return BadRequest(ex.Message);
+
+			}
+		}
+
+		[HttpPost("google/login")]
+		public async Task<IActionResult> GoogleLogin(GoogleModel model)
+		{
+			try
+			{
+				var result = await _authenticationService.GoogleLogin(model);
+				if (result.Success)
+				{
+					return Ok(new { token = result.Token, user = result.User, roles = result.User });
+				}
+				return BadRequest("Google login failed");
+
+			}
+			catch (Exception ex)
+			{
+				return BadRequest("Google login failed");
 
 			}
 		}
