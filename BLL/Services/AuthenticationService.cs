@@ -12,6 +12,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BLL.ViewModels;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BLL.Services
 {
@@ -45,7 +48,7 @@ namespace BLL.Services
 			var result = await _userManager.CreateAsync(user, password);
 			if (!result.Succeeded)
 			{
-				throw new Exception("Password requirements not met (min 6 characters inclusing lower, upper, digit and non alphanumeric)");
+				throw new Exception("Password requirements not met (min 6 characters including a digit)");
 			}
 			else
 			{
@@ -78,6 +81,100 @@ namespace BLL.Services
 				Token = token.Result
 			};
 		}
+
+		public async Task<bool> GoogleRegistration(GoogleModel registrationModel)
+		{
+			var payload = await _jwtTokenService.VerifyGoogleToken(registrationModel.Token);
+			if (payload == null)
+			{
+				throw new Exception("Invalid token");
+			}
+
+			string provider = "Google";
+			var info = new UserLoginInfo(provider, payload.Subject, provider);
+			var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+			if (user == null)
+			{
+				user = await _userManager.FindByEmailAsync(payload.Email);
+				if (user == null)
+				{
+					
+
+					user = new ApplicationUser
+					{
+						Email = payload.Email,
+						UserName = registrationModel.UserName,
+						FirstName = registrationModel.FirstName,
+						LastName = registrationModel.LastName,
+
+					};
+					var resultCreate = await _userManager.CreateAsync(user);
+					if (!resultCreate.Succeeded)
+					{
+						throw new Exception("Google registartion failed");
+					}
+
+					await _userManager.AddToRoleAsync(user, RoleConstants.USER);
+
+					return resultCreate.Succeeded;
+
+				}
+			}
+
+			throw new Exception("Google registartion failed");
+		}
+
+		public async Task<GoogleModel> GoogleLogin(GoogleModel model)
+		{
+			var payload = await _jwtTokenService.VerifyGoogleToken(model.Token);
+			var token = "";
+			if (payload == null)
+			{
+				throw new Exception("Google Log In failed");
+
+			}
+			string provider = "Google";
+			var info = new UserLoginInfo(provider, payload.Subject, provider);
+			var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+			bool isNewUser = false;
+			if (user == null)
+			{
+				user = await _userManager.FindByEmailAsync(payload.Email);
+				if (user == null)
+				{
+					isNewUser = true;
+
+					user = new ApplicationUser
+					{
+						Email = payload.Email,
+						UserName = payload.Email,
+						FirstName = model.FirstName,
+						LastName = model.LastName,
+
+					};
+					return Ok(new { isNewUser, user, token });
+
+				}
+
+
+				var resultuserLogin = await _userManager.AddLoginAsync(user, info);
+				if (!resultuserLogin.Succeeded)
+				{
+					return BadRequest();
+				}
+			}
+			string lockedRes = await IsLockedOut(user);
+			if (lockedRes != null)
+			{
+				return BadRequest(lockedRes);
+			}
+			token = await _jwtTokenService.CreateToken(user);
+
+			var roles = await _userManager.GetRolesAsync(user);
+
+			return Ok(new { isNewUser, user, token, roles });
+		}
+
 	}
 
 }

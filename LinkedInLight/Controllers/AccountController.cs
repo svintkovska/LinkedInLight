@@ -5,7 +5,9 @@ using LinkedInLight.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using BLL.ViewModels;
 
 namespace LinkedInLight.Controllers
 {
@@ -14,12 +16,10 @@ namespace LinkedInLight.Controllers
 	public class AccountController : ControllerBase
 	{
 		private readonly AuthenticationService _authenticationService;
-		private readonly IJwtTokenService _jwtTokenService;
 
-		public AccountController(AuthenticationService authenticationService, IJwtTokenService jwtTokenService)
+		public AccountController(AuthenticationService authenticationService)
 		{
 			_authenticationService = authenticationService;
-			_jwtTokenService = jwtTokenService;
 		}
 
 		[HttpPost("register")]
@@ -56,6 +56,26 @@ namespace LinkedInLight.Controllers
 			catch (Exception ex)
 			{
 				return Unauthorized("Login failed. " + ex.Message);
+
+			}
+		}
+
+		[HttpPost("google/registartion")]
+		public async Task<IActionResult> GoogleRegistartion(GoogleModel model)
+		{
+			try
+			{
+				var result = await _authenticationService.GoogleRegistration(model);
+				if (result)
+				{
+					return Ok("User registred successfully");
+				}
+				return BadRequest("Google registration failed");
+
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
 
 			}
 		}
