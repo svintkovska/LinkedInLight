@@ -1,5 +1,5 @@
 ﻿using BLL.Interfaces;
-using BLL.ViewModels;
+using BLL.ViewModels.AuthModels;
 using DLL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,7 @@ namespace BLL.Services
 			_signInManager = signInManager;
 		}
 
-		public async Task<bool> ChangePassword( ChangePasswordModel model)
+		public async Task<bool> ChangePassword( ChangePasswordVM model)
 		{
 			var user = await _userManager.FindByEmailAsync(model.Email);
 			if (user == null)

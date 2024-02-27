@@ -1,4 +1,4 @@
-﻿using BLL.ViewModels;
+﻿using BLL.ViewModels.AuthModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,6 @@ namespace BLL.Interfaces
 {
 	public interface IAccountService
 	{
-		public Task<bool> ChangePassword(ChangePasswordModel model);
+		public Task<bool> ChangePassword(ChangePasswordVM model);
 	}
 }

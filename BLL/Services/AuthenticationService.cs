@@ -11,16 +11,18 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BLL.ViewModels;
+using BLL.ViewModels.AuthModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using BLL.ViewModels.AuthModels;
+using BLL.ViewModels;
 
 namespace BLL.Services
 {
-	public class AuthenticationService: IAuthService
+    public class AuthenticationService: IAuthService
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
@@ -64,12 +66,12 @@ namespace BLL.Services
 			return result.Succeeded;
 		}
 
-		public async Task<LoginResult> Login(string email, string password)
+		public async Task<LoginResultVM> Login(string email, string password)
 		{
 			var user = await _userManager.FindByEmailAsync(email);
 			if (user == null)
 			{
-				return new LoginResult { Success = false };
+				return new LoginResultVM { Success = false };
 			}
 
 			var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
@@ -81,7 +83,7 @@ namespace BLL.Services
 
 			var token = _jwtTokenService.CreateToken(user);
 			var r = await _userManager.GetRolesAsync(user);
-			return new LoginResult
+			return new LoginResultVM
 			{
 				Success = true,
 				User = _mapper.Map<UserDTO>(user),
@@ -90,7 +92,7 @@ namespace BLL.Services
 			};
 		}
 
-		public async Task<LoginResult> GoogleRegistration(GoogleModel registrationModel)
+		public async Task<LoginResultVM> GoogleRegistration(GoogleVM registrationModel)
 		{
 			var payload = await _jwtTokenService.VerifyGoogleToken(registrationModel.Token);
 			if (payload == null)
@@ -125,7 +127,7 @@ namespace BLL.Services
 
 					var roles = await _userManager.GetRolesAsync(user);
 
-					var loginResult = new LoginResult
+					var loginResult = new LoginResultVM
 					{
 						Success = true,
 						User = _mapper.Map<UserDTO>(user),
@@ -140,7 +142,7 @@ namespace BLL.Services
 			throw new Exception("Google registartion failed");
 		}
 
-		public async Task<LoginResult> GoogleLogin(GoogleModel model)
+		public async Task<LoginResultVM> GoogleLogin(GoogleVM model)
 		{
 			var payload = await _jwtTokenService.VerifyGoogleToken(model.Token);
 			var token = "";
@@ -175,7 +177,7 @@ namespace BLL.Services
 					token = await _jwtTokenService.CreateToken(user);
 					var roles = await _userManager.GetRolesAsync(user);
 
-					var loginResult = new LoginResult
+					var loginResult = new LoginResultVM
 					{
 						Success = true,
 						User = _mapper.Map<UserDTO>(user),
@@ -198,7 +200,7 @@ namespace BLL.Services
 
 			var userRoles = await _userManager.GetRolesAsync(user);
 
-			var loginResult2 = new LoginResult
+			var loginResult2 = new LoginResultVM
 			{
 				Success = true,
 				User = _mapper.Map<UserDTO>(user),
@@ -234,6 +236,18 @@ namespace BLL.Services
 
 			_emailService.Send(message);
 
+			return true;
+		}
+
+		public async Task<bool> SetNewPassword(NewPasswordVM model)
+		{
+			var user = await _userManager.FindByIdAsync(model.UserId);
+			var res = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+			if (!res.Succeeded)
+			{
+				throw new Exception("Setting new password failed");
+
+			}
 			return true;
 		}
 	}

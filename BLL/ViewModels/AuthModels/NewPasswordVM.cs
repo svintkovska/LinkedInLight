@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.ViewModels
+namespace BLL.ViewModels.AuthModels
 {
-	public class ChangePasswordModel
-	{
-		public string OldPassword { get; set; }
-
+    public class NewPasswordVM
+    {
+		public string UserId { get; set; }
+		public string Token { get; set; }
 		public string NewPassword { get; set; }
-
-		public string Email { get; set; }
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using BLL.Interfaces;
+using BLL.ViewModels.AuthModels;
 using BLL.Services;
 using BLL.DTOs;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +25,7 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost("register")]
-		public async Task<IActionResult> Register(AuthModel model)
+		public async Task<IActionResult> Register(AuthVM model)
 		{
 			try
 			{
@@ -42,7 +43,7 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost("login")]
-		public async Task<IActionResult> Login(AuthModel model)
+		public async Task<IActionResult> Login(AuthVM model)
 		{
 			try
 			{
@@ -62,7 +63,7 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost("google/registartion")]
-		public async Task<IActionResult> GoogleRegistartion(GoogleModel model)
+		public async Task<IActionResult> GoogleRegistartion(GoogleVM model)
 		{
 			try
 			{
@@ -82,7 +83,7 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost("google/login")]
-		public async Task<IActionResult> GoogleLogin(GoogleModel model)
+		public async Task<IActionResult> GoogleLogin(GoogleVM model)
 		{
 			try
 			{
@@ -117,6 +118,15 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-
+		[HttpPost("newPassword")]
+		public async Task<IActionResult> SetNewPassword(NewPasswordVM model)
+		{
+			var res = await _authenticationService.SetNewPassword(model);
+			if (!res)
+			{
+				return BadRequest();
+			}
+			return Ok();
+		}
 	}
 }

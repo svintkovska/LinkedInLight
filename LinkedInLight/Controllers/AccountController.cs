@@ -1,6 +1,6 @@
 ﻿using BLL.Interfaces;
 using BLL.Services;
-using BLL.ViewModels;
+using BLL.ViewModels.AuthModels;
 using Google.Apis.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +19,7 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost("edit/changePassword")]
-		public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
+		public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordVM model)
 		{
 			try
 			{
