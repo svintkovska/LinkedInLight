@@ -32,6 +32,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 	.AddDefaultTokenProviders();
 
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AccountService>();
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();

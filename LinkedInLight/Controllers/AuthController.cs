@@ -1,7 +1,6 @@
 ﻿using BLL.Interfaces;
 using BLL.Services;
 using BLL.DTOs;
-using LinkedInLight.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +22,7 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost("register")]
-		public async Task<IActionResult> Register(RegisterModel model)
+		public async Task<IActionResult> Register(AuthModel model)
 		{
 			try
 			{
@@ -41,7 +40,7 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost("login")]
-		public async Task<IActionResult> Login(LoginModel model)
+		public async Task<IActionResult> Login(AuthModel model)
 		{
 			try
 			{
@@ -99,5 +98,7 @@ namespace LinkedInLight.Controllers
 
 			}
 		}
+
+
 	}
 }
