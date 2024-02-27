@@ -74,6 +74,7 @@ namespace BLL.Services
 
 
 			var token = _jwtTokenService.CreateToken(user);
+			var r = await _userManager.GetRolesAsync(user);
 			return new LoginResult
 			{
 				Success = true,

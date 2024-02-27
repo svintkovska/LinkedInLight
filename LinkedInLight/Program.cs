@@ -7,6 +7,7 @@ using DLL.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -83,6 +84,16 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+var dir = Path.Combine(Directory.GetCurrentDirectory(), "images");
+if (!Directory.Exists(dir))
+{
+	Directory.CreateDirectory(dir);
+}
+app.UseStaticFiles(new StaticFileOptions
+{
+	FileProvider = new PhysicalFileProvider(dir),
+	RequestPath = "/images"
+});
 
 
 app.UseAuthentication();

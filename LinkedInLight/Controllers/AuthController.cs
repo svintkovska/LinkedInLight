@@ -49,7 +49,7 @@ namespace LinkedInLight.Controllers
 				if (result.Success)
 				{
 					
-					return Ok(new { token = result.Token, user = result.User, roles = result.User});
+					return Ok(new { token = result.Token, user = result.User, roles = result.Roles});
 				}
 				return BadRequest("Login failed");
 			}
@@ -68,7 +68,7 @@ namespace LinkedInLight.Controllers
 				var result = await _authenticationService.GoogleRegistration(model);
 				if (result.Success)
 				{
-					return Ok(new { token = result.Token, user = result.User, roles = result.User });
+					return Ok(new { token = result.Token, user = result.User, roles = result.Roles });
 				}
 				return BadRequest("Google registration failed");
 
@@ -88,7 +88,7 @@ namespace LinkedInLight.Controllers
 				var result = await _authenticationService.GoogleLogin(model);
 				if (result.Success)
 				{
-					return Ok(new { token = result.Token, user = result.User, roles = result.User });
+					return Ok(new { token = result.Token, user = result.User, roles = result.Roles });
 				}
 				return BadRequest("Google login failed");
 
