@@ -1,4 +1,5 @@
-﻿using BLL.ViewModels;
+﻿using BLL.Interfaces;
+using BLL.ViewModels;
 using DLL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-	public class AccountService
+	public class AccountService: IAccountService
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;

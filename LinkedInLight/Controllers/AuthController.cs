@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using BLL.ViewModels;
+using DLL.Models;
+using System.Net;
 
 namespace LinkedInLight.Controllers
 {
@@ -14,9 +16,9 @@ namespace LinkedInLight.Controllers
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
-		private readonly AuthenticationService _authenticationService;
+		private readonly IAuthService _authenticationService;
 
-		public AuthController(AuthenticationService authenticationService)
+		public AuthController(IAuthService authenticationService)
 		{
 			_authenticationService = authenticationService;
 		}
@@ -94,11 +96,27 @@ namespace LinkedInLight.Controllers
 			}
 			catch (Exception ex)
 			{
-				return BadRequest("Google login failed");
+				return BadRequest(ex.Message);
 
 			}
 		}
-
+		[HttpPost("forgotPassword")]
+		public async Task<IActionResult> ForgotPassword(string email)
+		{
+			try
+			{
+				var result = await _authenticationService.ForgotPassword(email);
+				if (result)
+				{
+					return Ok();
+				}
+				return BadRequest("Reset password failed");
+			}
+			catch(Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 
 	}
 }

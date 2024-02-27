@@ -1,5 +1,7 @@
-﻿using BLL.Services;
+﻿using BLL.Interfaces;
+using BLL.Services;
 using BLL.ViewModels;
+using Google.Apis.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +12,8 @@ namespace LinkedInLight.Controllers
 	[ApiController]
 	public class AccountController : ControllerBase
 	{
-		private readonly AccountService _accountService;
-		public AccountController(AccountService accountService)
+		private readonly IAccountService _accountService;
+		public AccountController(IAccountService accountService)
 		{
 			_accountService = accountService;
 		}
@@ -26,7 +28,7 @@ namespace LinkedInLight.Controllers
 				{
 					return Ok();
 				}
-				return BadRequest(result);
+				return BadRequest("Error when changing password");
 			}
 			catch(Exception ex)
 			{

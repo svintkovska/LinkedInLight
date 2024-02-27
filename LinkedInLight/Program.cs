@@ -35,7 +35,10 @@ builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AccountService>();
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
+builder.Services.AddScoped<IAuthService, AuthenticationService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<ISmtpEmailService, SmtpEmailService>();
 
 
 var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<String>("JWTSecretKey")));

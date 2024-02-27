@@ -16,22 +16,28 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace BLL.Services
 {
-	public class AuthenticationService
+	public class AuthenticationService: IAuthService
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly IMapper _mapper;
 		private readonly IJwtTokenService _jwtTokenService;
+		private readonly IConfiguration _configuration;
+		private readonly ISmtpEmailService _emailService;
 
-		public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMapper mapper, IJwtTokenService jwtTokenService)
+		public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
+			IMapper mapper, IJwtTokenService jwtTokenService, IConfiguration configuration, ISmtpEmailService emailService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_mapper = mapper;
 			_jwtTokenService = jwtTokenService;
+			_configuration = configuration;
+			_emailService = emailService;
 		}
 
 		public async Task<bool> Register(string email, string password)
@@ -203,6 +209,33 @@ namespace BLL.Services
 
 		}
 
+		public async Task<bool> ForgotPassword(string email)
+		{
+			var user = await _userManager.FindByEmailAsync(email);
+			if (user == null)
+				throw new Exception("Email not found");
+
+			var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+			var frontendURL = _configuration.GetValue<string>("FrontEndURL");
+			var callbackURL = $"{frontendURL}/resetpassword?userId={user.Id}&" + $"code={WebUtility.UrlEncode(token)}";
+
+			string basePath = AppContext.BaseDirectory;
+			string htmlFilePath = Path.Combine(basePath, "html", "messageHtml.html");
+			string htmlContent = System.IO.File.ReadAllText(htmlFilePath);
+
+			htmlContent = htmlContent.Replace("{{callbackURL}}", callbackURL);
+
+			var message = new SmtpMessage()
+			{
+				To = user.Email,
+				Subject = "Reset Password",
+				Body = htmlContent,
+			};
+
+			_emailService.Send(message);
+
+			return true;
+		}
 	}
 
 }
