@@ -1,4 +1,5 @@
-﻿using BLL.ViewModels.AuthModels;
+﻿using BLL.DTOs;
+using BLL.ViewModels.AuthModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace BLL.Interfaces
 	public interface IAccountService
 	{
 		public Task<bool> ChangePassword(ChangePasswordVM model);
+		public Task<UserDTO> EditImage(UserDTO userDTO, string username, bool background = false);
 	}
 }

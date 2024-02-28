@@ -1,6 +1,7 @@
 ﻿using DLL.Data;
 using DLL.Models;
 using DLL.Repositories.IRepository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace DLL.Repositories
 			_db = db;
 		}
 
-		public ApplicationUser GetByEmail(string email)
+		public async Task<ApplicationUser> GetByEmail(string email)
 		{
-			return _db.ApplicationUsers.FirstOrDefault(u => u.Email == email);
+			return await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email == email);
 		}
 	}
 }

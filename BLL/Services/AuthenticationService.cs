@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Net;
-using BLL.ViewModels.AuthModels;
 using BLL.ViewModels;
 
 namespace BLL.Services
@@ -82,13 +81,13 @@ namespace BLL.Services
 
 
 			var token = await _jwtTokenService.CreateToken(user);
-			var r = await _userManager.GetRolesAsync(user);
+			var roles = await _userManager.GetRolesAsync(user);
 
 			return new LoginResultVM
 			{
 				Success = true,
 				User = _mapper.Map<UserDTO>(user),
-				Roles = r,
+				Roles = roles,
 				Token = token
 			};
 		}

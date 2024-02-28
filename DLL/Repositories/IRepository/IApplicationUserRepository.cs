@@ -10,7 +10,7 @@ namespace DLL.Repositories.IRepository
 {
 	public interface IApplicationUserRepository : IRepository<ApplicationUser>
 	{
-		ApplicationUser GetByEmail(string email);
+		public Task<ApplicationUser> GetByEmail(string email);
 
 	}
 }

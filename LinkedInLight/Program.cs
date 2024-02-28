@@ -4,6 +4,8 @@ using BLL.Mapper;
 using BLL.Services;
 using DLL.Data;
 using DLL.Models;
+using DLL.Repositories;
+using DLL.Repositories.IRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +39,8 @@ builder.Services.AddScoped<IAuthService, AuthenticationService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ISmtpEmailService, SmtpEmailService>();
+builder.Services.AddScoped<IUploadService, UploadService>();
+builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
 
 
 var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<String>("JWTSecretKey")));
