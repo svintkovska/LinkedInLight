@@ -81,14 +81,15 @@ namespace BLL.Services
 			}
 
 
-			var token = _jwtTokenService.CreateToken(user);
+			var token = await _jwtTokenService.CreateToken(user);
 			var r = await _userManager.GetRolesAsync(user);
+
 			return new LoginResultVM
 			{
 				Success = true,
 				User = _mapper.Map<UserDTO>(user),
-				Roles = await _userManager.GetRolesAsync(user),
-				Token = token.Result
+				Roles = r,
+				Token = token
 			};
 		}
 
@@ -250,6 +251,6 @@ namespace BLL.Services
 			}
 			return true;
 		}
-	}
+    }
 
 }
