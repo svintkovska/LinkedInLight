@@ -9,7 +9,7 @@ namespace BLL.Interfaces
 {
     public interface IAuthService
 	{
-		public Task<bool> Register(string email, string password);
+		public Task<bool> Register(RegisterVM model);
 		public Task<LoginResultVM> Login(string email, string password);
 		public Task<LoginResultVM> GoogleRegistration(GoogleVM registrationModel);
 		public Task<LoginResultVM> GoogleLogin(GoogleVM model);

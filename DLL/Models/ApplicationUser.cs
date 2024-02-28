@@ -19,11 +19,11 @@ namespace DLL.Models
         public string? Headline { get; set; }
         public string? CurrentPosition { get; set; }
         public string? Industry { get; set; }
-        [Required]
+
         public string Country { get; set; }
 
         public string City { get; set; }
-        [Required]
+    
         public string About { get; set; }
 		public string Image { get; set; }
 		public string Background { get; set; }

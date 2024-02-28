@@ -42,19 +42,19 @@ namespace BLL.Services
 			_emailService = emailService;
 		}
 
-		public async Task<bool> Register(string email, string password)
+		public async Task<bool> Register(RegisterVM model)
 		{
-			var existingUser = await _userManager.FindByEmailAsync(email);
+			var existingUser = await _userManager.FindByEmailAsync(model.Email);
 			if (existingUser != null)
 			{
 				throw new Exception("Email already exists");
 			}
 
 
-			var userDTO = new UserDTO { UserName = email, Email = email, EmailConfirmed = true };
+			var userDTO = new UserDTO { UserName = model.Email, Email = model.Email, EmailConfirmed = true, FirstName = model.FirstName, LastName = model.LastName };
 			ApplicationUser user = _mapper.Map<ApplicationUser>(userDTO);
 
-			var result = await _userManager.CreateAsync(user, password);
+			var result = await _userManager.CreateAsync(user, model.Password);
 			if (!result.Succeeded)
 			{
 				throw new Exception("Password requirements not met (min 6 characters including a digit)");

@@ -25,11 +25,11 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost("register")]
-		public async Task<IActionResult> Register(AuthVM model)
+		public async Task<IActionResult> Register(RegisterVM model)
 		{
 			try
 			{
-				var result = await _authenticationService.Register(model.Email, model.Password);
+				var result = await _authenticationService.Register(model);
 				if (result)
 				{
 					return Ok("Registration successful");
