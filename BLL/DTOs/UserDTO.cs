@@ -17,6 +17,8 @@ namespace BLL.DTOs
         public string About { get; set; }
 		public string Image { get; set; }
 		public string Background { get; set; }
+		public ICollection<ExperienceDTO> Experiences { get; set; } = new List<ExperienceDTO>();
+		public ICollection<EducationDTO> Educations { get; set; } = new List<EducationDTO>();
 		public ICollection<ConnectionDTO> Connections { get; set; } = new List<ConnectionDTO>();
 		public ICollection<ConnectionRequestDTO> SentConnectionRequests { get; set; } = new List<ConnectionRequestDTO>();
 		public ICollection<ConnectionRequestDTO> ReceivedConnectionRequests { get; set; } = new List<ConnectionRequestDTO>();

@@ -44,6 +44,14 @@ namespace DLL.Data
 				new IdentityRole { Id = "2", Name = RoleConstants.FOUNDER, NormalizedName = RoleConstants.FOUNDER.ToUpper() },
 				new IdentityRole { Id = "3", Name = RoleConstants.RECRUITER, NormalizedName = RoleConstants.RECRUITER.ToUpper() }
 				);
+			modelBuilder.Entity<ApplicationUser>()
+			   .HasMany(u => u.Experiences)
+			   .WithOne(e => e.ApplicationUser)
+			   .HasForeignKey(e => e.ApplicationUserId);
+			modelBuilder.Entity<ApplicationUser>()
+			   .HasMany(u => u.Educations)
+			   .WithOne(e => e.ApplicationUser)
+			   .HasForeignKey(e => e.ApplicationUserId);
 			modelBuilder.Entity<Connection>()
 				.HasOne(c => c.User)
 				.WithMany(u => u.Connections)
