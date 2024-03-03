@@ -1,6 +1,5 @@
-﻿using BLL.DTOs;
-using BLL.Interfaces;
-using DLL.Models;
+﻿using BLL.Interfaces;
+using Domain.Models;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

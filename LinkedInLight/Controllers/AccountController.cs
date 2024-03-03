@@ -1,7 +1,7 @@
-﻿using BLL.DTOs;
-using BLL.Interfaces;
+﻿using BLL.Interfaces;
 using BLL.Services;
 using BLL.ViewModels.AuthModels;
+using Domain.Models;
 using Google.Apis.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -43,7 +43,7 @@ namespace LinkedInLight.Controllers
 			}		
 		}
 		[HttpPost("editImage")]
-		public async Task<ActionResult<UserDTO>> Edit(UserDTO user, bool background = false)
+		public async Task<ActionResult<ApplicationUser>> Edit(ApplicationUser user, bool background = false)
 		{
 			string name = User.FindFirstValue(ClaimTypes.Name);
 			return Ok(await _accountService.EditImage(user, name, background));
@@ -98,7 +98,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpPost("newExperience")]
-		public async Task<IActionResult> AddExperience(ExperienceDTO experience)
+		public async Task<IActionResult> AddExperience(Experience experience)
 		{
 			try
 			{
@@ -111,7 +111,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpPost("experience/edit/{id}")]
-		public async Task<IActionResult> UpdateExperience(ExperienceDTO experience)
+		public async Task<IActionResult> UpdateExperience(Experience experience)
 		{
 			try
 			{
@@ -165,7 +165,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpPost("newEducation")]
-		public async Task<IActionResult> AddEducation(EducationDTO education)
+		public async Task<IActionResult> AddEducation(Education education)
 		{
 			try
 			{
@@ -178,7 +178,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpPost("education/edit/{id}")]
-		public async Task<IActionResult> UpdateEducation(EducationDTO education)
+		public async Task<IActionResult> UpdateEducation(Education education)
 		{
 			try
 			{

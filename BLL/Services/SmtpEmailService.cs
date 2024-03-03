@@ -1,6 +1,5 @@
 ﻿using BLL.Interfaces;
 using BLL.ViewModels;
-using DLL.Models;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;

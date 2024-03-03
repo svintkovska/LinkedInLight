@@ -1,5 +1,5 @@
 ﻿using DLL.Data;
-using DLL.Models;
+using Domain.Models;
 using DLL.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;

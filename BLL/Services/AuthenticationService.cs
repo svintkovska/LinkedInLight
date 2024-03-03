@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using BLL.DTOs;
-using BLL.Interfaces;
-using DLL.Models;
+﻿using BLL.Interfaces;
 using DLL.Repositories.IRepository;
-using DLL.Utilities;
+using DLL.Constants;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -18,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using BLL.ViewModels;
+using Domain.Models;
 
 namespace BLL.Services
 {
@@ -25,17 +23,15 @@ namespace BLL.Services
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
-		private readonly IMapper _mapper;
 		private readonly IJwtTokenService _jwtTokenService;
 		private readonly IConfiguration _configuration;
 		private readonly ISmtpEmailService _emailService;
 
 		public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-			IMapper mapper, IJwtTokenService jwtTokenService, IConfiguration configuration, ISmtpEmailService emailService)
+			IJwtTokenService jwtTokenService, IConfiguration configuration, ISmtpEmailService emailService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
-			_mapper = mapper;
 			_jwtTokenService = jwtTokenService;
 			_configuration = configuration;
 			_emailService = emailService;
@@ -50,8 +46,7 @@ namespace BLL.Services
 			}
 
 
-			var userDTO = new UserDTO { UserName = model.Email, Email = model.Email, EmailConfirmed = true, FirstName = model.FirstName, LastName = model.LastName };
-			ApplicationUser user = _mapper.Map<ApplicationUser>(userDTO);
+			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true, FirstName = model.FirstName, LastName = model.LastName };
 
 			var result = await _userManager.CreateAsync(user, model.Password);
 			if (!result.Succeeded)
@@ -60,7 +55,7 @@ namespace BLL.Services
 			}
 			else
 			{
-				result = _userManager.AddToRoleAsync(user, RoleConstants.USER).Result;
+				result = _userManager.AddToRoleAsync(user, RoleConstants.AUTHORIZED_USER).Result;
 			}
 			return result.Succeeded;
 		}
@@ -86,7 +81,7 @@ namespace BLL.Services
 			return new LoginResultVM
 			{
 				Success = true,
-				User = _mapper.Map<UserDTO>(user),
+				User = user,
 				Roles = roles,
 				Token = token
 			};
@@ -122,7 +117,7 @@ namespace BLL.Services
 						throw new Exception("Google registartion failed");
 					}
 
-					await _userManager.AddToRoleAsync(user, RoleConstants.USER);
+					await _userManager.AddToRoleAsync(user, RoleConstants.AUTHORIZED_USER);
 					var token = await _jwtTokenService.CreateToken(user);
 
 					var roles = await _userManager.GetRolesAsync(user);
@@ -130,7 +125,7 @@ namespace BLL.Services
 					var loginResult = new LoginResultVM
 					{
 						Success = true,
-						User = _mapper.Map<UserDTO>(user),
+						User = user,
 						Token = token,
 						Roles = roles
 					};
@@ -173,14 +168,14 @@ namespace BLL.Services
 						throw new Exception("Google registartion failed");
 					}
 
-					await _userManager.AddToRoleAsync(user, RoleConstants.USER);
+					await _userManager.AddToRoleAsync(user, RoleConstants.AUTHORIZED_USER);
 					token = await _jwtTokenService.CreateToken(user);
 					var roles = await _userManager.GetRolesAsync(user);
 
 					var loginResult = new LoginResultVM
 					{
 						Success = true,
-						User = _mapper.Map<UserDTO>(user),
+						User = user,
 						Token = token,
 						Roles = roles
 					};
@@ -203,7 +198,7 @@ namespace BLL.Services
 			var loginResult2 = new LoginResultVM
 			{
 				Success = true,
-				User = _mapper.Map<UserDTO>(user),
+				User = user,
 				Token = token,
 				Roles = userRoles
 			};

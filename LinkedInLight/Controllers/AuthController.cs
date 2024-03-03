@@ -1,14 +1,13 @@
 ﻿using BLL.Interfaces;
 using BLL.ViewModels.AuthModels;
 using BLL.Services;
-using BLL.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using BLL.ViewModels;
-using DLL.Models;
+using Domain.Models;
 using System.Net;
 
 namespace LinkedInLight.Controllers

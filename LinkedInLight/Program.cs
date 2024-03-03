@@ -1,11 +1,9 @@
-using BLL.DTOs;
 using BLL.Interfaces;
-using BLL.Mapper;
 using BLL.Services;
 using DLL.Data;
-using DLL.Models;
 using DLL.Repositories;
 using DLL.Repositories.IRepository;
+using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +32,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 	.AddDefaultTokenProviders();
 
 
-builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.AddScoped<IAuthService, AuthenticationService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();

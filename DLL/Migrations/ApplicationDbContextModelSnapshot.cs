@@ -22,7 +22,38 @@ namespace DLL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("DLL.Data.Company", b =>
+            modelBuilder.Entity("Domain.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Domain.Models.Company", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +99,61 @@ namespace DLL.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("DLL.Data.Education", b =>
+            modelBuilder.Entity("Domain.Models.Connection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ConnectedUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConnectedUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("Domain.Models.ConnectionRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ReceiverId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("ConnectionRequests");
+                });
+
+            modelBuilder.Entity("Domain.Models.Education", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,7 +197,7 @@ namespace DLL.Migrations
                     b.ToTable("Educations");
                 });
 
-            modelBuilder.Entity("DLL.Data.Experience", b =>
+            modelBuilder.Entity("Domain.Models.Experience", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,7 +242,7 @@ namespace DLL.Migrations
                     b.ToTable("Experiences");
                 });
 
-            modelBuilder.Entity("DLL.Data.Industry", b =>
+            modelBuilder.Entity("Domain.Models.Industry", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -165,7 +250,7 @@ namespace DLL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Namme")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -174,144 +259,7 @@ namespace DLL.Migrations
                     b.ToTable("Industries");
                 });
 
-            modelBuilder.Entity("DLL.Data.Post", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DatePosted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Posts");
-                });
-
-            modelBuilder.Entity("DLL.Data.Skill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Skills");
-                });
-
-            modelBuilder.Entity("DLL.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("DLL.Models.Connection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ConnectedUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConnectedUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Connections");
-                });
-
-            modelBuilder.Entity("DLL.Models.ConnectionRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ReceiverId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("ConnectionRequests");
-                });
-
-            modelBuilder.Entity("DLL.Models.JobApplication", b =>
+            modelBuilder.Entity("Domain.Models.JobApplication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -342,7 +290,7 @@ namespace DLL.Migrations
                     b.ToTable("JobApplications");
                 });
 
-            modelBuilder.Entity("DLL.Models.JobPosting", b =>
+            modelBuilder.Entity("Domain.Models.JobPosting", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -398,7 +346,7 @@ namespace DLL.Migrations
                     b.ToTable("JobPostings");
                 });
 
-            modelBuilder.Entity("DLL.Models.Like", b =>
+            modelBuilder.Entity("Domain.Models.Like", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -429,7 +377,7 @@ namespace DLL.Migrations
                     b.ToTable("Likes");
                 });
 
-            modelBuilder.Entity("DLL.Models.Message", b =>
+            modelBuilder.Entity("Domain.Models.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -464,7 +412,7 @@ namespace DLL.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("DLL.Models.Notification", b =>
+            modelBuilder.Entity("Domain.Models.Notification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -493,7 +441,39 @@ namespace DLL.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("DLL.Models.ScreeningAnswer", b =>
+            modelBuilder.Entity("Domain.Models.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DatePosted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Domain.Models.ScreeningAnswer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -521,7 +501,7 @@ namespace DLL.Migrations
                     b.ToTable("ScreeningAnswers");
                 });
 
-            modelBuilder.Entity("DLL.Models.ScreeningQuestion", b =>
+            modelBuilder.Entity("Domain.Models.ScreeningQuestion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -541,6 +521,29 @@ namespace DLL.Migrations
                     b.HasIndex("JobPostingId");
 
                     b.ToTable("ScreeningQuestions");
+                });
+
+            modelBuilder.Entity("Domain.Models.Skill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -573,21 +576,42 @@ namespace DLL.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "87e6a67c-29f3-4890-b3d7-bf94116391a6",
-                            Name = "user",
-                            NormalizedName = "USER"
+                            ConcurrencyStamp = "b7ddaec1-d880-475e-90b3-3e6f5a720f15",
+                            Name = "admin",
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "a527aee3-d511-49e9-8035-bd29a6bd21a6",
+                            ConcurrencyStamp = "e28904a6-793f-4821-b604-63aa1d54d80e",
+                            Name = "moderator",
+                            NormalizedName = "MODERATOR"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            ConcurrencyStamp = "2f5494fc-e011-41c4-88a9-fe1da477ab4d",
+                            Name = "authorized_user",
+                            NormalizedName = "AUTHORIZED_USER"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            ConcurrencyStamp = "c905277a-2135-43d4-a11e-15d9585e81a3",
+                            Name = "unauthorized_user",
+                            NormalizedName = "UNAUTHORIZED_USER"
+                        },
+                        new
+                        {
+                            Id = "5",
+                            ConcurrencyStamp = "4ae79d4a-b1e3-4741-b8d3-856b5187e563",
                             Name = "founder",
                             NormalizedName = "FOUNDER"
                         },
                         new
                         {
-                            Id = "3",
-                            ConcurrencyStamp = "da4d0ec4-9186-4933-8cbf-8eec863f4ef9",
+                            Id = "6",
+                            ConcurrencyStamp = "c132ba9b-a553-421c-b572-de64c56505d6",
                             Name = "recruiter",
                             NormalizedName = "RECRUITER"
                         });
@@ -774,7 +798,7 @@ namespace DLL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DLL.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Domain.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -814,6 +838,9 @@ namespace DLL.Migrations
                     b.Property<string>("Industry")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsRecruiter")
                         .HasColumnType("bit");
 
@@ -824,86 +851,15 @@ namespace DLL.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("DLL.Data.Company", b =>
+            modelBuilder.Entity("Domain.Models.Comment", b =>
                 {
-                    b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DLL.Data.Industry", "Industry")
-                        .WithMany()
-                        .HasForeignKey("IndustryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Industry");
-                });
-
-            modelBuilder.Entity("DLL.Data.Education", b =>
-                {
-                    b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("DLL.Data.Experience", b =>
-                {
-                    b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DLL.Data.Industry", "Industry")
-                        .WithMany()
-                        .HasForeignKey("IndustryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Industry");
-                });
-
-            modelBuilder.Entity("DLL.Data.Post", b =>
-                {
-                    b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Posts")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("DLL.Data.Skill", b =>
-                {
-                    b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("DLL.Models.Comment", b =>
-                {
-                    b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Comments")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DLL.Data.Post", "Post")
+                    b.HasOne("Domain.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -914,15 +870,34 @@ namespace DLL.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("DLL.Models.Connection", b =>
+            modelBuilder.Entity("Domain.Models.Company", b =>
                 {
-                    b.HasOne("DLL.Models.ApplicationUser", "ConnectedUser")
+                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Industry", "Industry")
+                        .WithMany()
+                        .HasForeignKey("IndustryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Industry");
+                });
+
+            modelBuilder.Entity("Domain.Models.Connection", b =>
+                {
+                    b.HasOne("Domain.Models.ApplicationUser", "ConnectedUser")
                         .WithMany()
                         .HasForeignKey("ConnectedUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DLL.Models.ApplicationUser", "User")
+                    b.HasOne("Domain.Models.ApplicationUser", "User")
                         .WithMany("Connections")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -933,15 +908,15 @@ namespace DLL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DLL.Models.ConnectionRequest", b =>
+            modelBuilder.Entity("Domain.Models.ConnectionRequest", b =>
                 {
-                    b.HasOne("DLL.Models.ApplicationUser", "Receiver")
+                    b.HasOne("Domain.Models.ApplicationUser", "Receiver")
                         .WithMany("ReceivedConnectionRequests")
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DLL.Models.ApplicationUser", "Sender")
+                    b.HasOne("Domain.Models.ApplicationUser", "Sender")
                         .WithMany("SentConnectionRequests")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -952,15 +927,45 @@ namespace DLL.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("DLL.Models.JobApplication", b =>
+            modelBuilder.Entity("Domain.Models.Education", b =>
                 {
-                    b.HasOne("DLL.Models.ApplicationUser", "Candidate")
+                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Educations")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("Domain.Models.Experience", b =>
+                {
+                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Experiences")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Industry", "Industry")
+                        .WithMany()
+                        .HasForeignKey("IndustryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Industry");
+                });
+
+            modelBuilder.Entity("Domain.Models.JobApplication", b =>
+                {
+                    b.HasOne("Domain.Models.ApplicationUser", "Candidate")
                         .WithMany()
                         .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DLL.Models.JobPosting", "JobPosting")
+                    b.HasOne("Domain.Models.JobPosting", "JobPosting")
                         .WithMany("Applications")
                         .HasForeignKey("JobPostingId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -971,21 +976,21 @@ namespace DLL.Migrations
                     b.Navigation("JobPosting");
                 });
 
-            modelBuilder.Entity("DLL.Models.JobPosting", b =>
+            modelBuilder.Entity("Domain.Models.JobPosting", b =>
                 {
-                    b.HasOne("DLL.Data.Company", "Company")
+                    b.HasOne("Domain.Models.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DLL.Data.Industry", "Industry")
+                    b.HasOne("Domain.Models.Industry", "Industry")
                         .WithMany()
                         .HasForeignKey("IndustryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DLL.Models.ApplicationUser", "Recruiter")
+                    b.HasOne("Domain.Models.ApplicationUser", "Recruiter")
                         .WithMany("JobPostings")
                         .HasForeignKey("RecruiterId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -998,21 +1003,21 @@ namespace DLL.Migrations
                     b.Navigation("Recruiter");
                 });
 
-            modelBuilder.Entity("DLL.Models.Like", b =>
+            modelBuilder.Entity("Domain.Models.Like", b =>
                 {
-                    b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Likes")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DLL.Models.Comment", "Comment")
+                    b.HasOne("Domain.Models.Comment", "Comment")
                         .WithMany("Likes")
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DLL.Data.Post", "Post")
+                    b.HasOne("Domain.Models.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1025,15 +1030,15 @@ namespace DLL.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("DLL.Models.Message", b =>
+            modelBuilder.Entity("Domain.Models.Message", b =>
                 {
-                    b.HasOne("DLL.Models.ApplicationUser", "Receiver")
+                    b.HasOne("Domain.Models.ApplicationUser", "Receiver")
                         .WithMany()
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DLL.Models.ApplicationUser", "Sender")
+                    b.HasOne("Domain.Models.ApplicationUser", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1044,9 +1049,9 @@ namespace DLL.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("DLL.Models.Notification", b =>
+            modelBuilder.Entity("Domain.Models.Notification", b =>
                 {
-                    b.HasOne("DLL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Notifications")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1055,15 +1060,26 @@ namespace DLL.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("DLL.Models.ScreeningAnswer", b =>
+            modelBuilder.Entity("Domain.Models.Post", b =>
                 {
-                    b.HasOne("DLL.Models.ApplicationUser", "Candidate")
+                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Posts")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("Domain.Models.ScreeningAnswer", b =>
+                {
+                    b.HasOne("Domain.Models.ApplicationUser", "Candidate")
                         .WithMany()
                         .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DLL.Models.ScreeningQuestion", "ScreeningQuestion")
+                    b.HasOne("Domain.Models.ScreeningQuestion", "ScreeningQuestion")
                         .WithMany()
                         .HasForeignKey("ScreeningQuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1074,15 +1090,26 @@ namespace DLL.Migrations
                     b.Navigation("ScreeningQuestion");
                 });
 
-            modelBuilder.Entity("DLL.Models.ScreeningQuestion", b =>
+            modelBuilder.Entity("Domain.Models.ScreeningQuestion", b =>
                 {
-                    b.HasOne("DLL.Models.JobPosting", "JobPosting")
+                    b.HasOne("Domain.Models.JobPosting", "JobPosting")
                         .WithMany("ScreeningQuestions")
                         .HasForeignKey("JobPostingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("JobPosting");
+                });
+
+            modelBuilder.Entity("Domain.Models.Skill", b =>
+                {
+                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1136,30 +1163,34 @@ namespace DLL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DLL.Data.Post", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Likes");
-                });
-
-            modelBuilder.Entity("DLL.Models.Comment", b =>
+            modelBuilder.Entity("Domain.Models.Comment", b =>
                 {
                     b.Navigation("Likes");
                 });
 
-            modelBuilder.Entity("DLL.Models.JobPosting", b =>
+            modelBuilder.Entity("Domain.Models.JobPosting", b =>
                 {
                     b.Navigation("Applications");
 
                     b.Navigation("ScreeningQuestions");
                 });
 
-            modelBuilder.Entity("DLL.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Domain.Models.Post", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("Domain.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Comments");
 
                     b.Navigation("Connections");
+
+                    b.Navigation("Educations");
+
+                    b.Navigation("Experiences");
 
                     b.Navigation("JobPostings");
 

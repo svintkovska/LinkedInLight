@@ -1,5 +1,5 @@
-﻿using BLL.DTOs;
-using DLL.Models;
+﻿
+using Domain.Models;
 using Google.Apis.Auth;
 using System;
 using System.Collections.Generic;

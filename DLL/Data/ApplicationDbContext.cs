@@ -1,5 +1,5 @@
-﻿using DLL.Models;
-using DLL.Utilities;
+﻿using Domain.Models;
+using DLL.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -40,9 +40,12 @@ namespace DLL.Data
 		{
 			base.OnModelCreating(modelBuilder);
 			modelBuilder.Entity<IdentityRole>().HasData(
-				new IdentityRole { Id = "1", Name = RoleConstants.USER, NormalizedName = RoleConstants.USER.ToUpper() },
-				new IdentityRole { Id = "2", Name = RoleConstants.FOUNDER, NormalizedName = RoleConstants.FOUNDER.ToUpper() },
-				new IdentityRole { Id = "3", Name = RoleConstants.RECRUITER, NormalizedName = RoleConstants.RECRUITER.ToUpper() }
+				new IdentityRole { Id = "1", Name = RoleConstants.ADMIN, NormalizedName = RoleConstants.ADMIN.ToUpper() },
+				new IdentityRole { Id = "2", Name = RoleConstants.MODERATOR, NormalizedName = RoleConstants.MODERATOR.ToUpper() },
+				new IdentityRole { Id = "3", Name = RoleConstants.AUTHORIZED_USER, NormalizedName = RoleConstants.AUTHORIZED_USER.ToUpper() },
+				new IdentityRole { Id = "4", Name = RoleConstants.UNAUTHORIZED_USER, NormalizedName = RoleConstants.UNAUTHORIZED_USER.ToUpper() },
+				new IdentityRole { Id = "5", Name = RoleConstants.FOUNDER, NormalizedName = RoleConstants.FOUNDER.ToUpper() },
+				new IdentityRole { Id = "6", Name = RoleConstants.RECRUITER, NormalizedName = RoleConstants.RECRUITER.ToUpper() }
 				);
 			modelBuilder.Entity<ApplicationUser>()
 			   .HasMany(u => u.Experiences)

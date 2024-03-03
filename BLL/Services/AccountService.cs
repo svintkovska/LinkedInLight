@@ -1,10 +1,8 @@
-﻿using AutoMapper;
-using BLL.DTOs;
-using BLL.Interfaces;
+﻿using BLL.Interfaces;
 using BLL.ViewModels.AuthModels;
 using DLL.Data;
-using DLL.Models;
 using DLL.Repositories.IRepository;
+using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,17 +20,15 @@ namespace BLL.Services
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly IUploadService _uploadService;
-		private readonly IMapper _mapper;
 		private readonly IApplicationUserRepository _userRepository;
 		private readonly IExperience _experienceRepository;
 		private readonly IEducation _educationRepository;
-		public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUploadService uploadService, IMapper mapper, 
+		public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUploadService uploadService,  
 			IApplicationUserRepository userRepository, IExperience experience, IEducation educationRepository)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_uploadService = uploadService;
-			_mapper = mapper;
 			_userRepository = userRepository;
 			_experienceRepository = experience;
 			_educationRepository = educationRepository;
@@ -53,7 +49,7 @@ namespace BLL.Services
 			return result.Succeeded;
 
 		}
-		public async Task<UserDTO> EditImage(UserDTO userDTO, string username, bool background = false)
+		public async Task<ApplicationUser> EditImage(ApplicationUser userDTO, string username, bool background = false)
 		{
 			var user =  await _userRepository.Get(u=>u.UserName== username);
 			if (!background)
@@ -92,40 +88,40 @@ namespace BLL.Services
 			}
 
 			await _userRepository.Save();
-			return _mapper.Map<UserDTO>(user);
+			return user;
 		}
 
-		public async Task <UserDTO> GetUser(string id)
+		public async Task <ApplicationUser> GetUser(string id)
 		{
 			var user = await _userRepository.Get(u => u.Id == id);
 
-			return _mapper.Map<UserDTO>(user);
+			return user;
 		}
 
-		public async Task<UserDTO> EditAbout(string id, string about)
+		public async Task<ApplicationUser> EditAbout(string id, string about)
 		{
 			var user = await _userRepository.Get(u => u.Id == id);
 			user.About = about;
 			_userRepository.Update(user);
 			await _userRepository.Save();
-			return _mapper.Map<UserDTO>(user);
+			return user;
 		}
 
-		public async Task<List<ExperienceDTO>> GetUserExperiences(string userid)
+		public async Task<List<Experience>> GetUserExperiences(string userid)
 		{
 			var user = await _userRepository.Get(u => u.Id == userid, includeProperties: "Experience");
 			var list = user.Experiences.ToList();
-			return _mapper.Map<List<ExperienceDTO>>(user.Experiences);
+			return user.Experiences.ToList();
 		}
 
-		public async Task<ExperienceDTO> GetExperience(int id)
+		public async Task<Experience> GetExperience(int id)
 		{
 			var experience = await _experienceRepository.Get(e => e.Id == id);
-			return _mapper.Map<ExperienceDTO>(experience);
+			return experience;
 		}
-		public async Task<bool> AddExperience(ExperienceDTO experienceDTO)
+		public async Task<bool> AddExperience(Experience experience)
 		{
-			await _experienceRepository.Add(_mapper.Map<Experience>(experienceDTO));
+			await _experienceRepository.Add(experience);
 			await _experienceRepository.Save();
 			return true;
 		}
@@ -136,28 +132,28 @@ namespace BLL.Services
 			await _experienceRepository.Save();
 			return true;
 		}
-		public async Task<bool> UpdateExperience(ExperienceDTO experienceDTO)
+		public async Task<bool> UpdateExperience(Experience experience)
 		{
-			 _experienceRepository.Update(_mapper.Map<Experience>(experienceDTO));
+			 _experienceRepository.Update(experience);
 			await _experienceRepository.Save();
 			return true;
 		}
 
-		public async Task<List<EducationDTO>> GetUserEducations(string userid)
+		public async Task<List<Education>> GetUserEducations(string userid)
 		{
 			var user = await _userRepository.Get(u => u.Id == userid, includeProperties: "Education");
 			var list = user.Educations.ToList();
-			return _mapper.Map<List<EducationDTO>>(user.Educations);
+			return user.Educations.ToList();
 		}
 
-		public async Task<EducationDTO> GetEducation(int id)
+		public async Task<Education> GetEducation(int id)
 		{
 			var education = await _educationRepository.Get(e => e.Id == id);
-			return _mapper.Map<EducationDTO>(education);
+			return education;
 		}
-		public async Task<bool> AddEducation(EducationDTO educationDTO)
+		public async Task<bool> AddEducation(Education education)
 		{
-			await _educationRepository.Add(_mapper.Map<Education>(educationDTO));
+			await _educationRepository.Add(education);
 			await _educationRepository.Save();
 			return true;
 		}
@@ -168,9 +164,9 @@ namespace BLL.Services
 			await _educationRepository.Save();
 			return true;
 		}
-		public async Task<bool> UpdateEducation(EducationDTO educationDTO)
+		public async Task<bool> UpdateEducation(Education education)
 		{
-			_educationRepository.Update(_mapper.Map<Education>(educationDTO));
+			_educationRepository.Update(education);
 			await _educationRepository.Save();
 			return true;
 		}
