@@ -34,6 +34,7 @@ namespace DLL.Data
 		public DbSet<JobApplication> JobApplications { get; set; }
 		public DbSet<ScreeningQuestion> ScreeningQuestions { get; set; }
 		public DbSet<ScreeningAnswer> ScreeningAnswers { get; set; }
+		public DbSet<Language> Languages { get; set; }
 
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -135,10 +136,10 @@ namespace DLL.Data
 
 
 			modelBuilder.Entity<JobPosting>()
-		.HasOne(j => j.Company)
-		.WithMany()
-		.HasForeignKey(j => j.CompanyId)
-		.OnDelete(DeleteBehavior.Restrict);
+				.HasOne(j => j.Company)
+				.WithMany()
+				.HasForeignKey(j => j.CompanyId)
+				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<JobPosting>()
 				.HasOne(j => j.Recruiter)
@@ -152,7 +153,6 @@ namespace DLL.Data
 				.HasForeignKey(j => j.IndustryId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			// Configure the JobApplication entity
 			modelBuilder.Entity<JobApplication>()
 				.HasOne(a => a.JobPosting)
 				.WithMany(j => j.Applications)
@@ -165,14 +165,12 @@ namespace DLL.Data
 				.HasForeignKey(a => a.CandidateId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			// Configure the ScreeningQuestion entity
 			modelBuilder.Entity<ScreeningQuestion>()
 				.HasOne(q => q.JobPosting)
 				.WithMany(j => j.ScreeningQuestions)
 				.HasForeignKey(q => q.JobPostingId)
 				.OnDelete(DeleteBehavior.Cascade);
 
-			// Configure the ScreeningAnswer entity
 			modelBuilder.Entity<ScreeningAnswer>()
 				.HasOne(a => a.ScreeningQuestion)
 				.WithMany()

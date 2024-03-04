@@ -28,8 +28,11 @@ namespace Domain.Models
 		public string Image { get; set; }
 		public string Background { get; set; }
         public bool IsBanned { get; set; }  
+        public bool IsPrivateProfile{ get; set; }  
 		public virtual ICollection<Experience> Experiences { get; set; }
 		public virtual ICollection<Education> Educations { get; set; }
+		public virtual ICollection<Skill> Skills { get; set; }
+		public virtual ICollection<Language> Languages { get; set; }
 
 		public virtual ICollection<Connection> Connections { get; set; }
         public virtual ICollection<ConnectionRequest> SentConnectionRequests { get; set; }

@@ -33,13 +33,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 
 builder.Services.AddScoped<IAuthService, AuthenticationService>();
-builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ISmtpEmailService, SmtpEmailService>();
 builder.Services.AddScoped<IUploadService, UploadService>();
-builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
-builder.Services.AddScoped<IExperience, ExperienceRepository>();
-builder.Services.AddScoped<IEducation, EducationRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<String>("JWTSecretKey")));

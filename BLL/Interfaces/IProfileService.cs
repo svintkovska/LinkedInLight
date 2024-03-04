@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Interfaces
 {
-	public interface IAccountService
+	public interface IProfileService
 	{
 		public Task<bool> ChangePassword(ChangePasswordVM model);
 		public Task<ApplicationUser> EditImage(ApplicationUser userDTO, string username, bool background = false);
@@ -31,6 +31,12 @@ namespace BLL.Interfaces
 		public Task<bool> AddEducation(Education educationDTO);
 		public Task<bool> RemoveEducation(int educationId);
 		public Task<bool> UpdateEducation(Education educationDTO);
+		public Task<List<Post>> GetUserPosts(string userid);
+		public Task<List<Skill>> GetUserSkills(string userid);
+		public Task<List<Language>> GetUserLanguages(string userid);
+
+
+
 
 	}
 }

@@ -16,12 +16,25 @@ namespace LinkedInLight.Controllers
 	[Route("api/[controller]")]
 	[ApiController]
 	//[Authorize]
-	public class AccountController : ControllerBase
+	public class ProfileController : ControllerBase
 	{
-		private readonly IAccountService _accountService;
-		public AccountController(IAccountService accountService)
+		private readonly IProfileService _profileService;
+		public ProfileController(IProfileService profileService)
 		{
-			_accountService = accountService;
+			_profileService = profileService;
+		}
+		[HttpGet("")]
+		public async Task<IActionResult> GetUser(string id)
+		{
+			try
+			{
+				await _profileService.GetUser(id);
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
 
 		[HttpPost("edit/changePassword")]
@@ -29,7 +42,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				var result = await _accountService.ChangePassword(model);
+				var result = await _profileService.ChangePassword(model);
 				if (result)
 				{
 					return Ok();
@@ -46,14 +59,14 @@ namespace LinkedInLight.Controllers
 		public async Task<ActionResult<ApplicationUser>> Edit(ApplicationUser user, bool background = false)
 		{
 			string name = User.FindFirstValue(ClaimTypes.Name);
-			return Ok(await _accountService.EditImage(user, name, background));
+			return Ok(await _profileService.EditImage(user, name, background));
 			
 		}
 
 		[HttpGet("edit/about/{id}")]
 		public async Task< IActionResult> EditAbout(string id)
 		{
-			var user = await _accountService.GetUser(id);
+			var user = await _profileService.GetUser(id);
 			return Ok(user.About);
 		}
 
@@ -62,7 +75,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _accountService.EditAbout(id, about);
+				await _profileService.EditAbout(id, about);
 				return Ok();
 			}
 			catch (Exception ex)
@@ -76,7 +89,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				var list = await _accountService.GetUserExperiences(userid);
+				var list = await _profileService.GetUserExperiences(userid);
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -89,7 +102,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				var experience = await _accountService.GetExperience(experienceId);
+				var experience = await _profileService.GetExperience(experienceId);
 				return Ok(experience);
 			}
 			catch (Exception ex)
@@ -102,7 +115,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				 await _accountService.AddExperience(experience);
+				 await _profileService.AddExperience(experience);
 				return Ok(experience);
 			}
 			catch (Exception ex)
@@ -115,7 +128,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _accountService.UpdateExperience(experience);
+				await _profileService.UpdateExperience(experience);
 				return Ok("Experience updated");
 			}
 			catch (Exception ex)
@@ -128,7 +141,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _accountService.RemoveExperience(experienceId);
+				await _profileService.RemoveExperience(experienceId);
 				return Ok("Experience deleted");
 			}
 			catch (Exception ex)
@@ -136,14 +149,12 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-
-
 		[HttpGet("userEducation/{id}")]
 		public async Task<IActionResult> GetUserEducation(string userid)
 		{
 			try
 			{
-				var list = await _accountService.GetUserEducations(userid);
+				var list = await _profileService.GetUserEducations(userid);
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -156,7 +167,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				var education = await _accountService.GetEducation(educationId);
+				var education = await _profileService.GetEducation(educationId);
 				return Ok(education);
 			}
 			catch (Exception ex)
@@ -169,7 +180,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _accountService.AddEducation(education);
+				await _profileService.AddEducation(education);
 				return Ok(education);
 			}
 			catch (Exception ex)
@@ -182,7 +193,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _accountService.UpdateEducation(education);
+				await _profileService.UpdateEducation(education);
 				return Ok("Education updated");
 			}
 			catch (Exception ex)
@@ -195,8 +206,48 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _accountService.RemoveEducation(educationId);
+				await _profileService.RemoveEducation(educationId);
 				return Ok("Education deleted");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		[HttpGet("userPosts/{id}")]
+		public async Task<IActionResult> GetUserPosts(string userid)
+		{
+			try
+			{
+				var list = await _profileService.GetUserPosts(userid);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpGet("userSkills/{id}")]
+		public async Task<IActionResult> GetUserSkills(string userid)
+		{
+			try
+			{
+				var list = await _profileService.GetUserSkills(userid);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpGet("userLanguages/{id}")]
+		public async Task<IActionResult> GetUserLanguages(string userid)
+		{
+			try
+			{
+				var list = await _profileService.GetUserLanguages(userid);
+				return Ok(list);
 			}
 			catch (Exception ex)
 			{
