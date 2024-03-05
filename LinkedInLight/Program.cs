@@ -9,7 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Extensions.DependencyInjection;
+using SendGrid.Helpers.Mail;
 using System.Text;
+using Microsoft.Extensions.Options;
+using BLL.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +39,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddScoped<IAuthService, AuthenticationService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
-builder.Services.AddScoped<ISmtpEmailService, SmtpEmailService>();
 builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -61,8 +64,8 @@ builder.Services.AddAuthentication(options =>
 	};
 });
 
-
-
+builder.Services.Configure<SendGridOptions>(builder.Configuration.GetSection("SendGridOptions"));
+builder.Services.AddTransient<ISendGridService, SendGridService>();
 
 
 builder.Services.AddControllers();
@@ -70,10 +73,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
-
-
-
-
 
 
 var app = builder.Build();

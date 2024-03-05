@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using System.Net;
 using BLL.ViewModels;
 using Domain.Models;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace BLL.Services
 {
@@ -25,16 +26,16 @@ namespace BLL.Services
 		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly IJwtTokenService _jwtTokenService;
 		private readonly IConfiguration _configuration;
-		private readonly ISmtpEmailService _emailService;
+		private readonly ISendGridService _sendGridService;
 
 		public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-			IJwtTokenService jwtTokenService, IConfiguration configuration, ISmtpEmailService emailService)
+			IJwtTokenService jwtTokenService, IConfiguration configuration, ISendGridService sendGridService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_jwtTokenService = jwtTokenService;
 			_configuration = configuration;
-			_emailService = emailService;
+			_sendGridService = sendGridService;
 		}
 
 		public async Task<bool> Register(RegisterVM model)
@@ -46,9 +47,12 @@ namespace BLL.Services
 			}
 
 
-			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true, FirstName = model.FirstName, LastName = model.LastName };
+			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = false, FirstName = model.FirstName, LastName = model.LastName };
 
 			var result = await _userManager.CreateAsync(user, model.Password);
+			
+
+
 			if (!result.Succeeded)
 			{
 				throw new Exception("Password requirements not met (min 6 characters including a digit)");
@@ -56,6 +60,17 @@ namespace BLL.Services
 			else
 			{
 				result = _userManager.AddToRoleAsync(user, RoleConstants.AUTHORIZED_USER).Result;
+
+				var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+				var code = GenerateRandom6DigitCode();
+				user.EmailConfirmationToken= token;
+				user.EmailConfirmationCode= code;
+				await _userManager.UpdateAsync(user);
+
+				string subject = "Confirm Your Email";
+				string htmlMessage = $"<p>Please type in the following code to confirm your email: {code}</p>";
+
+				await _sendGridService.SendEmailAsync(user.Email, subject, htmlMessage);
 			}
 			return result.Succeeded;
 		}
@@ -222,14 +237,8 @@ namespace BLL.Services
 
 			htmlContent = htmlContent.Replace("{{callbackURL}}", callbackURL);
 
-			var message = new SmtpMessage()
-			{
-				To = user.Email,
-				Subject = "Reset Password",
-				Body = htmlContent,
-			};
+			await _sendGridService.SendEmailAsync(user.Email, "Reset Password", htmlContent);
 
-			_emailService.Send(message);
 
 			return true;
 		}
@@ -245,6 +254,39 @@ namespace BLL.Services
 			}
 			return true;
 		}
-    }
+
+		public async Task<bool> ConfirmEmail(string userId, string code)
+		{
+			var user = await _userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				throw new Exception("User not found");
+			}
+
+			if (code != user.EmailConfirmationCode)
+			{
+				throw new Exception("Invalid confirmation code");
+			}
+
+			var result = await _userManager.ConfirmEmailAsync(user, user.EmailConfirmationToken);
+			if (result.Succeeded)
+			{
+				await _userManager.UpdateAsync(user);
+
+				return true;
+			}
+			else
+			{
+				throw new Exception("Failed to confirm email");
+			}
+		}
+
+		private string GenerateRandom6DigitCode()
+		{
+			Random random = new Random();
+			int code = random.Next(100000, 999999);
+			return code.ToString();
+		}
+	}
 
 }

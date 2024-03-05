@@ -1,5 +1,4 @@
-﻿using BLL.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BLL.Interfaces
 {
-	public interface ISmtpEmailService
+	public interface ISendGridService
 	{
-		public void Send(SmtpMessage message);
+		public Task SendEmailAsync(string email, string subject, string htmlMessage);
+
 	}
 }

@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240305192916_AddEmailConfirmationCodeToUser")]
+    partial class AddEmailConfirmationCodeToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -603,42 +605,42 @@ namespace DLL.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "76baffc7-f775-4915-b5a0-68e98ab6159b",
+                            ConcurrencyStamp = "53be8250-a5e6-41d0-a3ee-595ffb02862b",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "480629bd-1327-430c-b491-5884d02d7863",
+                            ConcurrencyStamp = "82a1a42d-6bc6-4464-99d0-93cae11118cc",
                             Name = "moderator",
                             NormalizedName = "MODERATOR"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "2f3b53c8-4b5d-4865-a874-59c9677e054f",
+                            ConcurrencyStamp = "0696d41b-cafb-4d0a-9a95-9a165b872433",
                             Name = "authorized_user",
                             NormalizedName = "AUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "4",
-                            ConcurrencyStamp = "ec8e1fb9-6f14-49fe-be3b-ebc32e2d7157",
+                            ConcurrencyStamp = "1942fae4-ca7e-4847-95c3-166632d4e4e5",
                             Name = "unauthorized_user",
                             NormalizedName = "UNAUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "5",
-                            ConcurrencyStamp = "09ae01c6-e38e-4c41-becd-d7ec3027b3b0",
+                            ConcurrencyStamp = "549f7ac5-1f63-4913-ac28-516f9ae143f0",
                             Name = "founder",
                             NormalizedName = "FOUNDER"
                         },
                         new
                         {
                             Id = "6",
-                            ConcurrencyStamp = "77ea84f0-517b-4b4a-8e0e-056aa6cf2932",
+                            ConcurrencyStamp = "e50985aa-f75e-49b5-ae37-de7226e55328",
                             Name = "recruiter",
                             NormalizedName = "RECRUITER"
                         });
@@ -852,10 +854,6 @@ namespace DLL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmailConfirmationCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmailConfirmationToken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

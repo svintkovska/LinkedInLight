@@ -40,7 +40,23 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-
+		[HttpPost("confirm-email")]
+		public async Task<IActionResult> ConfirmEmail(ConfirmEmailVM model)
+		{
+			try
+			{
+				var result = await _authenticationService.ConfirmEmail(model.UserId, model.Code);
+				if (result)
+				{
+					return Ok("Email confirmed successfully");
+				}
+				return BadRequest("Failed to confirm email");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 		[HttpPost("login")]
 		public async Task<IActionResult> Login(AuthVM model)
 		{
