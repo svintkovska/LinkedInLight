@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
+using System.Xml.Linq;
 
 namespace LinkedInLight.Controllers
 {
@@ -56,11 +57,22 @@ namespace LinkedInLight.Controllers
 			}		
 		}
 		[HttpPost("editImage")]
-		public async Task<ActionResult<ApplicationUser>> Edit(ApplicationUser user, bool background = false)
+		public async Task<ActionResult<ApplicationUser>> EditImage(string userId, bool background = false)
 		{
-			string name = User.FindFirstValue(ClaimTypes.Name);
-			return Ok(await _profileService.EditImage(user, name, background));
-			
+			try
+			{
+				var result = await _profileService.EditImage(userId, background);
+				if (result != null)
+				{
+					return Ok(result);
+				}
+				return BadRequest("Error when changing image");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+
+			}			
 		}
 
 		[HttpGet("edit/about/{id}")]

@@ -45,21 +45,21 @@ namespace BLL.Services
 			return result.Succeeded;
 
 		}
-		public async Task<ApplicationUser> EditImage(ApplicationUser userDTO, string username, bool background = false)
+		public async Task<ApplicationUser> EditImage(string userId, bool background = false)
 		{
-			var user =  await _unitOfWork.UserRepo.Get(u=>u.UserName== username);
+			var user =  await _unitOfWork.UserRepo.Get(u=>u.Id== userId);
 			if (!background)
 			{
-				if (!string.IsNullOrEmpty(userDTO.Image) && userDTO.Image.Split(',').Length == 2)
+				if (!string.IsNullOrEmpty(user.Image) && user.Image.Split(',').Length == 2)
 				{
 					if (user.Image != null)
 					{
 						_uploadService.RemoveImage(user.Image);
 					}
-					user.Image = _uploadService.SaveImageFromBase64(userDTO.Image);
+					user.Image = _uploadService.SaveImageFromBase64(user.Image);
 				}
 
-				if (string.IsNullOrEmpty(userDTO.Image) && user.Image != null)
+				if (string.IsNullOrEmpty(user.Image) && user.Image != null)
 				{
 					_uploadService.RemoveImage(user.Image);
 					user.Image = null;
@@ -67,16 +67,16 @@ namespace BLL.Services
 			}
 			else
 			{
-				if (!string.IsNullOrEmpty(userDTO.Background) && userDTO.Background.Split(',').Length == 2)
+				if (!string.IsNullOrEmpty(user.Background) && user.Background.Split(',').Length == 2)
 				{
 					if (user.Background != null)
 					{
 						_uploadService.RemoveImage(user.Background);
 					}
-					user.Background = _uploadService.SaveImageFromBase64(userDTO.Background);
+					user.Background = _uploadService.SaveImageFromBase64(user.Background);
 				}
 
-				if (string.IsNullOrEmpty(userDTO.Background) && user.Background != null)
+				if (string.IsNullOrEmpty(user.Background) && user.Background != null)
 				{
 					_uploadService.RemoveImage(user.Background);
 					user.Background = null;

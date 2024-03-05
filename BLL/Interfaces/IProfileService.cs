@@ -14,7 +14,7 @@ namespace BLL.Interfaces
 	public interface IProfileService
 	{
 		public Task<bool> ChangePassword(ChangePasswordVM model);
-		public Task<ApplicationUser> EditImage(ApplicationUser userDTO, string username, bool background = false);
+		public Task<ApplicationUser> EditImage(string userId, bool background = false);
 		public  Task<ApplicationUser> GetUser(string id);
 
 		public Task<ApplicationUser> EditAbout(string id, string about);
