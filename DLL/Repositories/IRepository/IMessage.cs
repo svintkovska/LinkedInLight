@@ -9,5 +9,7 @@ namespace DLL.Repositories.IRepository
 {
 	public interface IMessage: IRepository<Message>
 	{
+		public Task<List<Message>> GetUnreadMessagesBySenderReceiver(string senderId, string receiverId);
+
 	}
 }

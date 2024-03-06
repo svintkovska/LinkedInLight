@@ -14,6 +14,7 @@ using SendGrid.Helpers.Mail;
 using System.Text;
 using Microsoft.Extensions.Options;
 using BLL.Utilities;
+using BLL.Utilities.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IChatService, ChatService>();
 
 
 var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<String>("JWTSecretKey")));
@@ -66,6 +68,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.Configure<SendGridOptions>(builder.Configuration.GetSection("SendGridOptions"));
 builder.Services.AddTransient<ISendGridService, SendGridService>();
+builder.Services.AddSignalR();
 
 
 builder.Services.AddControllers();
@@ -86,11 +89,16 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
-var dir = Path.Combine(Directory.GetCurrentDirectory(), "images");
+
+var dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
 if (!Directory.Exists(dir))
-{
 	Directory.CreateDirectory(dir);
-}
+app.UseStaticFiles(new StaticFileOptions
+{
+	FileProvider = new PhysicalFileProvider(dir),
+	RequestPath = "/uploads"
+});
+
 app.UseStaticFiles(new StaticFileOptions
 {
 	FileProvider = new PhysicalFileProvider(dir),
@@ -103,4 +111,6 @@ app.UseAuthorization();
 
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chat");
+
 app.Run();
