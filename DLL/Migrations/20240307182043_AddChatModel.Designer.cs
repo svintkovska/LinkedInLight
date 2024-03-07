@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240307182043_AddChatModel")]
+    partial class AddChatModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,12 +34,6 @@ namespace DLL.Migrations
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsDeletedForParticipant1")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeletedForParticipant2")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
@@ -460,12 +456,6 @@ namespace DLL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeletedForReceiver")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeletedForSender")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
@@ -655,42 +645,42 @@ namespace DLL.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "a0952981-9dab-4eef-a350-ac32db0243f5",
+                            ConcurrencyStamp = "e078804d-652a-4d0b-84c1-0d00dc63884f",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "29f9158c-75d4-40c2-8eb6-2692a8ddf37e",
+                            ConcurrencyStamp = "fa7343be-d5f6-4f62-a550-481436b62e64",
                             Name = "moderator",
                             NormalizedName = "MODERATOR"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "64ada3e1-77a0-4688-b07b-dfff5d6a07ce",
+                            ConcurrencyStamp = "fda21ea7-6b2b-4da1-8c58-d8c8bbabc518",
                             Name = "authorized_user",
                             NormalizedName = "AUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "4",
-                            ConcurrencyStamp = "afd68a7e-8796-4892-8a8a-89ac4f08ce0d",
+                            ConcurrencyStamp = "f0501a0e-954b-4681-b015-ebc415807542",
                             Name = "unauthorized_user",
                             NormalizedName = "UNAUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "5",
-                            ConcurrencyStamp = "edad52dc-24d2-42e4-9969-8f64cc2f8e12",
+                            ConcurrencyStamp = "acff5c2a-6432-474a-865a-41face1a3e06",
                             Name = "founder",
                             NormalizedName = "FOUNDER"
                         },
                         new
                         {
                             Id = "6",
-                            ConcurrencyStamp = "0d9d0d50-a637-4736-89a1-02fddabb0320",
+                            ConcurrencyStamp = "afb6da17-65d1-48ba-8053-992149dc77a7",
                             Name = "recruiter",
                             NormalizedName = "RECRUITER"
                         });
@@ -1140,7 +1130,7 @@ namespace DLL.Migrations
 
             modelBuilder.Entity("Domain.Models.Message", b =>
                 {
-                    b.HasOne("Domain.Models.Chat", "Chat")
+                    b.HasOne("Domain.Models.Chat", null)
                         .WithMany("Messages")
                         .HasForeignKey("ChatId");
 
@@ -1155,8 +1145,6 @@ namespace DLL.Migrations
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Chat");
 
                     b.Navigation("Receiver");
 

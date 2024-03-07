@@ -9,7 +9,8 @@ namespace DLL.Repositories.IRepository
 {
 	public interface IMessage: IRepository<Message>
 	{
-		public Task<List<Message>> GetUnreadMessagesBySenderReceiver(string senderId, string receiverId);
+		public Task DeleteAllMessagesFromChat(string senderId, string receiverId);
+		public Task<List<Message>> GetMessagesFromChat(int chatId, string userId);
 
 	}
 }

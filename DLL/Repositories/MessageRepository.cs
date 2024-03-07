@@ -17,15 +17,23 @@ namespace DLL.Repositories
 		{
 			_db = db;
 		}
-
-		public async Task<List<Message>> GetUnreadMessagesBySenderReceiver(string senderId, string receiverId)
+		public async Task DeleteAllMessagesFromChat(string senderId, string receiverId)
 		{
 			var messages = await _db.Messages
-			.Where(m => m.ReceiverId == receiverId && m.SenderId == senderId && !m.IsRead)
-			.OrderBy(m => m.SentAt)
-			.ToListAsync();
+			   .Where(m => (m.SenderId == senderId && m.ReceiverId == receiverId) ||
+						(m.SenderId == receiverId && m.ReceiverId == senderId))
+			   .ToListAsync();
 
-			return messages;
+			_db.Messages.RemoveRange(messages);
+			await _db.SaveChangesAsync();
+		}
+		public async Task<List<Message>> GetMessagesFromChat(int chatId, string userId)
+		{
+			return await _db.Messages
+				.Where(m => m.ChatId == chatId &&
+							(!m.IsDeletedForSender || m.SenderId != userId) &&
+							(!m.IsDeletedForReceiver || m.ReceiverId != userId))
+				.ToListAsync();
 		}
 	}
 }

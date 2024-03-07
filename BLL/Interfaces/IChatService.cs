@@ -9,8 +9,14 @@ namespace BLL.Interfaces
 {
 	public interface IChatService
 	{
-		public Task SendMessage(Message message);
-		public Task MarkMessagesAsRead(string senderId, string receiverId);
-
+		public  Task<List<Chat>> GetChatsForUser(string userId);
+		public Task<List<Message>> GetMessagesFromChat(int chatId, string userId);
+		public Task SendMessage(string userId, int chatId, Message message);
+		public Task UpdateMessage(Message message);
+		public  Task<bool> DeleteMyMessageForAll(string userId, int messageId, int chatId);
+		public  Task DeleteMessageForMe(string userId, int messageId, int chatId);
+		public Task DeleteChatForAll(int chatId, string userId);
+		public Task DeleteChatForMe(int chatId, string userId);
+		public Task MarkMessagesAsRead(int chatId, string userId);
 	}
 }

@@ -17,11 +17,15 @@ namespace Domain.Models
 		public DateTime SentAt { get; set; }
 
 		public bool IsRead { get; set; }
-
+		public bool IsDeletedForSender { get; set; }
+		public bool IsDeletedForReceiver { get; set; }
 		public string SenderId { get; set; }
 		public virtual ApplicationUser Sender { get; set; }
 
 		public string ReceiverId { get; set; }
 		public virtual ApplicationUser Receiver { get; set; }
+		public int? ChatId { get; set; } 
+		public virtual Chat Chat { get; set; } 
+
 	}
 }

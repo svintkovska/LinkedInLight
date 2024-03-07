@@ -22,12 +22,16 @@ namespace DLL.Repositories.IRepository
 		IJobPosting JobPostingRepo { get; }
 		ILike LikeRepo { get; }
 		IMessage MessageRepo { get; }
+		IChat ChatRepo { get; }
 		INotification NotificationRepo { get; }
 		IPost PostRepo { get; }
 		IScreeningAnswer ScreeningAnswerRepo { get; }
 		IScreeningQuestion ScreeningQuestionRepo { get; }
 		ISkill SkillRepo { get; }
 		ILanguage LanguageRepo { get; }
+
+		public Task SaveAsync();
+
 
 	}
 }

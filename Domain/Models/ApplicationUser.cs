@@ -45,5 +45,7 @@ namespace Domain.Models
 		public virtual ICollection<Notification> Notifications { get; set; }
 		public bool IsRecruiter { get; set; }
 		public virtual ICollection<JobPosting> JobPostings { get; set; }
+		public virtual ICollection<Chat> Chats { get; set; }
+
 	}
 }

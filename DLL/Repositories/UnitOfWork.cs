@@ -35,6 +35,7 @@ namespace DLL.Repositories
 		public ILike LikeRepo { get; private set; }
 
 		public IMessage MessageRepo { get; private set; }
+		public IChat ChatRepo { get; private set; }
 
 		public INotification NotificationRepo { get; private set; }
 
@@ -62,6 +63,7 @@ namespace DLL.Repositories
 			JobPostingRepo = new JobPostingRepository(_db);
 			LikeRepo = new LikeRepository(_db);
 			MessageRepo = new MessageRepository(_db);
+			ChatRepo = new ChatRepository(_db);
 			NotificationRepo = new NotificationRepository(_db);
 			PostRepo = new PostRepository(_db);
 			ScreeningAnswerRepo = new ScreeningAnswerRepository(_db);
@@ -72,6 +74,9 @@ namespace DLL.Repositories
 
 			
 		}
-
+		public async Task SaveAsync()
+		{
+			await _db.SaveChangesAsync();
+		}
 	}
 }

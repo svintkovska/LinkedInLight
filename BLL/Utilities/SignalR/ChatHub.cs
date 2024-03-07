@@ -12,21 +12,6 @@ namespace BLL.Utilities.SignalR
 {
 	public class ChatHub: Hub
 	{
-		private readonly IChatService _chatService;
-
-		public ChatHub(IChatService chatService)
-		{
-			_chatService = chatService;
-		}
-		public async Task SendMessage(string user, Message message)
-		{
-			await _chatService.SendMessage(message);
-			await Clients.All.SendAsync("ReceiveMessage", user, message);
-		}
-
-		private async Task MarkMessagesAsRead(string senderId, string receiverId)
-		{
-			await _chatService.MarkMessagesAsRead(senderId, receiverId);
-		}
+		
 	}
 }
