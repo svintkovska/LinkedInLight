@@ -1,32 +1,45 @@
 ﻿using BLL.Interfaces;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace LinkedInLight.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class ChatController : ControllerBase
 	{
 		private readonly IChatService _chatService;
+		private readonly UserManager<ApplicationUser> _userManager;
 
-		public ChatController(IChatService chatService)
+		public ChatController(IChatService chatService, UserManager<ApplicationUser> userManager)
 		{
 			_chatService = chatService;
+			_userManager = userManager;
 		}
 
-		[HttpGet("{userId}")]
-		public async Task<ActionResult<List<Chat>>> GetChatsForUser(string userId)
+		[HttpGet]
+		public async Task<ActionResult<List<Chat>>> GetChatsForUser()
 		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+			if (userId == null)
+			{
+				throw new InvalidOperationException("User not found in claims.");
+			}
 			var chats = await _chatService.GetChatsForUser(userId);
 			return Ok(chats);
 		}
 
-		[HttpGet("{chatId}/{userId}")]
-		public async Task<ActionResult<List<Message>>> GetMessagesFromChat(int chatId, string userId)
+		[HttpGet("{chatId}")]
+		public async Task<ActionResult<List<Message>>> GetMessagesFromChat(int chatId)
 		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var messages = await _chatService.GetMessagesFromChat(chatId, userId);
 			return Ok(messages);
 		}
@@ -45,11 +58,12 @@ namespace LinkedInLight.Controllers
 			}
 		}
 
-		[HttpPost("{chatId}/{userId}")]
-		public async Task<ActionResult> MarkMessagesAsRead(int chatId, string userId)
+		[HttpPost("{chatId}")]
+		public async Task<ActionResult> MarkMessagesAsRead(int chatId)
 		{
 			try
 			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 				await _chatService.MarkMessagesAsRead(chatId, userId);
 				return Ok();
 			}
@@ -72,12 +86,23 @@ namespace LinkedInLight.Controllers
 			}
 		}
 
-		[HttpDelete("{userId}/{messageId}/{chatId}")]
-		public async Task<ActionResult> DeleteMyMessageForAll(string userId, int messageId, int chatId)
+		[HttpDelete("{messageId}/{chatId}")]
+		public async Task<ActionResult> DeleteMessage(int messageId, int chatId, bool deleteForMeOnly = true)
 		{
 			try
 			{
-				var result = await _chatService.DeleteMyMessageForAll(userId, messageId, chatId);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				bool result;
+				if (deleteForMeOnly)
+				{
+					result = await _chatService.DeleteMessageForMe(userId, messageId, chatId);
+
+				}
+				else
+				{
+					 result = await _chatService.DeleteMyMessageForAll(userId, messageId, chatId);
+
+				}
 				if (result)
 				{
 					return Ok("Message deleted.");
@@ -93,13 +118,29 @@ namespace LinkedInLight.Controllers
 			}
 		}
 
-		[HttpDelete("{userId}/{messageId}/{chatId}")]
-		public async Task<ActionResult> DeleteMessageForMe(string userId, int messageId, int chatId)
+		[HttpDelete("{chatId}")]
+		public async Task<ActionResult> DeleteChat(int chatId, bool deleteForMeOnly = true)
 		{
 			try
 			{
-				await _chatService.DeleteMessageForMe(userId, messageId, chatId);
-				return Ok("Message deleted.");
+				bool result;
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				if (deleteForMeOnly)
+				{
+					result = await _chatService.DeleteChatForMe(chatId, userId);
+				}
+				else
+				{
+					result = await _chatService.DeleteChatForAll(chatId, userId);
+				}
+				if (result)
+				{
+					return Ok("Chat deleted.");
+				}
+				else
+				{
+					return NotFound("Chat not found.");
+				}
 			}
 			catch (Exception ex)
 			{
@@ -107,32 +148,5 @@ namespace LinkedInLight.Controllers
 			}
 		}
 
-		[HttpDelete("{chatId}/{userId}")]
-		public async Task<ActionResult> DeleteChatForAll(int chatId, string userId)
-		{
-			try
-			{
-				await _chatService.DeleteChatForAll(chatId, userId);
-				return Ok("Chat deleted.");
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-		}
-
-		[HttpDelete("{chatId}/{userId}")]
-		public async Task<ActionResult> DeleteChatForMe(int chatId, string userId)
-		{
-			try
-			{
-				await _chatService.DeleteChatForMe(chatId, userId);
-				return Ok("Chat deleted.");
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-		}
 	}
 }

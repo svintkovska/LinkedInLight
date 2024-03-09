@@ -29,19 +29,19 @@ namespace BLL.Services
 			IList<string> roles = await _userManager.GetRolesAsync(user);
 			List<Claim> claims = new List<Claim>()
 			{
-				new Claim("name", user.UserName),
+				new Claim(ClaimTypes.Name, user.UserName),
 			};
 
 			foreach (var claim in roles)
 			{
-				claims.Add(new Claim("roles", claim));
+				claims.Add(new Claim(ClaimTypes.Role, claim));
 			}
 			var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<String>("JWTSecretKey")));
 			var signinCredentials = new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256);
 
 			var jwt = new JwtSecurityToken(
 				signingCredentials: signinCredentials,
-				expires: DateTime.Now.AddDays(1000),
+				expires: DateTime.Now.AddDays(100),
 				claims: claims
 			);
 

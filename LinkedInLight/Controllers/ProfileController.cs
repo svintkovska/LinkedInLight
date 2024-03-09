@@ -25,11 +25,12 @@ namespace LinkedInLight.Controllers
 			_profileService = profileService;
 		}
 		[HttpGet("")]
-		public async Task<IActionResult> GetUser(string id)
+		public async Task<IActionResult> GetUser()
 		{
 			try
 			{
-				await _profileService.GetUser(id);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				await _profileService.GetUser(userId);
 				return Ok();
 			}
 			catch (Exception ex)
@@ -57,10 +58,11 @@ namespace LinkedInLight.Controllers
 			}		
 		}
 		[HttpPost("editImage")]
-		public async Task<ActionResult<ApplicationUser>> EditImage(string userId, bool background = false)
+		public async Task<ActionResult<ApplicationUser>> EditImage( bool background = false)
 		{
 			try
 			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 				var result = await _profileService.EditImage(userId, background);
 				if (result != null)
 				{
@@ -83,11 +85,12 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPut("edit/about/{id}")]
-		public async Task<IActionResult> EditAbout(string id, string about)
+		public async Task<IActionResult> EditAboutPUT(string about)
 		{
 			try
 			{
-				await _profileService.EditAbout(id, about);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				await _profileService.EditAbout(userId, about);
 				return Ok();
 			}
 			catch (Exception ex)
@@ -97,11 +100,12 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpGet("userExperiences/{id}")]
-		public async Task<IActionResult> GetUserExperiences(string userid)
+		public async Task<IActionResult> GetUserExperiences()
 		{
 			try
 			{
-				var list = await _profileService.GetUserExperiences(userid);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetUserExperiences(userId);
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -162,11 +166,12 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpGet("userEducation/{id}")]
-		public async Task<IActionResult> GetUserEducation(string userid)
+		public async Task<IActionResult> GetUserEducation()
 		{
 			try
 			{
-				var list = await _profileService.GetUserEducations(userid);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetUserEducations(userId);
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -228,11 +233,13 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpGet("userPosts/{id}")]
-		public async Task<IActionResult> GetUserPosts(string userid)
+		public async Task<IActionResult> GetUserPosts()
 		{
 			try
 			{
-				var list = await _profileService.GetUserPosts(userid);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+				var list = await _profileService.GetUserPosts(userId);
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -241,11 +248,12 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpGet("userSkills/{id}")]
-		public async Task<IActionResult> GetUserSkills(string userid)
+		public async Task<IActionResult> GetUserSkills()
 		{
 			try
 			{
-				var list = await _profileService.GetUserSkills(userid);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetUserSkills(userId);
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -254,11 +262,12 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpGet("userLanguages/{id}")]
-		public async Task<IActionResult> GetUserLanguages(string userid)
+		public async Task<IActionResult> GetUserLanguages()
 		{
 			try
 			{
-				var list = await _profileService.GetUserLanguages(userid);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetUserLanguages(userId);
 				return Ok(list);
 			}
 			catch (Exception ex)

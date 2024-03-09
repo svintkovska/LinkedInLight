@@ -37,22 +37,21 @@ namespace BLL.Services
 			_configuration = configuration;
 			_sendGridService = sendGridService;
 		}
-
-		public async Task<bool> Register(RegisterVM model)
+		public async Task<bool> IfEmailValid(string email)
 		{
-			var existingUser = await _userManager.FindByEmailAsync(model.Email);
+			var existingUser = await _userManager.FindByEmailAsync(email);
 			if (existingUser != null)
 			{
 				throw new Exception("Email already exists");
 			}
-
-
+			return true;
+		}
+		public async Task<bool> Register(RegisterVM model)
+		{
 			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = false, FirstName = model.FirstName, LastName = model.LastName };
 
 			var result = await _userManager.CreateAsync(user, model.Password);
 			
-
-
 			if (!result.Succeeded)
 			{
 				throw new Exception("Password requirements not met (min 6 characters including a digit)");

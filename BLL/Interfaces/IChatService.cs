@@ -14,9 +14,9 @@ namespace BLL.Interfaces
 		public Task SendMessage(string userId, int chatId, Message message);
 		public Task UpdateMessage(Message message);
 		public  Task<bool> DeleteMyMessageForAll(string userId, int messageId, int chatId);
-		public  Task DeleteMessageForMe(string userId, int messageId, int chatId);
-		public Task DeleteChatForAll(int chatId, string userId);
-		public Task DeleteChatForMe(int chatId, string userId);
+		public Task<bool> DeleteMessageForMe(string userId, int messageId, int chatId);
+		public Task<bool> DeleteChatForAll(int chatId, string userId);
+		public Task<bool> DeleteChatForMe(int chatId, string userId);
 		public Task MarkMessagesAsRead(int chatId, string userId);
 	}
 }

@@ -16,6 +16,8 @@ namespace BLL.Interfaces
 		public  Task<bool> ForgotPassword(string email);
 		public Task<bool> SetNewPassword(NewPasswordVM model);
 		public Task<bool> ConfirmEmail(string userId, string code);
+		public Task<bool> IfEmailValid(string email);
+
 
 	}
 }

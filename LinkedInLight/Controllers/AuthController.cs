@@ -22,7 +22,23 @@ namespace LinkedInLight.Controllers
 		{
 			_authenticationService = authenticationService;
 		}
-
+		[HttpPost("validate-email")]
+		public async Task<IActionResult> ValidateEmail(string email)
+		{
+			try
+			{
+				var result = await _authenticationService.IfEmailValid(email);
+				if (result)
+				{
+					return Ok();
+				}
+				return BadRequest("Email already exists");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 		[HttpPost("register")]
 		public async Task<IActionResult> Register(RegisterVM model)
 		{

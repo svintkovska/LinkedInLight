@@ -3,6 +3,7 @@ using BLL.Utilities.SignalR;
 using DLL.Repositories;
 using DLL.Repositories.IRepository;
 using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -106,7 +107,7 @@ namespace BLL.Services
 			return false;
 		}
 
-		public async Task DeleteMessageForMe(string userId, int messageId, int chatId)
+		public async Task<bool> DeleteMessageForMe(string userId, int messageId, int chatId)
 		{
 			var message = await _unitOfWork.MessageRepo.Get(m => m.Id == messageId);
 			if (message != null)
@@ -127,10 +128,14 @@ namespace BLL.Services
 				///
 				var messages = await GetMessagesFromChat(chatId, userId);
 				await _hubContext.Clients.All.SendAsync("MessageDeletedForMe", messages);
+
+				return true;
 			}
+			return false;
+
 		}
 
-		public async Task DeleteChatForAll(int chatId, string userId)
+		public async Task<bool> DeleteChatForAll(int chatId, string userId)
 		{
 			var chat = await _unitOfWork.ChatRepo.Get(c=>c.Id == chatId);
 			if (chat != null)
@@ -142,9 +147,12 @@ namespace BLL.Services
 				///
 				var chats = await GetChatsForUser(userId);
 				await _hubContext.Clients.All.SendAsync("ChatDeletedForAll", chats);
+
+				return true;
 			}
+			return false;
 		}
-		public async Task DeleteChatForMe(int chatId, string userId)
+		public async Task<bool> DeleteChatForMe(int chatId, string userId)
 		{
 			var chat = await _unitOfWork.ChatRepo.Get(c=>c.Id == chatId);
 			if (chat != null)
@@ -175,7 +183,10 @@ namespace BLL.Services
 				///
 				var chats = await GetChatsForUser(userId);
 				await _hubContext.Clients.All.SendAsync("ChatDeletedForMe", chats);
+
+				return true;
 			}
+			return false;
 		}
 
 		
