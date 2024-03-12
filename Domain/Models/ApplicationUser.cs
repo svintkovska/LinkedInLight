@@ -19,9 +19,6 @@ namespace Domain.Models
         public string? Headline { get; set; }
         public string? CurrentPosition { get; set; }
         public string? Industry { get; set; }
-        public string EmailConfirmationCode { get; set; }
-        public string EmailConfirmationToken { get; set; }
-
 		public string Country { get; set; }
 
         public string City { get; set; }

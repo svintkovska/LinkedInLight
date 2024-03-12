@@ -37,7 +37,7 @@ namespace BLL.Services
 			_configuration = configuration;
 			_sendGridService = sendGridService;
 		}
-		public async Task<bool> IfEmailValid(string email)
+		public async Task<bool> IsValidEmail(string email)
 		{
 			var existingUser = await _userManager.FindByEmailAsync(email);
 			if (existingUser != null)
@@ -46,30 +46,32 @@ namespace BLL.Services
 			}
 			return true;
 		}
+
+		public async Task<string> SendConfirmationCode(string email)
+		{
+			var code = GenerateRandom6DigitCode();
+			string subject = "Confirm Your Email";
+			string htmlMessage = $"<p>Please type in the following code to confirm your email: {code}</p>";
+
+			 await _sendGridService.SendEmailAsync(email, subject, htmlMessage);
+
+			return code;
+		}
 		public async Task<bool> Register(RegisterVM model)
 		{
-			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = false, FirstName = model.FirstName, LastName = model.LastName };
+			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true, FirstName = model.FirstName, LastName = model.LastName };
 
 			var result = await _userManager.CreateAsync(user, model.Password);
 			
 			if (!result.Succeeded)
 			{
-				throw new Exception("Password requirements not met (min 6 characters including a digit)");
+				throw new Exception("Error when creating a user");
 			}
 			else
 			{
 				result = _userManager.AddToRoleAsync(user, RoleConstants.AUTHORIZED_USER).Result;
-
-				var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-				var code = GenerateRandom6DigitCode();
-				user.EmailConfirmationToken= token;
-				user.EmailConfirmationCode= code;
 				await _userManager.UpdateAsync(user);
 
-				string subject = "Confirm Your Email";
-				string htmlMessage = $"<p>Please type in the following code to confirm your email: {code}</p>";
-
-				await _sendGridService.SendEmailAsync(user.Email, subject, htmlMessage);
 			}
 			return result.Succeeded;
 		}
@@ -253,33 +255,6 @@ namespace BLL.Services
 			}
 			return true;
 		}
-
-		public async Task<bool> ConfirmEmail(string userId, string code)
-		{
-			var user = await _userManager.FindByIdAsync(userId);
-			if (user == null)
-			{
-				throw new Exception("User not found");
-			}
-
-			if (code != user.EmailConfirmationCode)
-			{
-				throw new Exception("Invalid confirmation code");
-			}
-
-			var result = await _userManager.ConfirmEmailAsync(user, user.EmailConfirmationToken);
-			if (result.Succeeded)
-			{
-				await _userManager.UpdateAsync(user);
-
-				return true;
-			}
-			else
-			{
-				throw new Exception("Failed to confirm email");
-			}
-		}
-
 		private string GenerateRandom6DigitCode()
 		{
 			Random random = new Random();

@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using BLL.Utilities.SignalR;
+using BLL.ViewModels;
 using DLL.Repositories;
 using DLL.Repositories.IRepository;
 using Domain.Models;
@@ -31,18 +32,21 @@ namespace BLL.Services
 		{
 			return await _unitOfWork.MessageRepo.GetMessagesFromChat(chatId, userId);
 		}
-		public async Task SendMessage(string userId, int chatId, Message message)
+		public async Task SendMessage(string userId, int chatId, MessageVM message)
 		{
-		    message = new Message
+		    Message msg = new Message
 			{
 				Content = message.Content,
 				SentAt = DateTime.UtcNow,
 				IsRead = false,
+				IsDeletedForSender= false,
+				IsDeletedForReceiver= false,
 				SenderId = message.SenderId,
-				ReceiverId = message.ReceiverId
+				ReceiverId = message.ReceiverId,
+				ChatId = chatId
 			};
 
-			await _unitOfWork.MessageRepo.Add(message);
+			await _unitOfWork.MessageRepo.Add(msg);
 			await _unitOfWork.SaveAsync();
 
 
@@ -51,7 +55,7 @@ namespace BLL.Services
 			var messages = await GetMessagesFromChat(chatId, userId);
 			await _hubContext.Clients.All.SendAsync("UpdateChatList", chats);
 			await _hubContext.Clients.All.SendAsync("UpdateMessages", messages);
-			await _hubContext.Clients.All.SendAsync("ReceiveMessage", userId, message);
+			await _hubContext.Clients.All.SendAsync("ReceiveMessage", userId, msg);
 		}
 
 		public async Task MarkMessagesAsRead(int chatId, string userId)

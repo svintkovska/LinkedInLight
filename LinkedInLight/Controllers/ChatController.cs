@@ -1,4 +1,5 @@
 ﻿using BLL.Interfaces;
+using BLL.ViewModels;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -45,11 +46,13 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> SendMessage(Message message)
+		public async Task<ActionResult> SendMessage(MessageVM message)
 		{
+			
+
 			try
 			{
-				await _chatService.SendMessage(message.SenderId, message.ChatId.Value, message);
+				await _chatService.SendMessage(message.SenderId, message.ChatId, message);
 				return Ok("Message sent.");
 			}
 			catch (Exception ex)
