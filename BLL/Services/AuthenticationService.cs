@@ -50,10 +50,22 @@ namespace BLL.Services
 		public async Task<string> SendConfirmationCode(string email)
 		{
 			var code = GenerateRandom6DigitCode();
-			string subject = "Confirm Your Email";
-			string htmlMessage = $"<p>Please type in the following code to confirm your email: {code}</p>";
 
-			 await _sendGridService.SendEmailAsync(email, subject, htmlMessage);
+
+			var frontendURL = _configuration.GetValue<string>("FrontEndURL");
+			var callbackURL = $"{frontendURL}/confirmEmail?email={email}";
+
+			string basePath = AppContext.BaseDirectory;
+			string htmlFilePath = Path.Combine(basePath, "html", "message-template.html");
+			string htmlContent = System.IO.File.ReadAllText(htmlFilePath);
+
+			htmlContent = htmlContent.Replace("{{code}}", code);
+			htmlContent = htmlContent.Replace("{{email}}", email);
+			htmlContent = htmlContent.Replace("{{callbackURL}}", callbackURL);
+
+			string subject = "Confirm Your Email";
+
+			 await _sendGridService.SendEmailAsync(email, subject, htmlContent);
 
 			return code;
 		}

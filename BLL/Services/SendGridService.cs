@@ -29,7 +29,6 @@ namespace BLL.Services
 			{
 				From = new EmailAddress("noreply.jobforyou@ukr.net", "NoReply"),
 				Subject = subject,
-				PlainTextContent = htmlMessage,
 				HtmlContent = htmlMessage
 			};
 			msg.AddTo(new EmailAddress(email));
