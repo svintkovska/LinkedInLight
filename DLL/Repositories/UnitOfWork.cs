@@ -47,6 +47,9 @@ namespace DLL.Repositories
 
 		public ISkill SkillRepo { get; private set; }
 		public ILanguage LanguageRepo { get; private set; }
+		public IProfileVisit ProfileVisitRepo { get; private set; }
+		public IUserPrivacySettings UserPrivacySettingsRepo { get; private set; }
+		public IBlockedUser BlockedUserRepo { get; private set; }
 
 		public UnitOfWork(ApplicationDbContext db)
 		{
@@ -69,8 +72,10 @@ namespace DLL.Repositories
 			ScreeningAnswerRepo = new ScreeningAnswerRepository(_db);
 			ScreeningQuestionRepo = new ScreeningQuestionRepository(_db);
 			SkillRepo = new SkillRepository(_db);
+			ProfileVisitRepo= new ProfileVisitRepository(_db);
 			LanguageRepo = new LanguageRepository(_db);
-
+			UserPrivacySettingsRepo= new UserPrivacySettingsRepository(_db);
+			BlockedUserRepo= new BlockedUserRepository(_db);
 
 			
 		}

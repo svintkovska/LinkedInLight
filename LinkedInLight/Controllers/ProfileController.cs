@@ -78,9 +78,10 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpGet("edit/about/{id}")]
-		public async Task< IActionResult> EditAbout(string id)
+		public async Task< IActionResult> EditAbout()
 		{
-			var user = await _profileService.GetUser(id);
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var user = await _profileService.GetUser(userId);
 			return Ok(user.About);
 		}
 

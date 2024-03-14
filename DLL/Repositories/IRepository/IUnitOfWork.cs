@@ -29,6 +29,9 @@ namespace DLL.Repositories.IRepository
 		IScreeningQuestion ScreeningQuestionRepo { get; }
 		ISkill SkillRepo { get; }
 		ILanguage LanguageRepo { get; }
+		IProfileVisit ProfileVisitRepo { get; }
+		IUserPrivacySettings UserPrivacySettingsRepo { get; }
+		IBlockedUser BlockedUserRepo { get; }
 
 		public Task SaveAsync();
 

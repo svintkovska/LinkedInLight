@@ -17,6 +17,8 @@ using System.Net;
 using BLL.ViewModels;
 using Domain.Models;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
+using DLL.Repositories;
+using Domain.Enums;
 
 namespace BLL.Services
 {
@@ -27,15 +29,17 @@ namespace BLL.Services
 		private readonly IJwtTokenService _jwtTokenService;
 		private readonly IConfiguration _configuration;
 		private readonly ISendGridService _sendGridService;
+		private readonly IUnitOfWork _unitOfWork;
 
 		public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-			IJwtTokenService jwtTokenService, IConfiguration configuration, ISendGridService sendGridService)
+			IJwtTokenService jwtTokenService, IConfiguration configuration, ISendGridService sendGridService, IUnitOfWork unitOfWork)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_jwtTokenService = jwtTokenService;
 			_configuration = configuration;
 			_sendGridService = sendGridService;
+			_unitOfWork = unitOfWork;
 		}
 		public async Task<bool> IsValidEmail(string email)
 		{
@@ -74,7 +78,7 @@ namespace BLL.Services
 			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true, FirstName = model.FirstName, LastName = model.LastName };
 
 			var result = await _userManager.CreateAsync(user, model.Password);
-			
+
 			if (!result.Succeeded)
 			{
 				throw new Exception("Error when creating a user");
@@ -83,6 +87,10 @@ namespace BLL.Services
 			{
 				result = _userManager.AddToRoleAsync(user, RoleConstants.AUTHORIZED_USER).Result;
 				await _userManager.UpdateAsync(user);
+
+
+				await _unitOfWork.SaveAsync();
+
 
 			}
 			return result.Succeeded;

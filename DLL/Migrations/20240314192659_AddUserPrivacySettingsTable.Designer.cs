@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240314192659_AddUserPrivacySettingsTable")]
+    partial class AddUserPrivacySettingsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,31 +23,6 @@ namespace DLL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Domain.Models.BlockedUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("BlockedUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlockedUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BlockedUsers");
-                });
 
             modelBuilder.Entity("Domain.Models.Chat", b =>
                 {
@@ -683,9 +660,6 @@ namespace DLL.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ActiveStatusVisibilityValue")
-                        .HasColumnType("int");
-
                     b.Property<bool>("ConnectionVisibility")
                         .HasColumnType("bit");
 
@@ -700,9 +674,6 @@ namespace DLL.Migrations
 
                     b.Property<int>("ProfileViewingValue")
                         .HasColumnType("int");
-
-                    b.Property<bool>("ShareProfileUpdates")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("ShowLastName")
                         .HasColumnType("bit");
@@ -742,42 +713,42 @@ namespace DLL.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "dea0aa37-ef5a-447a-a9e3-44298ddade31",
+                            ConcurrencyStamp = "bbbf4755-6ec5-4522-b318-b41de92f046f",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "c1a06b03-ee24-4147-95bf-8b221674ae41",
+                            ConcurrencyStamp = "d7269172-78db-45ef-a103-ef099b7132f6",
                             Name = "moderator",
                             NormalizedName = "MODERATOR"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "d63004c7-427d-41d8-a75d-bba6e3ba8183",
+                            ConcurrencyStamp = "81ab31d7-1112-4853-9727-a460961ec428",
                             Name = "authorized_user",
                             NormalizedName = "AUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "4",
-                            ConcurrencyStamp = "2cbdb3f5-81a6-4fe0-90bf-118c30e72970",
+                            ConcurrencyStamp = "24dca43d-a3a2-47d2-a9f3-6493a7f27874",
                             Name = "unauthorized_user",
                             NormalizedName = "UNAUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "5",
-                            ConcurrencyStamp = "2de5b151-c738-4a3f-a99f-45be46f30f11",
+                            ConcurrencyStamp = "303fe097-ad94-435a-8e06-e98147aac1af",
                             Name = "founder",
                             NormalizedName = "FOUNDER"
                         },
                         new
                         {
                             Id = "6",
-                            ConcurrencyStamp = "1a557e03-adfd-4ea1-9b16-d3cdae2e13d5",
+                            ConcurrencyStamp = "f0ac50f0-6ed3-4dac-87b6-608dd47f7949",
                             Name = "recruiter",
                             NormalizedName = "RECRUITER"
                         });
@@ -1028,31 +999,6 @@ namespace DLL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
-                });
-
-            modelBuilder.Entity("Domain.Models.BlockedUser", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "BlockedAppUser")
-                        .WithMany()
-                        .HasForeignKey("BlockedUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.UserPrivacySettings", null)
-                        .WithMany("BlockedUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BlockedAppUser");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Models.Chat", b =>
@@ -1443,11 +1389,6 @@ namespace DLL.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Likes");
-                });
-
-            modelBuilder.Entity("Domain.Models.UserPrivacySettings", b =>
-                {
-                    b.Navigation("BlockedUsers");
                 });
 
             modelBuilder.Entity("Domain.Models.ApplicationUser", b =>

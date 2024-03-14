@@ -28,6 +28,9 @@ namespace Domain.Models
 		public string Background { get; set; }
         public bool IsBanned { get; set; }  
         public bool IsPrivateProfile{ get; set; }  
+        public bool OpenToWork { get; set; }    
+        public bool OpenToHire { get; set; }
+        public string ProfileUrl { get; set; }    
 		public virtual ICollection<Experience> Experiences { get; set; }
 		public virtual ICollection<Education> Educations { get; set; }
 		public virtual ICollection<Skill> Skills { get; set; }
@@ -43,6 +46,7 @@ namespace Domain.Models
 		public bool IsRecruiter { get; set; }
 		public virtual ICollection<JobPosting> JobPostings { get; set; }
 		public virtual ICollection<Chat> Chats { get; set; }
+		public virtual UserPrivacySettings UserPrivacySettings { get; set; }
 
 	}
 }

@@ -36,6 +36,9 @@ namespace DLL.Data
 		public DbSet<ScreeningQuestion> ScreeningQuestions { get; set; }
 		public DbSet<ScreeningAnswer> ScreeningAnswers { get; set; }
 		public DbSet<Language> Languages { get; set; }
+		public DbSet<ProfileVisit> ProfileVisits { get; set; }
+		public DbSet<UserPrivacySettings> UserPrivacySettings { get; set; }
+		public DbSet<BlockedUser> BlockedUsers { get; set; }
 
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -183,6 +186,36 @@ namespace DLL.Data
 				.WithMany()
 				.HasForeignKey(a => a.CandidateId)
 				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<ProfileVisit>()
+				.HasOne(pv => pv.Visitor)
+				.WithMany()
+				.HasForeignKey(pv => pv.VisitorId)
+				.OnDelete(DeleteBehavior.NoAction); 
+
+			modelBuilder.Entity<ProfileVisit>()
+				.HasOne(pv => pv.ProfileOwner)
+				.WithMany()
+				.HasForeignKey(pv => pv.ProfileOwnerId)
+				.OnDelete(DeleteBehavior.NoAction); 
+
+			modelBuilder.Entity<UserPrivacySettings>()
+				.HasMany(up => up.BlockedUsers)
+				.WithOne()
+				.HasForeignKey(bu => bu.UserId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<BlockedUser>()
+			   .HasOne(b => b.User)
+			   .WithMany()
+			   .HasForeignKey(b => b.UserId)
+			   .OnDelete(DeleteBehavior.NoAction);
+
+			modelBuilder.Entity<BlockedUser>()
+				.HasOne(b => b.BlockedAppUser)
+				.WithMany()
+				.HasForeignKey(b => b.BlockedUserId)
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }
