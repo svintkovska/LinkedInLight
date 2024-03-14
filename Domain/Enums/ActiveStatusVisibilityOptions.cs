@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
-	public enum ActiveStatusVisibility
+	public enum ActiveStatusVisibilityOptions
 	{
 		NoOne,
 		YourConnectionsOnly,

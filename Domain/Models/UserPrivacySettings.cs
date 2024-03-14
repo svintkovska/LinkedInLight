@@ -63,9 +63,9 @@ namespace Domain.Models
 		public int ActiveStatusVisibilityValue { get; set; }
 
 		[NotMapped]
-		public ActiveStatusVisibility ActiveStatusVisibility
+		public ActiveStatusVisibilityOptions ActiveStatusVisibility
 		{
-			get => (ActiveStatusVisibility)ActiveStatusVisibilityValue;
+			get => (ActiveStatusVisibilityOptions)ActiveStatusVisibilityValue;
 			set => ActiveStatusVisibilityValue = (int)value;
 		}
 		public virtual ICollection<BlockedUser> BlockedUsers { get; set; }

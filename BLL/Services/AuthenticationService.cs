@@ -88,7 +88,21 @@ namespace BLL.Services
 				result = _userManager.AddToRoleAsync(user, RoleConstants.AUTHORIZED_USER).Result;
 				await _userManager.UpdateAsync(user);
 
+				var defaultSettings = new UserPrivacySettings
+				{
+					UserId = user.Id,
+					ProfileViewingValue = (int)ProfileViewingOptions.YourNameAndHeadline,
+					EmailVisibilityValue = (int)EmailVisibilityOptions.FirstDegreeConnections,
+					ConnectionVisibility = true,
+					ShowLastName = true,
+					ShareProfileUpdates = true ,
+					DiscoverByEmailValue = (int)DiscoverByEmailOptions.Anyone,
+					DiscoverByPhoneValue = (int)DiscoverByPhoneOptions.Everyone,
+					ActiveStatusVisibilityValue = (int)ActiveStatusVisibilityOptions.AllLinkedInMembers,
 
+				};
+
+				await _unitOfWork.UserPrivacySettingsRepo.Add(defaultSettings);
 				await _unitOfWork.SaveAsync();
 
 

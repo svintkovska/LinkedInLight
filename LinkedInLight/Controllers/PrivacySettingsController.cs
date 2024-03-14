@@ -91,7 +91,7 @@ namespace LinkedInLight.Controllers
 			return NotFound("User not found");
 		}
 		[HttpGet("activeStatusVisibility")]
-		public async Task<ActionResult<ActiveStatusVisibility>> GetActiveStatusVisibility()
+		public async Task<ActionResult<ActiveStatusVisibilityOptions>> GetActiveStatusVisibility()
 		{
 			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var result = await _settingsService.GetActiveStatusVisibility(userId);

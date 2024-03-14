@@ -18,7 +18,7 @@ namespace BLL.Interfaces
 		public Task<bool> UpdateDiscoverByEmailValue(string userId, int discoverByEmailValue);
 		public Task<DiscoverByPhoneOptions> GetDiscoverByPhone(string userId);
 		public Task<bool> UpdateDiscoverByPhoneValue(string userId, int discoverByPhoneValue);
-		public Task<ActiveStatusVisibility> GetActiveStatusVisibility(string userId);
+		public Task<ActiveStatusVisibilityOptions> GetActiveStatusVisibility(string userId);
 		public  Task<bool> UpdateActiveStatusVisibilityValue(string userId, int activeStatusVisibilityValue);
 		public Task<bool> GetConnectionVisibility(string userId);
 		public Task<bool> UpdateConnectionVisibility(string userId, bool connectionVisibility);

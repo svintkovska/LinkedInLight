@@ -25,7 +25,7 @@ namespace BLL.Services
 		{
 			var enumValues = new Dictionary<string, IEnumerable<string>>
 			{
-				{ "ActiveStatusVisibility", Enum.GetNames(typeof(ActiveStatusVisibility)) },
+				{ "ActiveStatusVisibility", Enum.GetNames(typeof(ActiveStatusVisibilityOptions)) },
 				{ "DiscoverByEmailOptions", Enum.GetNames(typeof(DiscoverByEmailOptions)) },
 				{ "DiscoverByPhoneOptions", Enum.GetNames(typeof(DiscoverByPhoneOptions)) },
 				{ "EmailVisibilityOptions", Enum.GetNames(typeof(EmailVisibilityOptions)) },
@@ -107,10 +107,10 @@ namespace BLL.Services
 			return true;
 		}
 
-		public async Task<ActiveStatusVisibility> GetActiveStatusVisibility(string userId)
+		public async Task<ActiveStatusVisibilityOptions> GetActiveStatusVisibility(string userId)
 		{
 			var userPrivacySettings = await _unitOfWork.UserPrivacySettingsRepo.Get(u => u.UserId == userId);
-			return userPrivacySettings != null ? userPrivacySettings.ActiveStatusVisibility : ActiveStatusVisibility.NoOne;
+			return userPrivacySettings != null ? userPrivacySettings.ActiveStatusVisibility : ActiveStatusVisibilityOptions.NoOne;
 		}
 		public async Task<bool> UpdateActiveStatusVisibilityValue(string userId, int activeStatusVisibilityValue)
 		{
