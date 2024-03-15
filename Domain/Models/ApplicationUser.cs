@@ -30,7 +30,7 @@ namespace Domain.Models
         public bool IsPrivateProfile{ get; set; }  
         public bool OpenToWork { get; set; }    
         public bool OpenToHire { get; set; }
-        public string ProfileUrl { get; set; }    
+        public string ProfileUrl { get; set; } = ""; 
 		public virtual ICollection<Experience> Experiences { get; set; }
 		public virtual ICollection<Education> Educations { get; set; }
 		public virtual ICollection<Skill> Skills { get; set; }

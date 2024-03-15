@@ -31,6 +31,7 @@ namespace DLL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
@@ -72,6 +73,12 @@ namespace DLL.Migrations
                 keyValue: "6",
                 column: "ConcurrencyStamp",
                 value: "f0ac50f0-6ed3-4dac-87b6-608dd47f7949");
+
+            migrationBuilder.AddColumn<string>(
+                name: "ProfileURL",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -120,6 +127,10 @@ namespace DLL.Migrations
                 keyValue: "6",
                 column: "ConcurrencyStamp",
                 value: "ddac32c5-3030-4eb5-8918-bd4041e547d7");
+
+            migrationBuilder.DropColumn(
+                name: "ProfileURL",
+                table: "AspNetUsers");
         }
     }
 }

@@ -30,8 +30,8 @@ namespace LinkedInLight.Controllers
 			try
 			{
 				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				await _profileService.GetUser(userId);
-				return Ok();
+				var user = await _profileService.GetUser(userId);
+				return Ok(user);
 			}
 			catch (Exception ex)
 			{
