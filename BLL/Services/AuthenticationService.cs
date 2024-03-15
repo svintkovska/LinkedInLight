@@ -19,6 +19,7 @@ using Domain.Models;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 using DLL.Repositories;
 using Domain.Enums;
+using Newtonsoft.Json;
 
 namespace BLL.Services
 {
@@ -73,9 +74,30 @@ namespace BLL.Services
 
 			return code;
 		}
+		public async Task<IEnumerable<string>> GetAllCountries()
+		{
+			var path = Path.Combine(Directory.GetCurrentDirectory(), "Data", "countries.json");
+			var json = await File.ReadAllTextAsync(path);
+			var data = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(json);
+			return data.Keys;
+		}
+
+		public async Task<IEnumerable<string>> GetCitiesByCountry(string country)
+		{
+			var path = Path.Combine(Directory.GetCurrentDirectory(), "Data", "countries.json");
+			var json = await File.ReadAllTextAsync(path);
+			var data = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(json);
+
+			if (data.ContainsKey(country))
+			{
+				return data[country];
+			}
+
+			return Enumerable.Empty<string>();
+		}
 		public async Task<bool> Register(RegisterVM model)
 		{
-			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true, FirstName = model.FirstName, LastName = model.LastName };
+			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true, FirstName = model.FirstName, LastName = model.LastName, Country = model.Country, City = model.City };
 
 			var result = await _userManager.CreateAsync(user, model.Password);
 

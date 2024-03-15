@@ -52,6 +52,19 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+		[HttpGet("countries")]
+		public async Task<IActionResult> GetAllCountries()
+		{
+			var countries = await _authenticationService.GetAllCountries();
+			return Ok(countries);
+		}
+
+		[HttpGet("countries/{country}")]
+		public async Task<IActionResult> GetCitiesByCountry(string country)
+		{
+			var cities = await _authenticationService.GetCitiesByCountry(country);
+			return Ok(cities);
+		}
 		[HttpPost("register")]
 		public async Task<IActionResult> Register(RegisterVM model)
 		{
