@@ -26,7 +26,7 @@ namespace Domain.Models
 		public string ExperienceLevel { get; set; }
 		public string Function { get; set; }
 		public int IndustryId { get; set; }
-		public Industry Industry { get; set; }
+		public virtual Industry Industry { get; set; }
 
 		public virtual ICollection<JobApplication> Applications { get; set; }
 		public virtual ICollection<ScreeningQuestion> ScreeningQuestions { get; set; }

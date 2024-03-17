@@ -1,4 +1,6 @@
-﻿using BLL.Interfaces;
+﻿using AutoMapper;
+using BLL.Interfaces;
+using BLL.ViewModels;
 using BLL.ViewModels.AuthModels;
 using DLL.Data;
 using DLL.Repositories.IRepository;
@@ -20,32 +22,21 @@ namespace BLL.Services
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly IUploadService _uploadService;
-		private readonly IUnitOfWork _unitOfWork; 
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IMapper _mapper;
+
 		public ProfileService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUploadService uploadService,  
-			IUnitOfWork unitOfWork)
+			IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_uploadService = uploadService;
 			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 
-		public async Task<bool> ChangePassword( ChangePasswordVM model)
-		{
-			var user = await _userManager.FindByEmailAsync(model.Email);
-			if (user == null)
-			{
-				throw new Exception("User not found");
-			}
-			var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-			if (!result.Succeeded)
-			{
-				throw new Exception("Error when changing password");
-			}
-			return result.Succeeded;
-
-		}
-		public async Task<ApplicationUser> EditImage(string userId, bool background = false)
+	
+		public async Task<UserProfileVM> EditImage(string userId, bool background = false)
 		{
 			var user =  await _unitOfWork.UserRepo.Get(u=>u.Id== userId);
 			if (!background)
@@ -83,107 +74,179 @@ namespace BLL.Services
 				}
 			}
 
-			await _unitOfWork.UserRepo.Save();
-			return user;
+			await _unitOfWork.SaveAsync();
+			var userProfile = await GetUserProfile(user.Id);
+			return userProfile;
 		}
 
-		public async Task <ApplicationUser> GetUser(string id)
+		public async Task<UserProfileVM> GetUserProfile(string id)
+		{
+			var user = await _unitOfWork.UserRepo.GetUserProfileProps(id);
+
+			var userProfile = _mapper.Map<ApplicationUser, UserProfileVM>(user);
+
+			return userProfile;
+		}
+
+		public async Task<bool> EditAbout(string id, string about)
 		{
 			var user = await _unitOfWork.UserRepo.Get(u => u.Id == id);
-
-			return user;
+			if(user != null)
+			{
+				user.About = about;
+				_unitOfWork.UserRepo.Update(user);
+				await _unitOfWork.SaveAsync();
+				return true;
+			}
+			return false;
 		}
 
-		public async Task<ApplicationUser> EditAbout(string id, string about)
+		public async Task<List<ExperienceVM>> GetUserExperiences(string userid)
 		{
-			var user = await _unitOfWork.UserRepo.Get(u => u.Id == id);
-			user.About = about;
-			_unitOfWork.UserRepo.Update(user);
-			await _unitOfWork.UserRepo.Save();
-			return user;
+			var experienceList = await _unitOfWork.ExperienceRepo.GetUserExperiencesWithIndustry(userid);
+			var list = _mapper.Map<List<ExperienceVM>>(experienceList);
+			return list;
 		}
 
-		public async Task<List<Experience>> GetUserExperiences(string userid)
+		public async Task<ExperienceVM> GetExperience(int id)
 		{
-			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Experience");
-			var list = user.Experiences.ToList();
-			return user.Experiences.ToList();
-		}
-
-		public async Task<Experience> GetExperience(int id)
-		{
-			var experience = await _unitOfWork.ExperienceRepo.Get(e => e.Id == id);
+			var exp = await _unitOfWork.ExperienceRepo.Get(e => e.Id == id, includeProperties: "Industry");
+			var experience = _mapper.Map<ExperienceVM>(exp);
 			return experience;
 		}
-		public async Task<bool> AddExperience(Experience experience)
+		public async Task<bool> AddExperience(ExperienceVM experience)
 		{
-			await _unitOfWork.ExperienceRepo.Add(experience);
-			await _unitOfWork.ExperienceRepo.Save();
+			var mappedExperience = _mapper.Map<Experience>(experience);
+
+			await _unitOfWork.ExperienceRepo.Add(mappedExperience);
+			await _unitOfWork.SaveAsync();
 			return true;
 		}
 		public async Task<bool> RemoveExperience(int experienceId)
 		{
 			var experience = await _unitOfWork.ExperienceRepo.Get(e => e.Id == experienceId);
 			_unitOfWork.ExperienceRepo.Update(experience);
-			await _unitOfWork.ExperienceRepo.Save();
+			await _unitOfWork.SaveAsync();
 			return true;
 		}
-		public async Task<bool> UpdateExperience(Experience experience)
+		public async Task<bool> UpdateExperience(ExperienceVM experience)
 		{
-			_unitOfWork.ExperienceRepo.Update(experience);
-			await _unitOfWork.ExperienceRepo.Save();
+			var mappedExperience = _mapper.Map<Experience>(experience);
+
+			_unitOfWork.ExperienceRepo.Update(mappedExperience);
+			await _unitOfWork.SaveAsync();
 			return true;
 		}
 
-		public async Task<List<Education>> GetUserEducations(string userid)
+		public async Task<List<EducationVM>> GetUserEducations(string userid)
 		{
-			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Education");
-			var list = user.Educations.ToList();
-			return user.Educations.ToList();
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Educations");
+			var educationList = user.Educations.ToList();
+			var list = _mapper.Map<List<EducationVM>>(educationList);
+			return list;
 		}
 
-		public async Task<Education> GetEducation(int id)
+		public async Task<EducationVM> GetEducation(int id)
 		{
-			var education = await _unitOfWork.EducationRepo.Get(e => e.Id == id);
+			var edu = await _unitOfWork.EducationRepo.Get(e => e.Id == id);
+			var education = _mapper.Map<EducationVM>(edu);
 			return education;
 		}
-		public async Task<bool> AddEducation(Education education)
+		public async Task<bool> AddEducation(EducationVM education)
 		{
-			await _unitOfWork.EducationRepo.Add(education);
-			await _unitOfWork.EducationRepo.Save();
+			var mappedEducation = _mapper.Map<Education>(education);
+
+			await _unitOfWork.EducationRepo.Add(mappedEducation);
+			await _unitOfWork.SaveAsync();
 			return true;
 		}
 		public async Task<bool> RemoveEducation(int educationId)
 		{
 			var education = await _unitOfWork.EducationRepo.Get(e => e.Id == educationId);
 			_unitOfWork.EducationRepo.Update(education);
-			await _unitOfWork.EducationRepo.Save();
+			await _unitOfWork.SaveAsync();
 			return true;
 		}
-		public async Task<bool> UpdateEducation(Education education)
+		public async Task<bool> UpdateEducation(EducationVM education)
 		{
-			_unitOfWork.EducationRepo.Update(education);
-			await _unitOfWork.EducationRepo.Save();
+			var mappedEducation = _mapper.Map<Education>(education);
+
+			_unitOfWork.EducationRepo.Update(mappedEducation);
+			await _unitOfWork.SaveAsync();
 			return true;
 		}
 
-		public async Task<List<Post>> GetUserPosts(string userid)
+		public async Task<List<PostVM>> GetUserPosts(string userid)
 		{
-			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Post");
-			var list = user.Posts.ToList();
-			return user.Posts.ToList();
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Posts");
+			var postList = user.Posts.ToList();
+			var list = _mapper.Map<List<PostVM>>(postList);
+
+			return list;
 		}
-		public async Task<List<Skill>> GetUserSkills(string userid)
+		public async Task<List<SkillVM>> GetUserSkills(string userid)
 		{
-			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Skill");
-			var list = user.Skills.ToList();
-			return user.Skills.ToList();
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Skills");
+			var skillList = user.Skills.ToList();
+			var list  = _mapper.Map<List<SkillVM>>(skillList);
+
+			return list;
 		}
-		public async Task<List<Language>> GetUserLanguages(string userid)
+
+		public async Task<bool> AddSkill(SkillVM skill)
 		{
-			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Language");
-			var list = user.Languages.ToList();
-			return user.Languages.ToList();
+			var mappedSkill = _mapper.Map<Skill>(skill);
+
+			await _unitOfWork.SkillRepo.Add(mappedSkill);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> RemoveSkill(int skillId)
+		{
+			var skill = await _unitOfWork.SkillRepo.Get(s => s.Id == skillId);
+			_unitOfWork.SkillRepo.Update(skill);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> UpdateSkill (SkillVM skill)
+		{
+			var mappedSkill = _mapper.Map<Skill>(skill);
+
+			_unitOfWork.SkillRepo.Update(mappedSkill);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<List<LanguageVM>> GetUserLanguages(string userid)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Languages");
+			var languageList = user.Languages.ToList();
+			var list = _mapper.Map<List<LanguageVM>>(languageList);
+
+			return list;
+		}
+
+		public async Task<bool> AddLanguage(LanguageVM language)
+		{
+			var mappedLanguage = _mapper.Map<Language>(language);
+
+			await _unitOfWork.LanguageRepo.Add(mappedLanguage);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> RemoveLanguage(int languageId)
+		{
+			var language = await _unitOfWork.LanguageRepo.Get(s => s.Id == languageId);
+			_unitOfWork.LanguageRepo.Update(language);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> UpdateLanguage(LanguageVM language)
+		{
+			var mappedLanguage = _mapper.Map<Language>(language);
+
+			_unitOfWork.LanguageRepo.Update(mappedLanguage);
+			await _unitOfWork.SaveAsync();
+			return true;
 		}
 	}
 }

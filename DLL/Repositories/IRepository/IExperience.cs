@@ -10,5 +10,7 @@ namespace DLL.Repositories.IRepository
 {
 	public interface IExperience : IRepository<Experience>
 	{
+		public Task<List<Experience>> GetUserExperiencesWithIndustry(string userId);
+
 	}
 }

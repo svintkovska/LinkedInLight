@@ -15,6 +15,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using BLL.Utilities;
 using BLL.Utilities.SignalR;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -44,6 +45,7 @@ builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IPrivacySettingsService, PrivacySettingsService>();
+builder.Services.AddScoped<IProfileSecurityService, ProfileSecurityService>();
 
 
 var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<String>("JWTSecretKey")));

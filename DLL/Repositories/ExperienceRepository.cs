@@ -1,6 +1,7 @@
 ﻿using DLL.Data;
 using DLL.Repositories.IRepository;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,13 @@ namespace DLL.Repositories
 			_db = db;
 		}
 
-
+		public async Task<List<Experience>> GetUserExperiencesWithIndustry(string userId)
+		{
+			return await _db.ApplicationUsers
+				.Where(u => u.Id == userId)
+				.SelectMany(u => u.Experiences)
+				.Include(e => e.Industry)
+				.ToListAsync();
+		}
 	}
 }

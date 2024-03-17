@@ -1,7 +1,9 @@
 ﻿
+using BLL.ViewModels;
 using BLL.ViewModels.AuthModels;
 using DLL.Data;
 using DLL.Repositories;
+using DLL.Repositories.IRepository;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -13,27 +15,33 @@ namespace BLL.Interfaces
 {
 	public interface IProfileService
 	{
-		public Task<bool> ChangePassword(ChangePasswordVM model);
-		public Task<ApplicationUser> EditImage(string userId, bool background = false);
-		public  Task<ApplicationUser> GetUser(string id);
+		public Task<UserProfileVM> EditImage(string userId, bool background = false);
+		public  Task<UserProfileVM> GetUserProfile(string id);
 
-		public Task<ApplicationUser> EditAbout(string id, string about);
-		public Task<List<Experience>> GetUserExperiences(string id);
-		public Task<Experience> GetExperience(int id);
+		public Task<bool> EditAbout(string id, string about);
+		public Task<List<ExperienceVM>> GetUserExperiences(string id);
+		public Task<ExperienceVM> GetExperience(int id);
 
-		public Task<bool> AddExperience(Experience experienceDTO);
+		public Task<bool> AddExperience(ExperienceVM experienceVM);
 		public Task<bool> RemoveExperience(int experienceId);
-		public Task<bool> UpdateExperience(Experience experienceDTO);
+		public Task<bool> UpdateExperience(ExperienceVM experienceDTO);
 
-		public Task<List<Education>> GetUserEducations(string id);
-		public Task<Education> GetEducation(int id);
+		public Task<List<EducationVM>> GetUserEducations(string id);
+		public Task<EducationVM> GetEducation(int id);
 
-		public Task<bool> AddEducation(Education educationDTO);
+		public Task<bool> AddEducation(EducationVM educationDTO);
 		public Task<bool> RemoveEducation(int educationId);
-		public Task<bool> UpdateEducation(Education educationDTO);
-		public Task<List<Post>> GetUserPosts(string userid);
-		public Task<List<Skill>> GetUserSkills(string userid);
-		public Task<List<Language>> GetUserLanguages(string userid);
+		public Task<bool> UpdateEducation(EducationVM educationDTO);
+		public Task<List<PostVM>> GetUserPosts(string userid);
+		public Task<List<SkillVM>> GetUserSkills(string userid);
+		public Task<bool> AddSkill(SkillVM skill);
+		public Task<bool> RemoveSkill(int skillId);
+		public Task<bool> UpdateSkill(SkillVM skill);
+		
+		public Task<List<LanguageVM>> GetUserLanguages(string userid);
+		public Task<bool> AddLanguage(LanguageVM language);
+		public Task<bool> RemoveLanguage(int languageId);
+		public Task<bool> UpdateLanguage(LanguageVM language);
 
 
 

@@ -18,9 +18,16 @@ namespace DLL.Repositories
 			_db = db;
 		}
 
-		public async Task<ApplicationUser> GetByEmail(string email)
+		public async Task<ApplicationUser> GetUserProfileProps(string id)
 		{
-			return await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email == email);
+			return await _db.ApplicationUsers
+					.Include(u => u.Skills)
+					.Include(u => u.Languages)
+					.Include(u => u.Posts)
+					.Include(u => u.Educations)
+					.Include(u => u.Experiences)
+						.ThenInclude(e => e.Industry)
+					.FirstOrDefaultAsync(u => u.Id == id);
 		}
 	}
 }

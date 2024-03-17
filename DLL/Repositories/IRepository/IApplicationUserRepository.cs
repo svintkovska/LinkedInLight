@@ -10,7 +10,8 @@ namespace DLL.Repositories.IRepository
 {
 	public interface IApplicationUserRepository : IRepository<ApplicationUser>
 	{
-		public Task<ApplicationUser> GetByEmail(string email);
+		public Task<ApplicationUser> GetUserProfileProps(string id);
+
 
 	}
 }

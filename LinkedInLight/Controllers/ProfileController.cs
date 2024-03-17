@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using BLL.Services;
+using BLL.ViewModels;
 using BLL.ViewModels.AuthModels;
 using Domain.Models;
 using Google.Apis.Util;
@@ -24,13 +25,13 @@ namespace LinkedInLight.Controllers
 		{
 			_profileService = profileService;
 		}
-		[HttpGet("")]
-		public async Task<IActionResult> GetUser()
+		[HttpGet]
+		public async Task<IActionResult> GetUserProfile()
 		{
 			try
 			{
 				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var user = await _profileService.GetUser(userId);
+				var user = await _profileService.GetUserProfile(userId);
 				return Ok(user);
 			}
 			catch (Exception ex)
@@ -39,25 +40,8 @@ namespace LinkedInLight.Controllers
 			}
 		}
 
-		[HttpPost("edit/changePassword")]
-		public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordVM model)
-		{
-			try
-			{
-				var result = await _profileService.ChangePassword(model);
-				if (result)
-				{
-					return Ok();
-				}
-				return BadRequest("Error when changing password");
-			}
-			catch(Exception ex)
-			{
-				return BadRequest(ex.Message);
-
-			}		
-		}
-		[HttpPost("editImage")]
+		
+		[HttpPut("editImage")]
 		public async Task<ActionResult<ApplicationUser>> EditImage( bool background = false)
 		{
 			try
@@ -77,15 +61,15 @@ namespace LinkedInLight.Controllers
 			}			
 		}
 
-		[HttpGet("edit/about/{id}")]
+		[HttpGet("edit/about")]
 		public async Task< IActionResult> EditAbout()
 		{
 			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var user = await _profileService.GetUser(userId);
+			var user = await _profileService.GetUserProfile(userId);
 			return Ok(user.About);
 		}
 
-		[HttpPut("edit/about/{id}")]
+		[HttpPut("edit/about")]
 		public async Task<IActionResult> EditAboutPUT(string about)
 		{
 			try
@@ -100,7 +84,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 
-		[HttpGet("userExperiences/{id}")]
+		[HttpGet("userExperiences")]
 		public async Task<IActionResult> GetUserExperiences()
 		{
 			try
@@ -128,7 +112,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpPost("newExperience")]
-		public async Task<IActionResult> AddExperience(Experience experience)
+		public async Task<IActionResult> AddExperience(ExperienceVM experience)
 		{
 			try
 			{
@@ -140,8 +124,8 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-		[HttpPost("experience/edit/{id}")]
-		public async Task<IActionResult> UpdateExperience(Experience experience)
+		[HttpPut("experience/edit/{id}")]
+		public async Task<IActionResult> UpdateExperience(ExperienceVM experience)
 		{
 			try
 			{
@@ -153,7 +137,7 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-		[HttpPost("experience/remove/{id}")]
+		[HttpDelete("experience/remove/{id}")]
 		public async Task<IActionResult> RemoveExperience(int experienceId)
 		{
 			try
@@ -166,8 +150,8 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-		[HttpGet("userEducation/{id}")]
-		public async Task<IActionResult> GetUserEducation()
+		[HttpGet("userEducations")]
+		public async Task<IActionResult> GetUserEducations()
 		{
 			try
 			{
@@ -194,7 +178,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpPost("newEducation")]
-		public async Task<IActionResult> AddEducation(Education education)
+		public async Task<IActionResult> AddEducation(EducationVM education)
 		{
 			try
 			{
@@ -206,8 +190,8 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-		[HttpPost("education/edit/{id}")]
-		public async Task<IActionResult> UpdateEducation(Education education)
+		[HttpPut("education/edit/{id}")]
+		public async Task<IActionResult> UpdateEducation(EducationVM education)
 		{
 			try
 			{
@@ -219,7 +203,7 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-		[HttpPost("education/remove/{id}")]
+		[HttpDelete("education/remove/{id}")]
 		public async Task<IActionResult> RemoveEducation(int educationId)
 		{
 			try
@@ -233,7 +217,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 
-		[HttpGet("userPosts/{id}")]
+		[HttpGet("userPosts")]
 		public async Task<IActionResult> GetUserPosts()
 		{
 			try
@@ -248,7 +232,7 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-		[HttpGet("userSkills/{id}")]
+		[HttpGet("userSkills")]
 		public async Task<IActionResult> GetUserSkills()
 		{
 			try
@@ -262,7 +246,47 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-		[HttpGet("userLanguages/{id}")]
+		[HttpPost("newSkill")]
+		public async Task<IActionResult> AddSkill(SkillVM skill)
+		{
+			try
+			{
+				await _profileService.AddSkill(skill);
+				return Ok(skill);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPut("skill/edit/{id}")]
+		public async Task<IActionResult> UpdateSkill(SkillVM skill)
+		{
+			try
+			{
+				await _profileService.UpdateSkill(skill);
+				return Ok("Skill updated");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpDelete("skill/remove/{id}")]
+		public async Task<IActionResult> RemoveSkill(int skillId)
+		{
+			try
+			{
+				await _profileService.RemoveSkill(skillId);
+				return Ok("Skill deleted");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		[HttpGet("userLanguages")]
 		public async Task<IActionResult> GetUserLanguages()
 		{
 			try
@@ -270,6 +294,45 @@ namespace LinkedInLight.Controllers
 				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 				var list = await _profileService.GetUserLanguages(userId);
 				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPost("newLanguage")]
+		public async Task<IActionResult> AddLanguage(LanguageVM language)
+		{
+			try
+			{
+				await _profileService.AddLanguage(language);
+				return Ok(language);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPut("language/edit/{id}")]
+		public async Task<IActionResult> UpdateLanguage(LanguageVM language)
+		{
+			try
+			{
+				await _profileService.UpdateLanguage(language);
+				return Ok("Language updated");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpDelete("language/remove/{id}")]
+		public async Task<IActionResult> RemoveLanguage(int languageId)
+		{
+			try
+			{
+				await _profileService.RemoveLanguage(languageId);
+				return Ok("Language deleted");
 			}
 			catch (Exception ex)
 			{

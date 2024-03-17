@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240317193558_UpdateCommentLike")]
+    partial class UpdateCommentLike
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -735,42 +737,42 @@ namespace DLL.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "c66e80d8-31d9-4c5d-9019-4ed6ff31340d",
+                            ConcurrencyStamp = "a868e465-b470-4dc6-a186-11cd9b477d04",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "be126e4b-4ffe-4f84-9bd2-48015391a400",
+                            ConcurrencyStamp = "c5e80a3f-eb93-4ccf-9c9a-260eb3cff003",
                             Name = "moderator",
                             NormalizedName = "MODERATOR"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "4dd85e6c-c326-408a-83af-d2a943f92d65",
+                            ConcurrencyStamp = "689abb5f-b63c-4ab6-99bb-52c37fb8864a",
                             Name = "authorized_user",
                             NormalizedName = "AUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "4",
-                            ConcurrencyStamp = "30c35584-ad26-4803-972c-d8a4afe79d50",
+                            ConcurrencyStamp = "5e4118e2-7d6c-4f11-8573-76464a0674e1",
                             Name = "unauthorized_user",
                             NormalizedName = "UNAUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "5",
-                            ConcurrencyStamp = "cec0d0c1-a0dd-4648-9381-33d766074c09",
+                            ConcurrencyStamp = "1c848aaf-02db-4d13-9a80-e4b99f65616a",
                             Name = "founder",
                             NormalizedName = "FOUNDER"
                         },
                         new
                         {
                             Id = "6",
-                            ConcurrencyStamp = "8e166fe1-1512-4aa6-8ba8-6f86ebb3c530",
+                            ConcurrencyStamp = "32c5a2bc-7eb4-47d0-a63a-9736ed86a8b9",
                             Name = "recruiter",
                             NormalizedName = "RECRUITER"
                         });
@@ -971,9 +973,6 @@ namespace DLL.Migrations
                     b.Property<string>("Background")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("City")
                         .IsRequired()

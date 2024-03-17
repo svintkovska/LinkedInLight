@@ -15,8 +15,10 @@ namespace DLL.Data
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
 		{
+			this.ChangeTracker.LazyLoadingEnabled = false;
 
 		}
+
 		public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 		public DbSet<Experience> Experiences { get; set; }
 		public DbSet<Education> Educations { get; set; }
@@ -40,7 +42,7 @@ namespace DLL.Data
 		public DbSet<UserPrivacySettings> UserPrivacySettings { get; set; }
 		public DbSet<BlockedUser> BlockedUsers { get; set; }
 
-
+	
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
@@ -113,12 +115,6 @@ namespace DLL.Data
 				.WithMany(p => p.Likes)
 				.HasForeignKey(l => l.PostId)
 				.OnDelete(DeleteBehavior.Restrict);
-
-			modelBuilder.Entity<Like>()
-				.HasOne(l => l.Comment)
-				.WithMany(c => c.Likes)
-				.HasForeignKey(l => l.CommentId)
-				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Message>()
 			   .HasOne(m => m.Sender)
