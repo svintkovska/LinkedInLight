@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240318182439_AddCertification")]
+    partial class AddCertification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,36 +257,6 @@ namespace DLL.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("ConnectionRequests");
-                });
-
-            modelBuilder.Entity("Domain.Models.Course", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AssociatedWith")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("Domain.Models.Education", b =>
@@ -606,33 +578,6 @@ namespace DLL.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("Domain.Models.PhoneNumber", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PhoneNumbers");
-                });
-
             modelBuilder.Entity("Domain.Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -691,100 +636,6 @@ namespace DLL.Migrations
                     b.HasIndex("VisitorId");
 
                     b.ToTable("ProfileVisits");
-                });
-
-            modelBuilder.Entity("Domain.Models.Project", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AssociatedWith")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("CurrentlyWorking")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("Domain.Models.ProjectContributor", b =>
-                {
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ProjectId", "ApplicationUserId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("ProjectContributors");
-                });
-
-            modelBuilder.Entity("Domain.Models.Recommendation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("GivenAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("GivenByUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PositionAtTheTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReceivedByUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Relationship")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GivenByUserId");
-
-                    b.HasIndex("ReceivedByUserId");
-
-                    b.ToTable("Recommendations");
                 });
 
             modelBuilder.Entity("Domain.Models.ScreeningAnswer", b =>
@@ -894,76 +745,6 @@ namespace DLL.Migrations
                     b.ToTable("UserPrivacySettings");
                 });
 
-            modelBuilder.Entity("Domain.Models.VolunteerExperience", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Cause")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("CurrentlyVolunteering")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Organization")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("VolunteerExperiences");
-                });
-
-            modelBuilder.Entity("Domain.Models.Website", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Websites");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -994,42 +775,42 @@ namespace DLL.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "f882945e-c5c6-4d9a-b47d-d84c08813672",
+                            ConcurrencyStamp = "f1e4f522-d084-45d1-bc70-a9533276e398",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "4d6e1f98-fb11-4896-b1bb-ceb098e57e32",
+                            ConcurrencyStamp = "c03383c4-3911-431a-bbff-1b6160928a5f",
                             Name = "moderator",
                             NormalizedName = "MODERATOR"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "048803db-40a0-400a-82cb-011bcd1fabef",
+                            ConcurrencyStamp = "a9782479-29d0-499b-8c35-19db983fdb88",
                             Name = "authorized_user",
                             NormalizedName = "AUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "4",
-                            ConcurrencyStamp = "137593b3-1619-4261-827a-154fa4d9f0c7",
+                            ConcurrencyStamp = "789972d4-42d3-4479-92bd-74e3d39582b1",
                             Name = "unauthorized_user",
                             NormalizedName = "UNAUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "5",
-                            ConcurrencyStamp = "05b3e004-56c7-4851-8f44-0968ad534445",
+                            ConcurrencyStamp = "a3fe0ab4-6d79-4697-9562-e5cf5987b8dc",
                             Name = "founder",
                             NormalizedName = "FOUNDER"
                         },
                         new
                         {
                             Id = "6",
-                            ConcurrencyStamp = "e1e547e3-e0c6-4363-aa13-ad84ece887b2",
+                            ConcurrencyStamp = "b2026060-f3c7-44e9-910d-bf4e613bbb01",
                             Name = "recruiter",
                             NormalizedName = "RECRUITER"
                         });
@@ -1227,10 +1008,6 @@ namespace DLL.Migrations
                     b.Property<string>("AdditionalName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Background")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1264,6 +1041,9 @@ namespace DLL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPrivateProfile")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsRecruiter")
@@ -1399,13 +1179,6 @@ namespace DLL.Migrations
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("Domain.Models.Course", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Domain.Models.Education", b =>
@@ -1550,17 +1323,6 @@ namespace DLL.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("Domain.Models.PhoneNumber", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "User")
-                        .WithMany("PhoneNumbers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Domain.Models.Post", b =>
                 {
                     b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
@@ -1589,51 +1351,6 @@ namespace DLL.Migrations
                     b.Navigation("ProfileOwner");
 
                     b.Navigation("Visitor");
-                });
-
-            modelBuilder.Entity("Domain.Models.Project", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("Domain.Models.ProjectContributor", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("ProjectContributors")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.Project", "Project")
-                        .WithMany("ProjectContributors")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("Domain.Models.Recommendation", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "GivenByUser")
-                        .WithMany("GivenRecommendations")
-                        .HasForeignKey("GivenByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.ApplicationUser", "ReceivedByUser")
-                        .WithMany("ReceivedRecommendations")
-                        .HasForeignKey("ReceivedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("GivenByUser");
-
-                    b.Navigation("ReceivedByUser");
                 });
 
             modelBuilder.Entity("Domain.Models.ScreeningAnswer", b =>
@@ -1682,24 +1399,6 @@ namespace DLL.Migrations
                     b.HasOne("Domain.Models.ApplicationUser", "User")
                         .WithOne("UserPrivacySettings")
                         .HasForeignKey("Domain.Models.UserPrivacySettings", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Models.VolunteerExperience", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", null)
-                        .WithMany("VolunteerExperiences")
-                        .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("Domain.Models.Website", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "User")
-                        .WithMany("Websites")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1776,11 +1475,6 @@ namespace DLL.Migrations
                     b.Navigation("Likes");
                 });
 
-            modelBuilder.Entity("Domain.Models.Project", b =>
-                {
-                    b.Navigation("ProjectContributors");
-                });
-
             modelBuilder.Entity("Domain.Models.UserPrivacySettings", b =>
                 {
                     b.Navigation("BlockedUsers");
@@ -1796,13 +1490,9 @@ namespace DLL.Migrations
 
                     b.Navigation("Connections");
 
-                    b.Navigation("Courses");
-
                     b.Navigation("Educations");
 
                     b.Navigation("Experiences");
-
-                    b.Navigation("GivenRecommendations");
 
                     b.Navigation("JobPostings");
 
@@ -1812,17 +1502,9 @@ namespace DLL.Migrations
 
                     b.Navigation("Notifications");
 
-                    b.Navigation("PhoneNumbers");
-
                     b.Navigation("Posts");
 
-                    b.Navigation("ProjectContributors");
-
-                    b.Navigation("Projects");
-
                     b.Navigation("ReceivedConnectionRequests");
-
-                    b.Navigation("ReceivedRecommendations");
 
                     b.Navigation("SentConnectionRequests");
 
@@ -1830,10 +1512,6 @@ namespace DLL.Migrations
 
                     b.Navigation("UserPrivacySettings")
                         .IsRequired();
-
-                    b.Navigation("VolunteerExperiences");
-
-                    b.Navigation("Websites");
                 });
 #pragma warning restore 612, 618
         }

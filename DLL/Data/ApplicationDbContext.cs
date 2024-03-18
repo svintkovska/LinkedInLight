@@ -41,6 +41,13 @@ namespace DLL.Data
 		public DbSet<ProfileVisit> ProfileVisits { get; set; }
 		public DbSet<UserPrivacySettings> UserPrivacySettings { get; set; }
 		public DbSet<BlockedUser> BlockedUsers { get; set; }
+		public DbSet<Certification> Certifications { get; set; }
+		public DbSet<Project> Projects { get; set; }
+		public DbSet<ProjectContributor> ProjectContributors { get; set; }
+		public DbSet<Recommendation> Recommendations { get; set; }
+		public DbSet<VolunteerExperience> VolunteerExperiences { get; set; }
+		public DbSet<PhoneNumber> PhoneNumbers { get; set; }
+		public DbSet<Website> Websites { get; set; }
 
 	
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -212,6 +219,43 @@ namespace DLL.Data
 				.WithMany()
 				.HasForeignKey(b => b.BlockedUserId)
 				.OnDelete(DeleteBehavior.NoAction);
+
+			modelBuilder.Entity<ProjectContributor>()
+				.HasKey(pc => new { pc.ProjectId, pc.ApplicationUserId });
+
+			modelBuilder.Entity<ProjectContributor>()
+				.HasOne(pc => pc.Project)
+				.WithMany(p => p.ProjectContributors)
+				.HasForeignKey(pc => pc.ProjectId);
+
+			modelBuilder.Entity<ProjectContributor>()
+				.HasOne(pc => pc.ApplicationUser)
+				.WithMany(u => u.ProjectContributors)
+				.HasForeignKey(pc => pc.ApplicationUserId);
+
+			modelBuilder.Entity<Recommendation>()
+				.HasOne(r => r.GivenByUser)
+				.WithMany(u => u.GivenRecommendations)
+				.HasForeignKey(r => r.GivenByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Recommendation>()
+				.HasOne(r => r.ReceivedByUser)
+				.WithMany(u => u.ReceivedRecommendations)
+				.HasForeignKey(r => r.ReceivedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<PhoneNumber>()
+				.HasOne(p => p.User)
+				.WithMany(u => u.PhoneNumbers)
+				.HasForeignKey(p => p.UserId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<Website>()
+				.HasOne(w => w.User)
+				.WithMany(u => u.Websites)
+				.HasForeignKey(w => w.UserId)
+				.OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

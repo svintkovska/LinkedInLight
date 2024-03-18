@@ -32,6 +32,13 @@ namespace DLL.Repositories.IRepository
 		IProfileVisit ProfileVisitRepo { get; }
 		IUserPrivacySettings UserPrivacySettingsRepo { get; }
 		IBlockedUser BlockedUserRepo { get; }
+		ICertification CertificationRepo { get; }
+		IProject ProjectRepo { get; }
+		IProjectContributor ProjectContributorRepo { get; }
+		IRecommendation RecommendationRepo{ get; }
+		IVolunteerExperience VolunteerExperienceRepo { get; }
+		IPhoneNumber PhoneNumberRepo { get; }
+		IWebsite WebsiteRepo { get; }
 
 		public Task SaveAsync();
 

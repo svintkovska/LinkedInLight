@@ -14,14 +14,28 @@ namespace BLL.Utilities
 		public MappingProfile()
 		{
 			CreateMap<ApplicationUser, UserProfileVM>()
-			.ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-			.ForMember(dest => dest.Experiences, opt => opt.MapFrom(src => src.Experiences))
-			.ForMember(dest => dest.Educations, opt => opt.MapFrom(src => src.Educations))
-			.ForMember(dest => dest.Skills, opt => opt.MapFrom(src => src.Skills))
-			.ForMember(dest => dest.Languages, opt => opt.MapFrom(src => src.Languages))
-			.ForMember(dest => dest.Posts, opt => opt.MapFrom(src => src.Posts));
+				.ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+				.ForMember(dest => dest.Experiences, opt => opt.MapFrom(src => src.Experiences))
+				.ForMember(dest => dest.Educations, opt => opt.MapFrom(src => src.Educations))
+				.ForMember(dest => dest.Skills, opt => opt.MapFrom(src => src.Skills))
+				.ForMember(dest => dest.Languages, opt => opt.MapFrom(src => src.Languages))
+				.ForMember(dest => dest.Posts, opt => opt.MapFrom(src => src.Posts))
+				.ForMember(dest => dest.Certifications, opt => opt.MapFrom(src => src.Certifications))
+				.ForMember(dest => dest.Projects, opt => opt.MapFrom(src => src.Projects))
+				.ForMember(dest => dest.Courses, opt => opt.MapFrom(src => src.Courses))
+				.ForMember(dest => dest.ReceivedRecommendations, opt => opt.MapFrom(src => src.ReceivedRecommendations))
+				.ForMember(dest => dest.GivenRecommendations, opt => opt.MapFrom(src => src.GivenRecommendations))
+				.ForMember(dest => dest.VolunteerExperiences, opt => opt.MapFrom(src => src.VolunteerExperiences))
+				.ForMember(dest => dest.PhoneNumbers, opt => opt.MapFrom(src => src.PhoneNumbers))
+				.ForMember(dest => dest.Websites, opt => opt.MapFrom(src => src.Websites));
 
 			CreateMap<Education, EducationVM>();
+			CreateMap<Certification, CertificationVM>();
+			CreateMap<Course, CourseVM>();
+			CreateMap<Recommendation, RecommendationVM>();
+			CreateMap<VolunteerExperience, VolunteerExperienceVM>();
+			CreateMap<PhoneNumber, PhoneNumberVM>();
+			CreateMap<Website, WebsiteVM>();
 			CreateMap<Skill, SkillVM>();
 			CreateMap<Language, LanguageVM>();
 			CreateMap<Comment, CommentVM>();
@@ -32,6 +46,19 @@ namespace BLL.Utilities
 
 			CreateMap<Experience, ExperienceVM>()
 				.ForMember(dest => dest.Industry, opt => opt.MapFrom(src => new IndustryVM { Id = src.Industry.Id, Name = src.Industry.Name }));
+
+			
+
+			CreateMap<Project, ProjectVM>()
+				.ForMember(dest => dest.ProjectContributors, opt => opt.MapFrom(src => src.ProjectContributors.Select(pc => new ProjectContributorVM
+				{
+					ProjectId = pc.ProjectId,
+					ApplicationUserId = pc.ApplicationUserId
+				})));
+
+
+			CreateMap<ProjectContributor, ProjectContributorVM>();
+
 		}
 	}
 }

@@ -50,7 +50,13 @@ namespace DLL.Repositories
 		public IProfileVisit ProfileVisitRepo { get; private set; }
 		public IUserPrivacySettings UserPrivacySettingsRepo { get; private set; }
 		public IBlockedUser BlockedUserRepo { get; private set; }
-
+		public ICertification CertificationRepo { get; private set; }
+		public IProject ProjectRepo { get; private set; }
+		public IProjectContributor ProjectContributorRepo { get; private set; }
+		public IRecommendation RecommendationRepo { get; private set; }
+		public IVolunteerExperience VolunteerExperienceRepo { get; private set; }
+		public IPhoneNumber PhoneNumberRepo { get; private set; }
+		public IWebsite WebsiteRepo { get; private set; }
 		public UnitOfWork(ApplicationDbContext db)
 		{
 			_db = db;
@@ -76,7 +82,13 @@ namespace DLL.Repositories
 			LanguageRepo = new LanguageRepository(_db);
 			UserPrivacySettingsRepo= new UserPrivacySettingsRepository(_db);
 			BlockedUserRepo= new BlockedUserRepository(_db);
-
+			CertificationRepo= new CertificationRepository(_db);
+			ProjectRepo= new ProjectRepository(_db);
+			ProjectContributorRepo = new ProjectContributorsRepository(_db);
+			RecommendationRepo = new RecommendationRepository(_db) ;
+			VolunteerExperienceRepo = new VolunteerExperienceRepository(_db);
+			PhoneNumberRepo = new PhoneNumberRepository(_db);
+			WebsiteRepo = new WebsiteRepository(_db);
 			
 		}
 		public async Task SaveAsync()

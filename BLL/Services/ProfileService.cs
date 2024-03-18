@@ -19,17 +19,13 @@ namespace BLL.Services
 {
 	public class ProfileService: IProfileService
 	{
-		private readonly UserManager<ApplicationUser> _userManager;
-		private readonly SignInManager<ApplicationUser> _signInManager;
+
 		private readonly IUploadService _uploadService;
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
 
-		public ProfileService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUploadService uploadService,  
-			IUnitOfWork unitOfWork, IMapper mapper)
+		public ProfileService(IUploadService uploadService, IUnitOfWork unitOfWork, IMapper mapper)
 		{
-			_userManager = userManager;
-			_signInManager = signInManager;
 			_uploadService = uploadService;
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;

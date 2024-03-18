@@ -30,7 +30,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e";
 				var user = await _profileService.GetUserProfile(userId);
 				return Ok(user);
 			}

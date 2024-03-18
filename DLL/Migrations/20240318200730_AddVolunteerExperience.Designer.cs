@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240318200730_AddVolunteerExperience")]
+    partial class AddVolunteerExperience
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -606,33 +608,6 @@ namespace DLL.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("Domain.Models.PhoneNumber", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PhoneNumbers");
-                });
-
             modelBuilder.Entity("Domain.Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -937,33 +912,6 @@ namespace DLL.Migrations
                     b.ToTable("VolunteerExperiences");
                 });
 
-            modelBuilder.Entity("Domain.Models.Website", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Websites");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -994,42 +942,42 @@ namespace DLL.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "f882945e-c5c6-4d9a-b47d-d84c08813672",
+                            ConcurrencyStamp = "9efc36e7-ef6f-41e2-9f7e-1cb8ed8bca23",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "4d6e1f98-fb11-4896-b1bb-ceb098e57e32",
+                            ConcurrencyStamp = "3528f6d9-90a4-4429-8e85-a47750d5e687",
                             Name = "moderator",
                             NormalizedName = "MODERATOR"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "048803db-40a0-400a-82cb-011bcd1fabef",
+                            ConcurrencyStamp = "0e2e9c2c-a9d3-44fb-a10f-f6ad0a19c332",
                             Name = "authorized_user",
                             NormalizedName = "AUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "4",
-                            ConcurrencyStamp = "137593b3-1619-4261-827a-154fa4d9f0c7",
+                            ConcurrencyStamp = "3628ae4a-9bde-4a3c-9249-c3cfe84a02ac",
                             Name = "unauthorized_user",
                             NormalizedName = "UNAUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "5",
-                            ConcurrencyStamp = "05b3e004-56c7-4851-8f44-0968ad534445",
+                            ConcurrencyStamp = "eb47f1a0-caea-41e4-acf7-a43be1422615",
                             Name = "founder",
                             NormalizedName = "FOUNDER"
                         },
                         new
                         {
                             Id = "6",
-                            ConcurrencyStamp = "e1e547e3-e0c6-4363-aa13-ad84ece887b2",
+                            ConcurrencyStamp = "fadc3500-bcf8-4803-bd57-2ba2fd0baa09",
                             Name = "recruiter",
                             NormalizedName = "RECRUITER"
                         });
@@ -1266,6 +1214,9 @@ namespace DLL.Migrations
                     b.Property<bool>("IsBanned")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsPrivateProfile")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsRecruiter")
                         .HasColumnType("bit");
 
@@ -1278,6 +1229,10 @@ namespace DLL.Migrations
 
                     b.Property<bool>("OpenToWork")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PhoneType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfileUrl")
                         .IsRequired()
@@ -1550,17 +1505,6 @@ namespace DLL.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("Domain.Models.PhoneNumber", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "User")
-                        .WithMany("PhoneNumbers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Domain.Models.Post", b =>
                 {
                     b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
@@ -1695,17 +1639,6 @@ namespace DLL.Migrations
                         .HasForeignKey("ApplicationUserId");
                 });
 
-            modelBuilder.Entity("Domain.Models.Website", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "User")
-                        .WithMany("Websites")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1812,8 +1745,6 @@ namespace DLL.Migrations
 
                     b.Navigation("Notifications");
 
-                    b.Navigation("PhoneNumbers");
-
                     b.Navigation("Posts");
 
                     b.Navigation("ProjectContributors");
@@ -1832,8 +1763,6 @@ namespace DLL.Migrations
                         .IsRequired();
 
                     b.Navigation("VolunteerExperiences");
-
-                    b.Navigation("Websites");
                 });
 #pragma warning restore 612, 618
         }
