@@ -656,5 +656,74 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+
+
+		[HttpGet("userProjects")]
+		public async Task<IActionResult> GetUserProjects()
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetUserProjects(userId);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpGet("project/{id}")]
+		public async Task<IActionResult> GetProject(int projectId)
+		{
+			try
+			{
+				var project = await _profileService.GetProject(projectId);
+				return Ok(project);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPost("newProject")]
+		public async Task<IActionResult> AddProject(ProjectVM project)
+		{
+			try
+			{
+				await _profileService.AddProjectWithContributors(project);
+				return Ok(project);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPut("project/edit/{id}")]
+		public async Task<IActionResult> UpdateProject(ProjectVM project)
+		{
+			try
+			{
+				await _profileService.UpdateProjectWithContributors(project);
+				return Ok("Project updated");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpDelete("project/remove/{id}")]
+		public async Task<IActionResult> RemoveProject(int projectId)
+		{
+			try
+			{
+				await _profileService.RemoveProject(projectId);
+				return Ok("Project deleted");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
 	}
 }

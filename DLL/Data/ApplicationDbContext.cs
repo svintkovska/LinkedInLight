@@ -219,7 +219,11 @@ namespace DLL.Data
 				.WithMany()
 				.HasForeignKey(b => b.BlockedUserId)
 				.OnDelete(DeleteBehavior.NoAction);
-
+			modelBuilder.Entity<Project>()
+				.HasOne(p => p.ApplicationUser)
+				.WithMany(u => u.Projects)
+				.HasForeignKey(p => p.ApplicationUserId)
+				.OnDelete(DeleteBehavior.NoAction);
 			modelBuilder.Entity<ProjectContributor>()
 				.HasKey(pc => new { pc.ProjectId, pc.ApplicationUserId });
 

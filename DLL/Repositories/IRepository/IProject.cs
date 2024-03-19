@@ -9,5 +9,7 @@ namespace DLL.Repositories.IRepository
 {
 	public interface IProject: IRepository<Project>
 	{
+		public Task<List<Project>> GetUserProjects(string userId);
+		public Task<Project> GetProjectWithContributors(int projectId);
 	}
 }

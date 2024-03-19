@@ -47,7 +47,8 @@ namespace BLL.Utilities
 			CreateMap<Experience, ExperienceVM>()
 				.ForMember(dest => dest.Industry, opt => opt.MapFrom(src => new IndustryVM { Id = src.Industry.Id, Name = src.Industry.Name }));
 
-			
+			CreateMap<Industry, IndustryVM>();
+
 
 			CreateMap<Project, ProjectVM>()
 				.ForMember(dest => dest.ProjectContributors, opt => opt.MapFrom(src => src.ProjectContributors.Select(pc => new ProjectContributorVM

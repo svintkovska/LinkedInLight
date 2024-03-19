@@ -16,6 +16,8 @@ namespace BLL.ViewModels
 		public DateTime? EndDate { get; set; }
 		public bool CurrentlyWorking { get; set; }
 		public string AssociatedWith { get; set; }
+		public string ApplicationUserId { get; set; }
+
 		public ICollection<ProjectContributorVM> ProjectContributors { get; set; }
 
 	}

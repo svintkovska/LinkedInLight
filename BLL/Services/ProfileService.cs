@@ -517,5 +517,99 @@ namespace BLL.Services
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
+
+
+		public async Task<List<ProjectVM>> GetUserProjects(string userid)
+		{
+			var projects = await _unitOfWork.ProjectRepo.GetUserProjects(userid);
+			var list = _mapper.Map<List<ProjectVM>>(projects);
+			return list;
+		}
+		public async Task<ProjectVM> GetProject(int id)
+		{
+			var proj = await _unitOfWork.ProjectRepo.GetProjectWithContributors(id);
+			var project = _mapper.Map<ProjectVM>(proj);
+			return project;
+		}
+		public async Task<bool> AddProjectWithContributors(ProjectVM projectVM)
+		{
+			var project = _mapper.Map<Project>(projectVM);
+			await _unitOfWork.ProjectRepo.Add(project);
+			await _unitOfWork.SaveAsync();
+
+			foreach (var contributorId in projectVM.ProjectContributors.Select(pc => pc.ApplicationUserId))
+			{
+				var contributor = await _unitOfWork.UserRepo.Get(u=>u.Id == contributorId);
+				if (contributor != null)
+				{
+					var projectContributor = new ProjectContributor
+					{
+						ProjectId = project.Id,
+						ApplicationUserId = contributor.Id
+					};
+					await _unitOfWork.ProjectContributorRepo.Add(projectContributor);
+				}
+			}
+			await _unitOfWork.SaveAsync();
+
+			return true;
+		}
+		public async Task<bool> RemoveProject(int projectId)
+		{
+			var project = await _unitOfWork.ProjectRepo.GetProjectWithContributors(projectId);
+
+			if (project == null)
+			{
+				return false;
+			}
+
+			foreach (var contributor in project.ProjectContributors.ToList())
+			{
+				_unitOfWork.ProjectContributorRepo.Remove(contributor);
+			}
+			_unitOfWork.ProjectRepo.Remove(project);
+
+			await _unitOfWork.SaveAsync();
+
+			return true;
+		}
+		public async Task<bool> UpdateProjectWithContributors(ProjectVM projectVM)
+		{
+			var project = await _unitOfWork.ProjectRepo.Get(p => p.Id == projectVM.Id, includeProperties: "ProjectContributors");
+
+			if (project == null)
+			{
+				return false;
+			}
+
+			_mapper.Map(projectVM, project);
+
+			var contributorsToRemove = project.ProjectContributors.Where(pc => !projectVM.ProjectContributors.Any(pcv => pcv.ApplicationUserId == pc.ApplicationUserId)).ToList();
+			foreach (var contributor in contributorsToRemove)
+			{
+				_unitOfWork.ProjectContributorRepo.Remove(contributor);
+			}
+
+			foreach (var contributorId in projectVM.ProjectContributors.Select(pc => pc.ApplicationUserId))
+			{
+				if (!project.ProjectContributors.Any(pc => pc.ApplicationUserId == contributorId))
+				{
+					var newContributor = await _unitOfWork.UserRepo.Get(u => u.Id == contributorId);
+					if (newContributor != null)
+					{
+						var projectContributor = new ProjectContributor
+						{
+							ProjectId = project.Id,
+							ApplicationUserId = newContributor.Id
+						};
+						await _unitOfWork.ProjectContributorRepo.Add(projectContributor);
+					}
+				}
+			}
+			await _unitOfWork.SaveAsync();
+
+			return true;
+		}
+
 	}
 }

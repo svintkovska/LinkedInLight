@@ -17,6 +17,8 @@ namespace Domain.Models
 		public DateTime? EndDate { get; set; }
 		public bool CurrentlyWorking { get; set; }
 		public string? AssociatedWith { get; set; }
+		public string ApplicationUserId { get; set; }
+		public virtual ApplicationUser ApplicationUser { get; set; }
 		public virtual ICollection<ProjectContributor> ProjectContributors { get; set; }
 
 	}

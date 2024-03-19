@@ -74,5 +74,12 @@ namespace BLL.Interfaces
 		public Task<bool> AddVolunteerExperience(VolunteerExperienceVM volunteerExperience);
 		public Task<bool> RemoveVolunteerExperience(int volunteerExperienceId);
 		public Task<bool> UpdateVolunteerExperience(VolunteerExperienceVM volunteerExperience);
+
+
+		public Task<List<ProjectVM>> GetUserProjects(string userid);
+		public Task<ProjectVM> GetProject(int id);
+		public Task<bool> AddProjectWithContributors(ProjectVM projectVM);
+		public Task<bool> RemoveProject(int projectId);
+		public Task<bool> UpdateProjectWithContributors(ProjectVM projectVM);
 	}
 }
