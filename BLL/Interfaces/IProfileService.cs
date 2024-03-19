@@ -56,5 +56,17 @@ namespace BLL.Interfaces
 		public Task<bool> AddCourse(CourseVM course);
 		public Task<bool> RemoveCourse(int courseId);
 		public Task<bool> UpdateCourse(CourseVM course);
+
+
+		public Task<List<PhoneNumberVM>> GetPhoneNumbers(string userid);
+		public Task<bool> AddPhoneNumber(PhoneNumberVM phoneNumber);
+		public Task<bool> RemovePhoneNumber(int phoneNumberId);
+		public Task<bool> UpdatePhoneNumber(PhoneNumberVM phoneNumber);
+
+
+		public Task<List<WebsiteVM>> GetWebsites(string userid);
+		public Task<bool> AddWebsite(WebsiteVM website);
+		public Task<bool> RemoveWebsite(int websiteId);
+		public Task<bool> UpdateWebsite(WebsiteVM website);
 	}
 }

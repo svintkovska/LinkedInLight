@@ -126,7 +126,7 @@ namespace BLL.Services
 		public async Task<bool> RemoveExperience(int experienceId)
 		{
 			var experience = await _unitOfWork.ExperienceRepo.Get(e => e.Id == experienceId);
-			_unitOfWork.ExperienceRepo.Update(experience);
+			_unitOfWork.ExperienceRepo.Remove(experience);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -176,7 +176,7 @@ namespace BLL.Services
 		public async Task<bool> RemoveEducation(int educationId)
 		{
 			var education = await _unitOfWork.EducationRepo.Get(e => e.Id == educationId);
-			_unitOfWork.EducationRepo.Update(education);
+			_unitOfWork.EducationRepo.Remove(education);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -230,7 +230,7 @@ namespace BLL.Services
 		public async Task<bool> RemoveSkill(int skillId)
 		{
 			var skill = await _unitOfWork.SkillRepo.Get(s => s.Id == skillId);
-			_unitOfWork.SkillRepo.Update(skill);
+			_unitOfWork.SkillRepo.Remove(skill);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -270,7 +270,7 @@ namespace BLL.Services
 		public async Task<bool> RemoveLanguage(int languageId)
 		{
 			var language = await _unitOfWork.LanguageRepo.Get(s => s.Id == languageId);
-			_unitOfWork.LanguageRepo.Update(language);
+			_unitOfWork.LanguageRepo.Remove(language);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -316,7 +316,7 @@ namespace BLL.Services
 		public async Task<bool> RemoveCertification(int certificationId)
 		{
 			var certification = await _unitOfWork.CertificationRepo.Get(e => e.Id == certificationId);
-			_unitOfWork.CertificationRepo.Update(certification);
+			_unitOfWork.CertificationRepo.Remove(certification);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -366,7 +366,7 @@ namespace BLL.Services
 		public async Task<bool> RemoveCourse(int courseId)
 		{
 			var course = await _unitOfWork.CourseRepo.Get(e => e.Id == courseId);
-			_unitOfWork.CourseRepo.Update(course);
+			_unitOfWork.CourseRepo.Remove(course);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -384,6 +384,86 @@ namespace BLL.Services
 		
 
 			_unitOfWork.CourseRepo.Update(existingCourse);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+
+
+		public async Task<List<PhoneNumberVM>> GetPhoneNumbers(string userid)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "PhoneNumbers");
+			var phoneNumberlist = user.PhoneNumbers.ToList();
+			var list = _mapper.Map<List<PhoneNumberVM>>(phoneNumberlist);
+			return list;
+		}
+		public async Task<bool> AddPhoneNumber(PhoneNumberVM phoneNumber)
+		{
+			var mappedPhoneNumber = _mapper.Map<PhoneNumber>(phoneNumber);
+
+			await _unitOfWork.PhoneNumberRepo.Add(mappedPhoneNumber);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> RemovePhoneNumber(int phoneNumberId)
+		{
+			var phoneNumber = await _unitOfWork.PhoneNumberRepo.Get(e => e.Id == phoneNumberId);
+			_unitOfWork.PhoneNumberRepo.Remove(phoneNumber);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> UpdatePhoneNumber(PhoneNumberVM phoneNumber)
+		{
+			var existingPhoneNumber = await _unitOfWork.PhoneNumberRepo.Get(e => e.Id == phoneNumber.Id);
+			if (existingPhoneNumber == null)
+			{
+				return false;
+			}
+
+			existingPhoneNumber.Number = phoneNumber.Number;
+			existingPhoneNumber.Type = phoneNumber.Type;
+
+
+			_unitOfWork.PhoneNumberRepo.Update(existingPhoneNumber);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+
+
+		public async Task<List<WebsiteVM>> GetWebsites(string userid)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Websites");
+			var websiteList = user.Websites.ToList();
+			var list = _mapper.Map<List<WebsiteVM>>(websiteList);
+			return list;
+		}
+		public async Task<bool> AddWebsite(WebsiteVM website)
+		{
+			var mappedWebsite = _mapper.Map<Website>(website);
+
+			await _unitOfWork.WebsiteRepo.Add(mappedWebsite);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> RemoveWebsite(int websiteId)
+		{
+			var website = await _unitOfWork.WebsiteRepo.Get(e => e.Id == websiteId);
+			_unitOfWork.WebsiteRepo.Remove(website);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> UpdateWebsite(WebsiteVM website)
+		{
+			var existingWebsite = await _unitOfWork.WebsiteRepo.Get(e => e.Id == website.Id);
+			if (existingWebsite == null)
+			{
+				return false;
+			}
+
+			existingWebsite.Url = website.Url;
+			existingWebsite.Type = website.Type;
+
+
+			_unitOfWork.WebsiteRepo.Update(existingWebsite);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}

@@ -476,5 +476,117 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+
+
+		[HttpGet("userPhoneNumbers")]
+		public async Task<IActionResult> GetUserPhoneNumbers()
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetPhoneNumbers(userId);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		
+		[HttpPost("newPhoneNumber")]
+		public async Task<IActionResult> AddPhoneNumber(PhoneNumberVM phoneNumber)
+		{
+			try
+			{
+				await _profileService.AddPhoneNumber(phoneNumber);
+				return Ok(phoneNumber);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPut("phoneNumber/edit/{id}")]
+		public async Task<IActionResult> UpdateCertification(PhoneNumberVM phoneNumber)
+		{
+			try
+			{
+				await _profileService.UpdatePhoneNumber(phoneNumber);
+				return Ok("Phone Number updated");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpDelete("phoneNumber/remove/{id}")]
+		public async Task<IActionResult> RemovePhoneNumber(int phoneNumberId)
+		{
+			try
+			{
+				await _profileService.RemovePhoneNumber(phoneNumberId);
+				return Ok("Phone Number deleted");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+
+		[HttpGet("userWebsites")]
+		public async Task<IActionResult> GetUserWebsites()
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetWebsites(userId);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		[HttpPost("newWebsite")]
+		public async Task<IActionResult> AddWebsite(WebsiteVM website)
+		{
+			try
+			{
+				await _profileService.AddWebsite(website);
+				return Ok(website);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPut("website/edit/{id}")]
+		public async Task<IActionResult> UpdateCertification(WebsiteVM website)
+		{
+			try
+			{
+				await _profileService.UpdateWebsite(website);
+				return Ok("Website Number updated");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpDelete("website/remove/{id}")]
+		public async Task<IActionResult> RemoveWebsite(int websiteId)
+		{
+			try
+			{
+				await _profileService.RemoveWebsite(websiteId);
+				return Ok("Website deleted");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 	}
 }
