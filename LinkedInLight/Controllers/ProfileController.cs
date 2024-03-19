@@ -30,8 +30,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e";
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 				var user = await _profileService.GetUserProfile(userId);
 				return Ok(user);
 			}
@@ -43,12 +42,12 @@ namespace LinkedInLight.Controllers
 
 		
 		[HttpPut("editImage")]
-		public async Task<ActionResult<ApplicationUser>> EditImage( bool background = false)
+		public async Task<ActionResult<ApplicationUser>> EditImage([FromForm] string newImage, bool background = false)
 		{
 			try
 			{
 				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var result = await _profileService.EditImage(userId, background);
+				var result = await _profileService.EditImage(userId, newImage, background);
 				if (result != null)
 				{
 					return Ok(result);

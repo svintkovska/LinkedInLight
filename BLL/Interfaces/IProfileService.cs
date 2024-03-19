@@ -15,7 +15,7 @@ namespace BLL.Interfaces
 {
 	public interface IProfileService
 	{
-		public Task<UserProfileVM> EditImage(string userId, bool background = false);
+		public Task<UserProfileVM> EditImage(string userId, string newImage, bool background = false);
 		public  Task<UserProfileVM> GetUserProfile(string id);
 
 		public Task<bool> EditAbout(string id, string about);

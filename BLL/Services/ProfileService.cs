@@ -32,38 +32,41 @@ namespace BLL.Services
 		}
 
 	
-		public async Task<UserProfileVM> EditImage(string userId, bool background = false)
+		public async Task<UserProfileVM> EditImage(string userId, string newImage, bool background = false)
 		{
 			var user =  await _unitOfWork.UserRepo.Get(u=>u.Id== userId);
 			if (!background)
 			{
-				if (!string.IsNullOrEmpty(user.Image) && user.Image.Split(',').Length == 2)
+
+				if (!string.IsNullOrEmpty(newImage) && newImage.Split(',').Length == 2)
 				{
 					if (user.Image != null)
 					{
 						_uploadService.RemoveImage(user.Image);
 					}
-					user.Image = _uploadService.SaveImageFromBase64(user.Image);
+					user.Image = _uploadService.SaveImageFromBase64(newImage);
 				}
 
-				if (string.IsNullOrEmpty(user.Image) && user.Image != null)
+				if (string.IsNullOrEmpty(newImage) && user.Image != null)
 				{
 					_uploadService.RemoveImage(user.Image);
 					user.Image = null;
 				}
+
+
 			}
 			else
 			{
-				if (!string.IsNullOrEmpty(user.Background) && user.Background.Split(',').Length == 2)
+				if (!string.IsNullOrEmpty(newImage) && newImage.Split(',').Length == 2)
 				{
 					if (user.Background != null)
 					{
 						_uploadService.RemoveImage(user.Background);
 					}
-					user.Background = _uploadService.SaveImageFromBase64(user.Background);
+					user.Background = _uploadService.SaveImageFromBase64(newImage);
 				}
 
-				if (string.IsNullOrEmpty(user.Background) && user.Background != null)
+				if (string.IsNullOrEmpty(newImage) && user.Background != null)
 				{
 					_uploadService.RemoveImage(user.Background);
 					user.Background = null;
