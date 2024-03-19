@@ -106,7 +106,6 @@ namespace BLL.Services
 			var list = _mapper.Map<List<ExperienceVM>>(experienceList);
 			return list;
 		}
-
 		public async Task<ExperienceVM> GetExperience(int id)
 		{
 			var exp = await _unitOfWork.ExperienceRepo.Get(e => e.Id == id, includeProperties: "Industry");
@@ -130,9 +129,22 @@ namespace BLL.Services
 		}
 		public async Task<bool> UpdateExperience(ExperienceVM experience)
 		{
-			var mappedExperience = _mapper.Map<Experience>(experience);
+			var existingExperience = await _unitOfWork.ExperienceRepo.Get(e => e.Id == experience.Id);
+			if (existingExperience == null)
+			{
+				return false;
+			}
 
-			_unitOfWork.ExperienceRepo.Update(mappedExperience);
+			existingExperience.Title = experience.Title;
+			existingExperience.CompanyName = experience.CompanyName;
+			existingExperience.Description = experience.Description;
+			existingExperience.StartDate = experience.StartDate;
+			existingExperience.EndDate = experience.EndDate;
+			existingExperience.CurrentlyWorking = experience.CurrentlyWorking;
+			existingExperience.ProfileHeadline = experience.ProfileHeadline;
+			existingExperience.IndustryId = experience.Industry.Id;
+
+			_unitOfWork.ExperienceRepo.Update(existingExperience);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -144,7 +156,6 @@ namespace BLL.Services
 			var list = _mapper.Map<List<EducationVM>>(educationList);
 			return list;
 		}
-
 		public async Task<EducationVM> GetEducation(int id)
 		{
 			var edu = await _unitOfWork.EducationRepo.Get(e => e.Id == id);
@@ -168,9 +179,22 @@ namespace BLL.Services
 		}
 		public async Task<bool> UpdateEducation(EducationVM education)
 		{
-			var mappedEducation = _mapper.Map<Education>(education);
+			var existingEducation = await _unitOfWork.EducationRepo.Get(e => e.Id == education.Id);
+			if (existingEducation == null)
+			{
+				return false;
+			}
 
-			_unitOfWork.EducationRepo.Update(mappedEducation);
+			existingEducation.Description = education.Description;
+			existingEducation.StartDate = education.StartDate;
+			existingEducation.EndDate = education.EndDate;
+			existingEducation.CurrentlyStudying= education.CurrentlyStudying;
+			existingEducation.Degree = education.Degree;
+			existingEducation.School = education.School;
+			existingEducation.Grade = education.Grade;
+			existingEducation.FieldOfStudy = education.FieldOfStudy;
+
+			_unitOfWork.EducationRepo.Update(existingEducation);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -183,6 +207,7 @@ namespace BLL.Services
 
 			return list;
 		}
+
 		public async Task<List<SkillVM>> GetUserSkills(string userid)
 		{
 			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Skills");
@@ -191,7 +216,6 @@ namespace BLL.Services
 
 			return list;
 		}
-
 		public async Task<bool> AddSkill(SkillVM skill)
 		{
 			var mappedSkill = _mapper.Map<Skill>(skill);
@@ -209,12 +233,21 @@ namespace BLL.Services
 		}
 		public async Task<bool> UpdateSkill (SkillVM skill)
 		{
-			var mappedSkill = _mapper.Map<Skill>(skill);
+			var existingSkill = await _unitOfWork.SkillRepo.Get(e => e.Id == skill.Id);
+			if (existingSkill == null)
+			{
+				return false;
+			}
 
-			_unitOfWork.SkillRepo.Update(mappedSkill);
+			existingSkill.Name = skill.Name;
+			existingSkill.IsMainSkill = skill.IsMainSkill;
+			
+
+			_unitOfWork.SkillRepo.Update(existingSkill);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
+
 		public async Task<List<LanguageVM>> GetUserLanguages(string userid)
 		{
 			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Languages");
@@ -223,7 +256,6 @@ namespace BLL.Services
 
 			return list;
 		}
-
 		public async Task<bool> AddLanguage(LanguageVM language)
 		{
 			var mappedLanguage = _mapper.Map<Language>(language);
@@ -241,9 +273,66 @@ namespace BLL.Services
 		}
 		public async Task<bool> UpdateLanguage(LanguageVM language)
 		{
-			var mappedLanguage = _mapper.Map<Language>(language);
+			var existingLanguage = await _unitOfWork.LanguageRepo.Get(e => e.Id == language.Id);
+			if (existingLanguage == null)
+			{
+				return false;
+			}
 
-			_unitOfWork.LanguageRepo.Update(mappedLanguage);
+			existingLanguage.Name = language.Name;
+			existingLanguage.Proficiency = language.Proficiency;
+
+
+			_unitOfWork.LanguageRepo.Update(existingLanguage);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+
+
+		public async Task<List<CertificationVM>> GetUserCertifications(string userid)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Certifications");
+			var certificationList = user.Certifications.ToList();
+			var list = _mapper.Map<List<CertificationVM>>(certificationList);
+			return list;
+		}
+		public async Task<CertificationVM> GetCertification(int id)
+		{
+			var crt = await _unitOfWork.CertificationRepo.Get(e => e.Id == id);
+			var certification = _mapper.Map<CertificationVM>(crt);
+			return certification;
+		}
+		public async Task<bool> AddCertification(CertificationVM certification)
+		{
+			var mappedCertification = _mapper.Map<Certification>(certification);
+
+			await _unitOfWork.CertificationRepo.Add(mappedCertification);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> RemoveCertification(int certificationId)
+		{
+			var certification = await _unitOfWork.CertificationRepo.Get(e => e.Id == certificationId);
+			_unitOfWork.CertificationRepo.Update(certification);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> UpdateCertification(CertificationVM certification)
+		{
+			var existingCertification = await _unitOfWork.CertificationRepo.Get(e => e.Id == certification.Id);
+			if (existingCertification == null)
+			{
+				return false; 
+			}
+
+			existingCertification.Name = certification.Name;
+			existingCertification.IssuingOrganization = certification.IssuingOrganization;
+			existingCertification.IssueDate = certification.IssueDate;
+			existingCertification.ExpirationDate = certification.ExpirationDate;
+			existingCertification.CredentialURL = certification.CredentialURL;
+			existingCertification.CredentialId = certification.CredentialId;
+
+			_unitOfWork.CertificationRepo.Update(existingCertification);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}

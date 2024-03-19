@@ -10,5 +10,7 @@ namespace BLL.ViewModels
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
+		public bool IsMainSkill { get; set; }
+		public string ApplicationUserId { get; set; }
 	}
 }

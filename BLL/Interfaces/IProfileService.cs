@@ -44,7 +44,11 @@ namespace BLL.Interfaces
 		public Task<bool> UpdateLanguage(LanguageVM language);
 
 
-
+		public Task<List<CertificationVM>> GetUserCertifications(string userid);
+		public Task<CertificationVM> GetCertification(int id);
+		public Task<bool> AddCertification(CertificationVM certification);
+		public Task<bool> RemoveCertification(int certificationId);
+		public Task<bool> UpdateCertification(CertificationVM certification);
 
 	}
 }

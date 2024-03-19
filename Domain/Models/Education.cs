@@ -19,8 +19,10 @@ namespace Domain.Models
 		[Required]
 		public string FieldOfStudy{ get; set; }
 		[Required]
-		public DateTime StartDate { get; set; }
+		public DateTime? StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
+		public bool CurrentlyStudying { get; set; }
+
 		[Required]
 		public string? Grade { get; set; }
 		public string? Description { get; set; }

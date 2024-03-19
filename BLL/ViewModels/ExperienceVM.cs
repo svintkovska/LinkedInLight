@@ -15,6 +15,8 @@ namespace BLL.ViewModels
 		public string CompanyName { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
+		public bool CurrentlyWorking { get; set; }
+
 		public string Description { get; set; }
 		public string ProfileHeadline { get; set; }
 		public IndustryVM Industry { get; set; }

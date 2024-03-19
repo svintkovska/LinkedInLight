@@ -339,5 +339,73 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+
+
+		[HttpGet("userCertifications")]
+		public async Task<IActionResult> GetUserCertifications()
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetUserCertifications(userId);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpGet("certification/{id}")]
+		public async Task<IActionResult> GetCertification(int experienceId)
+		{
+			try
+			{
+				var certification = await _profileService.GetCertification(experienceId);
+				return Ok(certification);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPost("newCertification")]
+		public async Task<IActionResult> AddExperience(CertificationVM certification)
+		{
+			try
+			{
+				await _profileService.AddCertification(certification);
+				return Ok(certification);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPut("certification/edit/{id}")]
+		public async Task<IActionResult> UpdateCertification(CertificationVM certification)
+		{
+			try
+			{
+				await _profileService.UpdateCertification(certification);
+				return Ok("Certification updated");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpDelete("certification/remove/{id}")]
+		public async Task<IActionResult> RemoveCertification(int certificationId)
+		{
+			try
+			{
+				await _profileService.RemoveCertification(certificationId);
+				return Ok("Certification deleted");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 	}
 }

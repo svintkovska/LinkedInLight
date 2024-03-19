@@ -20,8 +20,10 @@ namespace Domain.Models
 		[Required]
 		public DateTime StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
+		public bool CurrentlyWorking { get; set; }
+
 		[Required]
-		public string Description { get; set; }
+		public string? Description { get; set; }
 		public string? ProfileHeadline { get; set; }
 
 		public string ApplicationUserId { get; set; }
