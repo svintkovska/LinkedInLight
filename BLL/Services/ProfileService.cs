@@ -3,6 +3,7 @@ using BLL.Interfaces;
 using BLL.ViewModels;
 using BLL.ViewModels.AuthModels;
 using DLL.Data;
+using DLL.Repositories;
 using DLL.Repositories.IRepository;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
@@ -70,10 +71,12 @@ namespace BLL.Services
 				{
 					_uploadService.RemoveImage(user.Background);
 					user.Background = null;
-				}
-			}
+                }
+            }
 
-			await _unitOfWork.SaveAsync();
+            _unitOfWork.UserRepo.Update(user);
+
+            await _unitOfWork.SaveAsync();
 			var userProfile = await GetUserProfile(user.Id);
 			return userProfile;
 		}
