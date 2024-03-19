@@ -50,5 +50,11 @@ namespace BLL.Interfaces
 		public Task<bool> RemoveCertification(int certificationId);
 		public Task<bool> UpdateCertification(CertificationVM certification);
 
+
+		public Task<List<CourseVM>> GetUserCourses(string userid);
+		public Task<CourseVM> GetCourse(int id);
+		public Task<bool> AddCourse(CourseVM course);
+		public Task<bool> RemoveCourse(int courseId);
+		public Task<bool> UpdateCourse(CourseVM course);
 	}
 }

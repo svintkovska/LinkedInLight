@@ -407,5 +407,74 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+
+
+
+		[HttpGet("userCourses")]
+		public async Task<IActionResult> GetUserCourses()
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetUserCourses(userId);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpGet("course/{id}")]
+		public async Task<IActionResult> GetCourse(int courseId)
+		{
+			try
+			{
+				var certification = await _profileService.GetCourse(courseId);
+				return Ok(certification);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPost("newCourse")]
+		public async Task<IActionResult> AddCourse(CourseVM course)
+		{
+			try
+			{
+				await _profileService.AddCourse(course);
+				return Ok(course);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPut("course/edit/{id}")]
+		public async Task<IActionResult> UpdateCertification(CourseVM course)
+		{
+			try
+			{
+				await _profileService.UpdateCourse(course);
+				return Ok("Course updated");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpDelete("course/remove/{id}")]
+		public async Task<IActionResult> RemoveCourse(int courseId)
+		{
+			try
+			{
+				await _profileService.RemoveCourse(courseId);
+				return Ok("Course deleted");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 	}
 }

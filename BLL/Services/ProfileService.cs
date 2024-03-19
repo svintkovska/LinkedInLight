@@ -339,5 +339,53 @@ namespace BLL.Services
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
+
+
+
+		public async Task<List<CourseVM>> GetUserCourses(string userid)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Courses");
+			var coursesList = user.Courses.ToList();
+			var list = _mapper.Map<List<CourseVM>>(coursesList);
+			return list;
+		}
+		public async Task<CourseVM> GetCourse(int id)
+		{
+			var crs = await _unitOfWork.CourseRepo.Get(e => e.Id == id);
+			var course = _mapper.Map<CourseVM>(crs);
+			return course;
+		}
+		public async Task<bool> AddCourse(CourseVM course)
+		{
+			var mappedCourse = _mapper.Map<Course>(course);
+
+			await _unitOfWork.CourseRepo.Add(mappedCourse);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> RemoveCourse(int courseId)
+		{
+			var course = await _unitOfWork.CourseRepo.Get(e => e.Id == courseId);
+			_unitOfWork.CourseRepo.Update(course);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> UpdateCourse(CourseVM course)
+		{
+			var existingCourse = await _unitOfWork.CourseRepo.Get(e => e.Id == course.Id);
+			if (existingCourse == null)
+			{
+				return false;
+			}
+
+			existingCourse.Name = course.Name;
+			existingCourse.Number = course.Number;
+			existingCourse.AssociatedWith = course.AssociatedWith;
+		
+
+			_unitOfWork.CourseRepo.Update(existingCourse);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
 	}
 }

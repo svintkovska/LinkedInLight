@@ -39,7 +39,7 @@ namespace DLL.Repositories.IRepository
 		IVolunteerExperience VolunteerExperienceRepo { get; }
 		IPhoneNumber PhoneNumberRepo { get; }
 		IWebsite WebsiteRepo { get; }
-
+		ICourse CourseRepo { get; }
 		public Task SaveAsync();
 
 
