@@ -389,7 +389,7 @@ namespace BLL.Services
 		}
 
 
-		public async Task<List<PhoneNumberVM>> GetPhoneNumbers(string userid)
+		public async Task<List<PhoneNumberVM>> GetUserPhoneNumbers(string userid)
 		{
 			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "PhoneNumbers");
 			var phoneNumberlist = user.PhoneNumbers.ToList();
@@ -429,7 +429,7 @@ namespace BLL.Services
 		}
 
 
-		public async Task<List<WebsiteVM>> GetWebsites(string userid)
+		public async Task<List<WebsiteVM>> GetUserWebsites(string userid)
 		{
 			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Websites");
 			var websiteList = user.Websites.ToList();
@@ -464,6 +464,56 @@ namespace BLL.Services
 
 
 			_unitOfWork.WebsiteRepo.Update(existingWebsite);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+
+
+		public async Task<List<VolunteerExperienceVM>> GetUserVolunteerExperiences(string userid)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "VolunteerExperiences");
+			var volunteerExperienceList = user.VolunteerExperiences.ToList();
+			var list = _mapper.Map<List<VolunteerExperienceVM>>(volunteerExperienceList);
+			return list;
+		}
+		public async Task<VolunteerExperienceVM> GetVolunteerExperience(int id)
+		{
+			var experience = await _unitOfWork.VolunteerExperienceRepo.Get(e => e.Id == id);
+			var volunteerExperience = _mapper.Map<VolunteerExperienceVM>(experience);
+			return volunteerExperience;
+		}
+		public async Task<bool> AddVolunteerExperience(VolunteerExperienceVM volunteerExperience)
+		{
+			var mappedVolunteerExperience = _mapper.Map<VolunteerExperience>(volunteerExperience);
+
+			await _unitOfWork.VolunteerExperienceRepo.Add(mappedVolunteerExperience);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> RemoveVolunteerExperience(int volunteerExperienceId)
+		{
+			var volunteerExperience = await _unitOfWork.VolunteerExperienceRepo.Get(e => e.Id == volunteerExperienceId);
+			_unitOfWork.VolunteerExperienceRepo.Remove(volunteerExperience);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> UpdateVolunteerExperience(VolunteerExperienceVM volunteerExperience)
+		{
+			var existingVolunteerExperience = await _unitOfWork.VolunteerExperienceRepo.Get(e => e.Id == volunteerExperience.Id);
+			if (existingVolunteerExperience == null)
+			{
+				return false;
+			}
+
+			existingVolunteerExperience.Organization = volunteerExperience.Organization;
+			existingVolunteerExperience.Description = volunteerExperience.Description;
+			existingVolunteerExperience.StartDate = volunteerExperience.StartDate;
+			existingVolunteerExperience.EndDate= volunteerExperience.EndDate;
+			existingVolunteerExperience.Role = volunteerExperience.Role;
+			existingVolunteerExperience.Cause = volunteerExperience.Cause;
+			existingVolunteerExperience.CurrentlyVolunteering = volunteerExperience.CurrentlyVolunteering;
+
+			_unitOfWork.VolunteerExperienceRepo.Update(existingVolunteerExperience);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}

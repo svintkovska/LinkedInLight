@@ -484,7 +484,7 @@ namespace LinkedInLight.Controllers
 			try
 			{
 				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var list = await _profileService.GetPhoneNumbers(userId);
+				var list = await _profileService.GetUserPhoneNumbers(userId);
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -540,7 +540,7 @@ namespace LinkedInLight.Controllers
 			try
 			{
 				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var list = await _profileService.GetWebsites(userId);
+				var list = await _profileService.GetUserWebsites(userId);
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -582,6 +582,74 @@ namespace LinkedInLight.Controllers
 			{
 				await _profileService.RemoveWebsite(websiteId);
 				return Ok("Website deleted");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+
+		[HttpGet("userVolunteerExperiences")]
+		public async Task<IActionResult> GetUserVolunteerExperiences()
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetUserVolunteerExperiences(userId);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpGet("volunteerExperience/{id}")]
+		public async Task<IActionResult> GetVolunteerExperience(int volunteerExperienceId)
+		{
+			try
+			{
+				var volunteerExperience = await _profileService.GetVolunteerExperience(volunteerExperienceId);
+				return Ok(volunteerExperience);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPost("newVolunteerExperience")]
+		public async Task<IActionResult> AddVolunteerExperience(VolunteerExperienceVM volunteerExperience)
+		{
+			try
+			{
+				await _profileService.AddVolunteerExperience(volunteerExperience);
+				return Ok(volunteerExperience);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpPut("volunteerExperience/edit/{id}")]
+		public async Task<IActionResult> UpdateVolunteerExperience(VolunteerExperienceVM volunteerExperience)
+		{
+			try
+			{
+				await _profileService.UpdateVolunteerExperience(volunteerExperience);
+				return Ok("Volunteer Experience updated");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpDelete("volunteerExperience/remove/{id}")]
+		public async Task<IActionResult> RemoveVolunteerExperience(int volunteerExperienceId)
+		{
+			try
+			{
+				await _profileService.RemoveVolunteerExperience(volunteerExperienceId);
+				return Ok("Volunteer Experience deleted");
 			}
 			catch (Exception ex)
 			{
