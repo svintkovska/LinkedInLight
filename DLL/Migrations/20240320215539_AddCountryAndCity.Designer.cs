@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240320215539_AddCountryAndCity")]
+    partial class AddCountryAndCity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BlockedUsers", (string)null);
+                    b.ToTable("BlockedUsers");
                 });
 
             modelBuilder.Entity("Domain.Models.Certification", b =>
@@ -82,7 +84,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Certifications", (string)null);
+                    b.ToTable("Certifications");
                 });
 
             modelBuilder.Entity("Domain.Models.Chat", b =>
@@ -123,7 +125,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Domain.Models.City", b =>
@@ -145,7 +147,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("Domain.Models.Comment", b =>
@@ -176,7 +178,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Domain.Models.Company", b =>
@@ -222,7 +224,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("IndustryId");
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("Domain.Models.Connection", b =>
@@ -247,7 +249,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Connections", (string)null);
+                    b.ToTable("Connections");
                 });
 
             modelBuilder.Entity("Domain.Models.ConnectionRequest", b =>
@@ -276,7 +278,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("ConnectionRequests", (string)null);
+                    b.ToTable("ConnectionRequests");
                 });
 
             modelBuilder.Entity("Domain.Models.Country", b =>
@@ -293,7 +295,7 @@ namespace DLL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Domain.Models.Course", b =>
@@ -323,7 +325,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Course", (string)null);
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("Domain.Models.Education", b =>
@@ -371,7 +373,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Educations", (string)null);
+                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("Domain.Models.Experience", b =>
@@ -419,7 +421,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("IndustryId");
 
-                    b.ToTable("Experiences", (string)null);
+                    b.ToTable("Experiences");
                 });
 
             modelBuilder.Entity("Domain.Models.Industry", b =>
@@ -436,7 +438,7 @@ namespace DLL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Industries", (string)null);
+                    b.ToTable("Industries");
                 });
 
             modelBuilder.Entity("Domain.Models.JobApplication", b =>
@@ -467,7 +469,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("JobPostingId");
 
-                    b.ToTable("JobApplications", (string)null);
+                    b.ToTable("JobApplications");
                 });
 
             modelBuilder.Entity("Domain.Models.JobPosting", b =>
@@ -523,7 +525,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("RecruiterId");
 
-                    b.ToTable("JobPostings", (string)null);
+                    b.ToTable("JobPostings");
                 });
 
             modelBuilder.Entity("Domain.Models.Language", b =>
@@ -550,7 +552,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Languages", (string)null);
+                    b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("Domain.Models.Like", b =>
@@ -574,7 +576,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Likes", (string)null);
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("Domain.Models.Message", b =>
@@ -620,7 +622,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Domain.Models.Notification", b =>
@@ -649,7 +651,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Models.PhoneNumber", b =>
@@ -676,7 +678,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PhoneNumbers", (string)null);
+                    b.ToTable("PhoneNumbers");
                 });
 
             modelBuilder.Entity("Domain.Models.Position", b =>
@@ -693,7 +695,7 @@ namespace DLL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Positions", (string)null);
+                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("Domain.Models.Post", b =>
@@ -725,7 +727,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Domain.Models.ProfileVisit", b =>
@@ -753,7 +755,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("VisitorId");
 
-                    b.ToTable("ProfileVisits", (string)null);
+                    b.ToTable("ProfileVisits");
                 });
 
             modelBuilder.Entity("Domain.Models.Project", b =>
@@ -792,7 +794,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Domain.Models.ProjectContributor", b =>
@@ -807,7 +809,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("ProjectContributors", (string)null);
+                    b.ToTable("ProjectContributors");
                 });
 
             modelBuilder.Entity("Domain.Models.Recommendation", b =>
@@ -847,7 +849,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ReceivedByUserId");
 
-                    b.ToTable("Recommendations", (string)null);
+                    b.ToTable("Recommendations");
                 });
 
             modelBuilder.Entity("Domain.Models.ScreeningAnswer", b =>
@@ -875,7 +877,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ScreeningQuestionId");
 
-                    b.ToTable("ScreeningAnswers", (string)null);
+                    b.ToTable("ScreeningAnswers");
                 });
 
             modelBuilder.Entity("Domain.Models.ScreeningQuestion", b =>
@@ -897,7 +899,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("JobPostingId");
 
-                    b.ToTable("ScreeningQuestions", (string)null);
+                    b.ToTable("ScreeningQuestions");
                 });
 
             modelBuilder.Entity("Domain.Models.Service", b =>
@@ -930,7 +932,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Services", (string)null);
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("Domain.Models.ServiceCity", b =>
@@ -950,7 +952,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("CityId1");
 
-                    b.ToTable("ServiceCities", (string)null);
+                    b.ToTable("ServiceCities");
                 });
 
             modelBuilder.Entity("Domain.Models.ServiceCountry", b =>
@@ -970,7 +972,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("CountryId1");
 
-                    b.ToTable("ServiceCountries", (string)null);
+                    b.ToTable("ServiceCountries");
                 });
 
             modelBuilder.Entity("Domain.Models.Skill", b =>
@@ -996,7 +998,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Skills", (string)null);
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("Domain.Models.UserPrivacySettings", b =>
@@ -1030,7 +1032,7 @@ namespace DLL.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserPrivacySettings", (string)null);
+                    b.ToTable("UserPrivacySettings");
                 });
 
             modelBuilder.Entity("Domain.Models.VolunteerExperience", b =>
@@ -1073,7 +1075,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("VolunteerExperiences", (string)null);
+                    b.ToTable("VolunteerExperiences");
                 });
 
             modelBuilder.Entity("Domain.Models.Website", b =>
@@ -1100,7 +1102,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Website", (string)null);
+                    b.ToTable("Website");
                 });
 
             modelBuilder.Entity("Domain.ServicePosition", b =>
@@ -1115,7 +1117,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("PositionId");
 
-                    b.ToTable("ServicePositions", (string)null);
+                    b.ToTable("ServicePositions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
