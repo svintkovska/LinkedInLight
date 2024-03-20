@@ -246,6 +246,20 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+		[HttpGet("mainSkills")]
+		public async Task<IActionResult> GetMainkills()
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetMainkills(userId);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 		[HttpPost("newSkill")]
 		public async Task<IActionResult> AddSkill(SkillVM skill)
 		{

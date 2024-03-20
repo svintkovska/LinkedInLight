@@ -219,6 +219,14 @@ namespace BLL.Services
 
 			return list;
 		}
+		public async Task<List<SkillVM>> GetMainkills(string userid)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Skills");
+			var mainSkillList = user.Skills.Where(s => s.IsMainSkill).ToList();
+			var list = _mapper.Map<List<SkillVM>>(mainSkillList);
+
+			return list;
+		}
 		public async Task<bool> AddSkill(SkillVM skill)
 		{
 			var mappedSkill = _mapper.Map<Skill>(skill);
