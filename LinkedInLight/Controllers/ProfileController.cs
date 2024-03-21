@@ -70,7 +70,7 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPut("edit/about")]
-		public async Task<IActionResult> EditAboutPUT(string about)
+		public async Task<IActionResult> EditAboutPUT([FromBody] string about)
 		{
 			try
 			{
