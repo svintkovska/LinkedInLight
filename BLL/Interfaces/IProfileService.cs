@@ -41,7 +41,7 @@ namespace BLL.Interfaces
 		public Task<bool> UpdateSkill(SkillVM skill);
 		
 		public Task<List<LanguageVM>> GetUserLanguages(string userid);
-		public Task<bool> AddLanguage(LanguageVM language);
+		public Task<bool> AddLanguage(LanguageVM language, string userid);
 		public Task<bool> RemoveLanguage(int languageId);
 		public Task<bool> UpdateLanguage(LanguageVM language);
 

@@ -38,7 +38,8 @@ namespace BLL.Utilities
 			CreateMap<Website, WebsiteVM>();
 			CreateMap<Skill, SkillVM>()
 				.ReverseMap();
-			CreateMap<Language, LanguageVM>();
+			CreateMap<Language, LanguageVM>()
+				.ReverseMap();
 			CreateMap<Comment, CommentVM>();
 			CreateMap<Like, LikeVM>();
 			CreateMap<Post, PostVM>()

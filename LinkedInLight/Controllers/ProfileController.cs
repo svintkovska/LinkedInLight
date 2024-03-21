@@ -320,7 +320,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _profileService.AddLanguage(language);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _profileService.AddLanguage(language, userId);
 				return Ok(language);
 			}
 			catch (Exception ex)
