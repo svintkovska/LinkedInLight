@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace DLL.Repositories.IRepository
 {
-	public interface IProject: IRepository<Project>
+	public interface ICourse: IRepository<Course>
 	{
-		public Task<List<Project>> GetUserProjects(string userId);
-		public Task<Project> GetProjectWithContributors(int projectId);
 	}
 }

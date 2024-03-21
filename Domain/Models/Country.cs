@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.ViewModels
+namespace Domain.Models
 {
-	public class SkillVM
+	
+	public class Country
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public bool IsMainSkill { get; set; }
-		public string ApplicationUserId { get; set; }
+		public ICollection<City> Cities { get; set; }
+		public virtual ICollection<ServiceCountry> ServiceCountries { get; set; }
+
 	}
 }

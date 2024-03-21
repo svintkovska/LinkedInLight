@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.ViewModels
+namespace Domain.Models
 {
-	public class SkillVM
+	public class Position
 	{
+		[Key]
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public bool IsMainSkill { get; set; }
-		public string ApplicationUserId { get; set; }
+		public virtual ICollection<ServicePosition> ServicePositions { get; set; }
+
 	}
 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain;
 
 namespace DLL.Data
 {
@@ -47,9 +48,16 @@ namespace DLL.Data
 		public DbSet<Recommendation> Recommendations { get; set; }
 		public DbSet<VolunteerExperience> VolunteerExperiences { get; set; }
 		public DbSet<PhoneNumber> PhoneNumbers { get; set; }
-		public DbSet<Website> Websites { get; set; }
+		public DbSet<Position> Positions { get; set; }
+		public DbSet<ServicePosition> ServicePositions { get; set; }
+		public DbSet<Country> Countries { get; set; }
+		public DbSet<City> Cities { get; set; }
+		public DbSet<ServiceCountry> ServiceCountries { get; set; }
+		public DbSet<ServiceCity> ServiceCities { get; set; }
+		public DbSet<Service> Services { get; set; }
 
-	
+
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
@@ -219,7 +227,11 @@ namespace DLL.Data
 				.WithMany()
 				.HasForeignKey(b => b.BlockedUserId)
 				.OnDelete(DeleteBehavior.NoAction);
-
+			modelBuilder.Entity<Project>()
+				.HasOne(p => p.ApplicationUser)
+				.WithMany(u => u.Projects)
+				.HasForeignKey(p => p.ApplicationUserId)
+				.OnDelete(DeleteBehavior.NoAction);
 			modelBuilder.Entity<ProjectContributor>()
 				.HasKey(pc => new { pc.ProjectId, pc.ApplicationUserId });
 
@@ -256,6 +268,46 @@ namespace DLL.Data
 				.WithMany(u => u.Websites)
 				.HasForeignKey(w => w.UserId)
 				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<ServicePosition>()
+				 .HasKey(sp => new { sp.ServiceId, sp.PositionId });
+
+			modelBuilder.Entity<ServicePosition>()
+				.HasOne(sp => sp.Service)
+				.WithMany(s => s.ServicePositions)
+				.HasForeignKey(sp => sp.ServiceId);
+
+			modelBuilder.Entity<ServicePosition>()
+				.HasOne(sp => sp.Position)
+				.WithMany(p => p.ServicePositions)
+				.HasForeignKey(sp => sp.PositionId);
+
+			modelBuilder.Entity<ServiceCity>()
+		       .HasKey(sc => new { sc.ServiceId, sc.CityId });
+
+			modelBuilder.Entity<ServiceCity>()
+				.HasOne(sc => sc.Service)
+				.WithMany(s => s.ServiceCities)
+				.HasForeignKey(sc => sc.ServiceId);
+
+			modelBuilder.Entity<ServiceCity>()
+				.HasOne(sc => sc.City)
+				.WithMany()
+				.HasForeignKey(sc => sc.CityId);
+
+
+			modelBuilder.Entity<ServiceCountry>()
+			   .HasKey(sc => new { sc.ServiceId, sc.CountryId });
+
+			modelBuilder.Entity<ServiceCountry>()
+				.HasOne(sc => sc.Service)
+				.WithMany(s => s.ServiceCountries)
+				.HasForeignKey(sc => sc.ServiceId);
+
+			modelBuilder.Entity<ServiceCountry>()
+				.HasOne(sc => sc.Country)
+				.WithMany()
+				.HasForeignKey(sc => sc.CountryId);
 		}
 	}
 }

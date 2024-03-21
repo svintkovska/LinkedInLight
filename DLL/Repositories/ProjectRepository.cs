@@ -1,6 +1,7 @@
 ﻿using DLL.Data;
 using DLL.Repositories.IRepository;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,20 @@ namespace DLL.Repositories
 		{
 			_db = db;
 		}
+
+		public async Task<List<Project>> GetUserProjects(string userId)
+		{
+			return await _db.Projects
+				.Include(p => p.ProjectContributors)
+				.Where(u => u.ApplicationUserId == userId)
+				.ToListAsync();
+		}
+		public async Task<Project> GetProjectWithContributors(int projectId)
+		{
+			return await _db.Projects
+				.Include(p => p.ProjectContributors)
+				.FirstOrDefaultAsync(p => p.Id == projectId);
+		}
+
 	}
 }

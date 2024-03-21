@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240319224906_UpdateProject")]
+    partial class UpdateProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BlockedUsers", (string)null);
+                    b.ToTable("BlockedUsers");
                 });
 
             modelBuilder.Entity("Domain.Models.Certification", b =>
@@ -82,7 +84,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Certifications", (string)null);
+                    b.ToTable("Certifications");
                 });
 
             modelBuilder.Entity("Domain.Models.Chat", b =>
@@ -123,29 +125,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Chats", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Models.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Domain.Models.Comment", b =>
@@ -176,7 +156,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Domain.Models.Company", b =>
@@ -222,7 +202,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("IndustryId");
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("Domain.Models.Connection", b =>
@@ -247,7 +227,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Connections", (string)null);
+                    b.ToTable("Connections");
                 });
 
             modelBuilder.Entity("Domain.Models.ConnectionRequest", b =>
@@ -276,24 +256,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("ConnectionRequests", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Models.Country", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("ConnectionRequests");
                 });
 
             modelBuilder.Entity("Domain.Models.Course", b =>
@@ -323,7 +286,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Course", (string)null);
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("Domain.Models.Education", b =>
@@ -371,7 +334,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Educations", (string)null);
+                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("Domain.Models.Experience", b =>
@@ -419,7 +382,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("IndustryId");
 
-                    b.ToTable("Experiences", (string)null);
+                    b.ToTable("Experiences");
                 });
 
             modelBuilder.Entity("Domain.Models.Industry", b =>
@@ -436,7 +399,7 @@ namespace DLL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Industries", (string)null);
+                    b.ToTable("Industries");
                 });
 
             modelBuilder.Entity("Domain.Models.JobApplication", b =>
@@ -467,7 +430,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("JobPostingId");
 
-                    b.ToTable("JobApplications", (string)null);
+                    b.ToTable("JobApplications");
                 });
 
             modelBuilder.Entity("Domain.Models.JobPosting", b =>
@@ -523,7 +486,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("RecruiterId");
 
-                    b.ToTable("JobPostings", (string)null);
+                    b.ToTable("JobPostings");
                 });
 
             modelBuilder.Entity("Domain.Models.Language", b =>
@@ -550,7 +513,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Languages", (string)null);
+                    b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("Domain.Models.Like", b =>
@@ -574,7 +537,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Likes", (string)null);
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("Domain.Models.Message", b =>
@@ -620,7 +583,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Domain.Models.Notification", b =>
@@ -649,7 +612,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Models.PhoneNumber", b =>
@@ -676,24 +639,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PhoneNumbers", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Models.Position", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Positions", (string)null);
+                    b.ToTable("PhoneNumbers");
                 });
 
             modelBuilder.Entity("Domain.Models.Post", b =>
@@ -725,7 +671,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Domain.Models.ProfileVisit", b =>
@@ -753,7 +699,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("VisitorId");
 
-                    b.ToTable("ProfileVisits", (string)null);
+                    b.ToTable("ProfileVisits");
                 });
 
             modelBuilder.Entity("Domain.Models.Project", b =>
@@ -792,7 +738,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Domain.Models.ProjectContributor", b =>
@@ -807,7 +753,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("ProjectContributors", (string)null);
+                    b.ToTable("ProjectContributors");
                 });
 
             modelBuilder.Entity("Domain.Models.Recommendation", b =>
@@ -847,7 +793,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ReceivedByUserId");
 
-                    b.ToTable("Recommendations", (string)null);
+                    b.ToTable("Recommendations");
                 });
 
             modelBuilder.Entity("Domain.Models.ScreeningAnswer", b =>
@@ -875,7 +821,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ScreeningQuestionId");
 
-                    b.ToTable("ScreeningAnswers", (string)null);
+                    b.ToTable("ScreeningAnswers");
                 });
 
             modelBuilder.Entity("Domain.Models.ScreeningQuestion", b =>
@@ -897,80 +843,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("JobPostingId");
 
-                    b.ToTable("ScreeningQuestions", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Models.Service", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GeneralInformation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsRemoteOk")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Services", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Models.ServiceCity", b =>
-                {
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CityId1")
-                        .HasColumnType("int");
-
-                    b.HasKey("ServiceId", "CityId");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("CityId1");
-
-                    b.ToTable("ServiceCities", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Models.ServiceCountry", b =>
-                {
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CountryId1")
-                        .HasColumnType("int");
-
-                    b.HasKey("ServiceId", "CountryId");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("CountryId1");
-
-                    b.ToTable("ServiceCountries", (string)null);
+                    b.ToTable("ScreeningQuestions");
                 });
 
             modelBuilder.Entity("Domain.Models.Skill", b =>
@@ -996,7 +869,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Skills", (string)null);
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("Domain.Models.UserPrivacySettings", b =>
@@ -1030,7 +903,7 @@ namespace DLL.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserPrivacySettings", (string)null);
+                    b.ToTable("UserPrivacySettings");
                 });
 
             modelBuilder.Entity("Domain.Models.VolunteerExperience", b =>
@@ -1073,7 +946,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("VolunteerExperiences", (string)null);
+                    b.ToTable("VolunteerExperiences");
                 });
 
             modelBuilder.Entity("Domain.Models.Website", b =>
@@ -1100,22 +973,7 @@ namespace DLL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Website", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.ServicePosition", b =>
-                {
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PositionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ServiceId", "PositionId");
-
-                    b.HasIndex("PositionId");
-
-                    b.ToTable("ServicePositions", (string)null);
+                    b.ToTable("Websites");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1148,42 +1006,42 @@ namespace DLL.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "70d7f269-1de5-42ba-bac2-7d26a4979563",
+                            ConcurrencyStamp = "a7fd92ed-deda-457a-a257-85dd441e3450",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "fa6eb088-3d6b-4dc9-91db-52108dd70d9a",
+                            ConcurrencyStamp = "b7d2b7cb-51bf-4559-8290-2e3dde5e4229",
                             Name = "moderator",
                             NormalizedName = "MODERATOR"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "5fb886ae-d82e-4c79-badf-15b156397009",
+                            ConcurrencyStamp = "f16feb3a-237f-425a-9550-626fbef5ed0b",
                             Name = "authorized_user",
                             NormalizedName = "AUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "4",
-                            ConcurrencyStamp = "5fea3eb7-62cf-4e73-826d-d907c42e0799",
+                            ConcurrencyStamp = "b5a588a6-fc19-47ea-8e08-e593c2f166d7",
                             Name = "unauthorized_user",
                             NormalizedName = "UNAUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "5",
-                            ConcurrencyStamp = "667dde92-29b8-4ab6-afdd-beb9e217ca70",
+                            ConcurrencyStamp = "cd31585c-1f1f-4127-a81c-e2619670b4af",
                             Name = "founder",
                             NormalizedName = "FOUNDER"
                         },
                         new
                         {
                             Id = "6",
-                            ConcurrencyStamp = "9785ecac-e89d-488e-82a0-2bc22bf6471c",
+                            ConcurrencyStamp = "34762cab-31af-4423-b5a7-6e9543fba742",
                             Name = "recruiter",
                             NormalizedName = "RECRUITER"
                         });
@@ -1477,17 +1335,6 @@ namespace DLL.Migrations
                     b.HasOne("Domain.Models.ApplicationUser", null)
                         .WithMany("Chats")
                         .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("Domain.Models.City", b =>
-                {
-                    b.HasOne("Domain.Models.Country", "Country")
-                        .WithMany("Cities")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("Domain.Models.Comment", b =>
@@ -1835,63 +1682,6 @@ namespace DLL.Migrations
                     b.Navigation("JobPosting");
                 });
 
-            modelBuilder.Entity("Domain.Models.Service", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("Domain.Models.ServiceCity", b =>
-                {
-                    b.HasOne("Domain.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.City", null)
-                        .WithMany("ServiceCities")
-                        .HasForeignKey("CityId1");
-
-                    b.HasOne("Domain.Models.Service", "Service")
-                        .WithMany("ServiceCities")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("Service");
-                });
-
-            modelBuilder.Entity("Domain.Models.ServiceCountry", b =>
-                {
-                    b.HasOne("Domain.Models.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.Country", null)
-                        .WithMany("ServiceCountries")
-                        .HasForeignKey("CountryId1");
-
-                    b.HasOne("Domain.Models.Service", "Service")
-                        .WithMany("ServiceCountries")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-
-                    b.Navigation("Service");
-                });
-
             modelBuilder.Entity("Domain.Models.Skill", b =>
                 {
                     b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
@@ -1930,25 +1720,6 @@ namespace DLL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.ServicePosition", b =>
-                {
-                    b.HasOne("Domain.Models.Position", "Position")
-                        .WithMany("ServicePositions")
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.Service", "Service")
-                        .WithMany("ServicePositions")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Position");
-
-                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -2007,28 +1778,11 @@ namespace DLL.Migrations
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("Domain.Models.City", b =>
-                {
-                    b.Navigation("ServiceCities");
-                });
-
-            modelBuilder.Entity("Domain.Models.Country", b =>
-                {
-                    b.Navigation("Cities");
-
-                    b.Navigation("ServiceCountries");
-                });
-
             modelBuilder.Entity("Domain.Models.JobPosting", b =>
                 {
                     b.Navigation("Applications");
 
                     b.Navigation("ScreeningQuestions");
-                });
-
-            modelBuilder.Entity("Domain.Models.Position", b =>
-                {
-                    b.Navigation("ServicePositions");
                 });
 
             modelBuilder.Entity("Domain.Models.Post", b =>
@@ -2041,15 +1795,6 @@ namespace DLL.Migrations
             modelBuilder.Entity("Domain.Models.Project", b =>
                 {
                     b.Navigation("ProjectContributors");
-                });
-
-            modelBuilder.Entity("Domain.Models.Service", b =>
-                {
-                    b.Navigation("ServiceCities");
-
-                    b.Navigation("ServiceCountries");
-
-                    b.Navigation("ServicePositions");
                 });
 
             modelBuilder.Entity("Domain.Models.UserPrivacySettings", b =>

@@ -34,7 +34,12 @@ namespace BLL.Interfaces
 		public Task<bool> UpdateEducation(EducationVM educationDTO);
 		public Task<List<PostVM>> GetUserPosts(string userid);
 		public Task<List<SkillVM>> GetUserSkills(string userid);
+
 		public Task<bool> AddSkill(SkillVM skill, string userid);
+
+		public Task<List<SkillVM>> GetMainkills(string userid);
+		//public Task<bool> AddSkill(SkillVM skill);
+
 		public Task<bool> RemoveSkill(int skillId);
 		public Task<bool> UpdateSkill(SkillVM skill);
 		
@@ -44,7 +49,42 @@ namespace BLL.Interfaces
 		public Task<bool> UpdateLanguage(LanguageVM language);
 
 
+		public Task<List<CertificationVM>> GetUserCertifications(string userid);
+		public Task<CertificationVM> GetCertification(int id);
+		public Task<bool> AddCertification(CertificationVM certification);
+		public Task<bool> RemoveCertification(int certificationId);
+		public Task<bool> UpdateCertification(CertificationVM certification);
 
 
+		public Task<List<CourseVM>> GetUserCourses(string userid);
+		public Task<CourseVM> GetCourse(int id);
+		public Task<bool> AddCourse(CourseVM course);
+		public Task<bool> RemoveCourse(int courseId);
+		public Task<bool> UpdateCourse(CourseVM course);
+
+
+		public Task<List<PhoneNumberVM>> GetUserPhoneNumbers(string userid);
+		public Task<bool> AddPhoneNumber(PhoneNumberVM phoneNumber);
+		public Task<bool> RemovePhoneNumber(int phoneNumberId);
+		public Task<bool> UpdatePhoneNumber(PhoneNumberVM phoneNumber);
+
+
+		public Task<List<WebsiteVM>> GetUserWebsites(string userid);
+		public Task<bool> AddWebsite(WebsiteVM website);
+		public Task<bool> RemoveWebsite(int websiteId);
+		public Task<bool> UpdateWebsite(WebsiteVM website);
+
+		public Task<List<VolunteerExperienceVM>> GetUserVolunteerExperiences(string userid);
+		public Task<VolunteerExperienceVM> GetVolunteerExperience(int id);
+		public Task<bool> AddVolunteerExperience(VolunteerExperienceVM volunteerExperience);
+		public Task<bool> RemoveVolunteerExperience(int volunteerExperienceId);
+		public Task<bool> UpdateVolunteerExperience(VolunteerExperienceVM volunteerExperience);
+
+
+		public Task<List<ProjectVM>> GetUserProjects(string userid);
+		public Task<ProjectVM> GetProject(int id);
+		public Task<bool> AddProjectWithContributors(ProjectVM projectVM);
+		public Task<bool> RemoveProject(int projectId);
+		public Task<bool> UpdateProjectWithContributors(ProjectVM projectVM);
 	}
 }

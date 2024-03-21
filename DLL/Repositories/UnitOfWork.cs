@@ -57,6 +57,7 @@ namespace DLL.Repositories
 		public IVolunteerExperience VolunteerExperienceRepo { get; private set; }
 		public IPhoneNumber PhoneNumberRepo { get; private set; }
 		public IWebsite WebsiteRepo { get; private set; }
+		public ICourse CourseRepo { get; private set; }
 		public UnitOfWork(ApplicationDbContext db)
 		{
 			_db = db;
@@ -89,7 +90,7 @@ namespace DLL.Repositories
 			VolunteerExperienceRepo = new VolunteerExperienceRepository(_db);
 			PhoneNumberRepo = new PhoneNumberRepository(_db);
 			WebsiteRepo = new WebsiteRepository(_db);
-			
+			CourseRepo = new CourseRepository(_db);
 		}
 		public async Task SaveAsync()
 		{

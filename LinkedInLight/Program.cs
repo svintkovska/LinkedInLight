@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using BLL.Utilities;
 using BLL.Utilities.SignalR;
 using AutoMapper;
+using DLL.Data.Seeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,7 +86,7 @@ var app = builder.Build();
 app.UseCors(options =>
 				options.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
 // Configure the HTTP request pipeline.
-
+}
 
 if (app.Environment.IsDevelopment())
 {
