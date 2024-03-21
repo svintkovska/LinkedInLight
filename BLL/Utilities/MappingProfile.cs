@@ -36,7 +36,8 @@ namespace BLL.Utilities
 			CreateMap<VolunteerExperience, VolunteerExperienceVM>();
 			CreateMap<PhoneNumber, PhoneNumberVM>();
 			CreateMap<Website, WebsiteVM>();
-			CreateMap<Skill, SkillVM>();
+			CreateMap<Skill, SkillVM>()
+				.ReverseMap();
 			CreateMap<Language, LanguageVM>();
 			CreateMap<Comment, CommentVM>();
 			CreateMap<Like, LikeVM>();

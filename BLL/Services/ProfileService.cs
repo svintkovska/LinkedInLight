@@ -74,9 +74,10 @@ namespace BLL.Services
                 }
             }
 
-            _unitOfWork.UserRepo.Update(user);
+			_unitOfWork.UserRepo.Update(user);
 
-            await _unitOfWork.SaveAsync();
+			await _unitOfWork.SaveAsync();
+
 			var userProfile = await GetUserProfile(user.Id);
 			return userProfile;
 		}
@@ -225,11 +226,16 @@ namespace BLL.Services
 			var mainSkillList = user.Skills.Where(s => s.IsMainSkill).ToList();
 			var list = _mapper.Map<List<SkillVM>>(mainSkillList);
 
+		//public async Task<bool> AddSkill(SkillVM skill, string userid)
+
 			return list;
 		}
-		public async Task<bool> AddSkill(SkillVM skill)
+		//public async Task<bool> AddSkill(SkillVM skill)
+
+public async Task<bool> AddSkill(SkillVM skill, string userid)
 		{
 			var mappedSkill = _mapper.Map<Skill>(skill);
+			mappedSkill.ApplicationUserId = userid;
 
 			await _unitOfWork.SkillRepo.Add(mappedSkill);
 			await _unitOfWork.SaveAsync();
