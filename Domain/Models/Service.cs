@@ -17,7 +17,7 @@ namespace Domain.Models
 		public bool IsRemoteOk { get; set; }
 
 		public string ApplicationUserId { get; set; }
-		public ApplicationUser ApplicationUser { get; set; }
+		public virtual ApplicationUser ApplicationUser { get; set; }
 		public virtual ICollection<ServicePosition> ServicePositions { get; set; }
 		public virtual ICollection<ServiceCity> ServiceCities { get; set; }
 		public virtual ICollection<ServiceCountry> ServiceCountries { get; set; }

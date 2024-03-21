@@ -60,6 +60,10 @@ namespace DLL.Repositories
 		public ICourse CourseRepo { get; private set; }
 		public ICountry CountryRepo { get; private set; }
 		public ICity CityRepo { get; private set; }
+		public IOpenToWorkCity OpenToWorkCityRepo { get; private set; }
+		public IOpenToWorkCountry OpenToWorkCountryRepo { get; private set; }
+		public IOpenToWorkPosition OpenToWorkPositionRepo { get; private set; }
+		public IOpenToWork OpenToWorkRepo { get; private set; }
 		public UnitOfWork(ApplicationDbContext db)
 		{
 			_db = db;
@@ -95,6 +99,10 @@ namespace DLL.Repositories
 			CourseRepo = new CourseRepository(_db);
 			CountryRepo = new CountryRepository(_db);
 			CityRepo =	new CityRepository(_db);
+			OpenToWorkCityRepo= new OpenToWorkCityRepository(_db);
+			OpenToWorkCountryRepo= new OpenToWorkCountryRepository(_db);
+			OpenToWorkPositionRepo= new OpenToWorkPositionRepository(_db);
+			OpenToWorkRepo = new OpenToWorkRepository(_db);
 		}
 		public async Task SaveAsync()
 		{

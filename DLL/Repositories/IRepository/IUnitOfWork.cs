@@ -42,6 +42,10 @@ namespace DLL.Repositories.IRepository
 		ICourse CourseRepo { get; }
 		ICountry CountryRepo { get; }
 		ICity CityRepo { get; }
+		IOpenToWork OpenToWorkRepo { get; }
+		IOpenToWorkPosition OpenToWorkPositionRepo { get; }
+		IOpenToWorkCity OpenToWorkCityRepo { get; }
+		IOpenToWorkCountry OpenToWorkCountryRepo { get; }
 		public Task SaveAsync();
 
 

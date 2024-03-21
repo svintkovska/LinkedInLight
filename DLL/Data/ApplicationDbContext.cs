@@ -55,6 +55,10 @@ namespace DLL.Data
 		public DbSet<ServiceCountry> ServiceCountries { get; set; }
 		public DbSet<ServiceCity> ServiceCities { get; set; }
 		public DbSet<Service> Services { get; set; }
+		public DbSet<OpenToWorkPosition> OpenToWorkPositions { get; set; }
+		public DbSet<OpenToWorkCountry> OpenToWorkCountries { get; set; }
+		public DbSet<OpenToWorkCity> OpenToWorkCities { get; set; }
+		public DbSet<OpenToWork> OpenToWorks { get; set; }
 
 
 
@@ -308,6 +312,45 @@ namespace DLL.Data
 				.HasOne(sc => sc.Country)
 				.WithMany()
 				.HasForeignKey(sc => sc.CountryId);
+
+			modelBuilder.Entity<OpenToWorkPosition>()
+				.HasKey(op => new { op.OpenToWorkId, op.PositionId });
+
+			modelBuilder.Entity<OpenToWorkCity>()
+				.HasKey(oc => new { oc.OpenToWorkId, oc.CityId });
+
+			modelBuilder.Entity<OpenToWorkCountry>()
+				.HasKey(occ => new { occ.OpenToWorkId, occ.CountryId });
+
+			modelBuilder.Entity<OpenToWorkPosition>()
+				.HasOne(op => op.OpenToWork)
+				.WithMany(ow => ow.OpenToWorkPositions)
+				.HasForeignKey(op => op.OpenToWorkId);
+
+			modelBuilder.Entity<OpenToWorkPosition>()
+				.HasOne(op => op.Position)
+				.WithMany()
+				.HasForeignKey(op => op.PositionId);
+
+			modelBuilder.Entity<OpenToWorkCity>()
+				.HasOne(oc => oc.OpenToWork)
+				.WithMany(ow => ow.OpenToWorkCities)
+				.HasForeignKey(oc => oc.OpenToWorkId);
+
+			modelBuilder.Entity<OpenToWorkCity>()
+				.HasOne(oc => oc.City)
+				.WithMany()
+				.HasForeignKey(oc => oc.CityId);
+
+			modelBuilder.Entity<OpenToWorkCountry>()
+				.HasOne(occ => occ.OpenToWork)
+				.WithMany(ow => ow.OpenToWorkCountries)
+				.HasForeignKey(occ => occ.OpenToWorkId);
+
+			modelBuilder.Entity<OpenToWorkCountry>()
+				.HasOne(occ => occ.Country)
+				.WithMany()
+				.HasForeignKey(occ => occ.CountryId);
 		}
 	}
 }
