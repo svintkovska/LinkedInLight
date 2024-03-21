@@ -251,7 +251,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _profileService.AddSkill(skill);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _profileService.AddSkill(skill, userId);
 				return Ok(skill);
 			}
 			catch (Exception ex)
@@ -273,11 +274,11 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpDelete("skill/remove/{id}")]
-		public async Task<IActionResult> RemoveSkill(int skillId)
+		public async Task<IActionResult> RemoveSkill(int id)
 		{
 			try
 			{
-				await _profileService.RemoveSkill(skillId);
+				await _profileService.RemoveSkill(id);
 				return Ok("Skill deleted");
 			}
 			catch (Exception ex)

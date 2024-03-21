@@ -34,7 +34,7 @@ namespace BLL.Interfaces
 		public Task<bool> UpdateEducation(EducationVM educationDTO);
 		public Task<List<PostVM>> GetUserPosts(string userid);
 		public Task<List<SkillVM>> GetUserSkills(string userid);
-		public Task<bool> AddSkill(SkillVM skill);
+		public Task<bool> AddSkill(SkillVM skill, string userid);
 		public Task<bool> RemoveSkill(int skillId);
 		public Task<bool> UpdateSkill(SkillVM skill);
 		

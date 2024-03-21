@@ -192,9 +192,10 @@ namespace BLL.Services
 			return list;
 		}
 
-		public async Task<bool> AddSkill(SkillVM skill)
+		public async Task<bool> AddSkill(SkillVM skill, string userid)
 		{
 			var mappedSkill = _mapper.Map<Skill>(skill);
+			mappedSkill.ApplicationUserId = userid;
 
 			await _unitOfWork.SkillRepo.Add(mappedSkill);
 			await _unitOfWork.SaveAsync();
@@ -203,7 +204,7 @@ namespace BLL.Services
 		public async Task<bool> RemoveSkill(int skillId)
 		{
 			var skill = await _unitOfWork.SkillRepo.Get(s => s.Id == skillId);
-			_unitOfWork.SkillRepo.Update(skill);
+			_unitOfWork.SkillRepo.Remove(skill);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
