@@ -73,6 +73,8 @@ namespace BLL.Services
 				}
 			}
 
+			_unitOfWork.UserRepo.Update(user);
+
 			await _unitOfWork.SaveAsync();
 			var userProfile = await GetUserProfile(user.Id);
 			return userProfile;
