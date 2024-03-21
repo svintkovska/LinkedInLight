@@ -60,6 +60,8 @@ namespace BLL.Utilities
 
 
 			CreateMap<ProjectContributor, ProjectContributorVM>();
+			CreateMap<Country, CountryVM>();
+			CreateMap<City, CityVM>();
 
 		}
 	}

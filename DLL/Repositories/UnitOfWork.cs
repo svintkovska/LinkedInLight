@@ -58,6 +58,8 @@ namespace DLL.Repositories
 		public IPhoneNumber PhoneNumberRepo { get; private set; }
 		public IWebsite WebsiteRepo { get; private set; }
 		public ICourse CourseRepo { get; private set; }
+		public ICountry CountryRepo { get; private set; }
+		public ICity CityRepo { get; private set; }
 		public UnitOfWork(ApplicationDbContext db)
 		{
 			_db = db;
@@ -91,6 +93,8 @@ namespace DLL.Repositories
 			PhoneNumberRepo = new PhoneNumberRepository(_db);
 			WebsiteRepo = new WebsiteRepository(_db);
 			CourseRepo = new CourseRepository(_db);
+			CountryRepo = new CountryRepository(_db);
+			CityRepo =	new CityRepository(_db);
 		}
 		public async Task SaveAsync()
 		{

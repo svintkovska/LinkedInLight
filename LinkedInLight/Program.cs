@@ -86,7 +86,7 @@ var app = builder.Build();
 app.UseCors(options =>
 				options.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
 // Configure the HTTP request pipeline.
-}
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -116,5 +116,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<ChatHub>("/chat");
+app.SeedData();
 
 app.Run();

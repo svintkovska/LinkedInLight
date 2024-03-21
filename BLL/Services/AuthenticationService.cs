@@ -20,6 +20,7 @@ using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 using DLL.Repositories;
 using Domain.Enums;
 using Newtonsoft.Json;
+using AutoMapper;
 
 namespace BLL.Services
 {
@@ -31,9 +32,11 @@ namespace BLL.Services
 		private readonly IConfiguration _configuration;
 		private readonly ISendGridService _sendGridService;
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IMapper _mapper;
+
 
 		public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-			IJwtTokenService jwtTokenService, IConfiguration configuration, ISendGridService sendGridService, IUnitOfWork unitOfWork)
+			IJwtTokenService jwtTokenService, IConfiguration configuration, ISendGridService sendGridService, IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
@@ -41,6 +44,7 @@ namespace BLL.Services
 			_configuration = configuration;
 			_sendGridService = sendGridService;
 			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 		public async Task<bool> IsValidEmail(string email)
 		{
@@ -74,26 +78,20 @@ namespace BLL.Services
 
 			return code;
 		}
-		public async Task<IEnumerable<string>> GetAllCountries()
+		public async Task<IEnumerable<CountryVM>> GetAllCountries()
 		{
-			var path = Path.Combine(Directory.GetCurrentDirectory(), "Data", "countries.json");
-			var json = await File.ReadAllTextAsync(path);
-			var data = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(json);
-			return data.Keys;
+			var countries = await _unitOfWork.CountryRepo.GetAll();
+			var list = _mapper.Map<IEnumerable<CountryVM>>(countries);
+			return list;
+
 		}
 
-		public async Task<IEnumerable<string>> GetCitiesByCountry(string country)
+		public async Task<IEnumerable<CityVM>> GetCitiesByCountry(string countryName)
 		{
-			var path = Path.Combine(Directory.GetCurrentDirectory(), "Data", "countries.json");
-			var json = await File.ReadAllTextAsync(path);
-			var data = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(json);
-
-			if (data.ContainsKey(country))
-			{
-				return data[country];
-			}
-
-			return Enumerable.Empty<string>();
+			var country = await _unitOfWork.CountryRepo.Get(c => c.Name == countryName);
+			var cities = await _unitOfWork.CityRepo.GetAll(c=> c.CountryId == country.Id);
+			var list = _mapper.Map<IEnumerable<CityVM>>(cities);
+			return list;
 		}
 		public async Task<bool> Register(RegisterVM model)
 		{

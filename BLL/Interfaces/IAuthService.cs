@@ -1,4 +1,5 @@
-﻿using BLL.ViewModels.AuthModels;
+﻿using BLL.ViewModels;
+using BLL.ViewModels.AuthModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace BLL.Interfaces
 {
     public interface IAuthService
 	{
-		public Task<IEnumerable<string>> GetAllCountries();
-		public Task<IEnumerable<string>> GetCitiesByCountry(string country);
+		public Task<IEnumerable<CountryVM>> GetAllCountries();
+		public Task<IEnumerable<CityVM>> GetCitiesByCountry(string countryName);
 		public Task<bool> Register(RegisterVM model);
 		public Task<LoginResultVM> Login(string email, string password);
 		public Task<LoginResultVM> GoogleRegistration(GoogleVM registrationModel);

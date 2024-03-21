@@ -59,10 +59,10 @@ namespace LinkedInLight.Controllers
 			return Ok(countries);
 		}
 
-		[HttpGet("countries/{country}")]
-		public async Task<IActionResult> GetCitiesByCountry(string country)
+		[HttpGet("cities/{country}")]
+		public async Task<IActionResult> GetCitiesByCountry(string countryName)
 		{
-			var cities = await _authenticationService.GetCitiesByCountry(country);
+			var cities = await _authenticationService.GetCitiesByCountry(countryName);
 			return Ok(cities);
 		}
 		[HttpPost("register")]

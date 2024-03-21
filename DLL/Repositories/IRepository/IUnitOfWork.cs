@@ -40,6 +40,8 @@ namespace DLL.Repositories.IRepository
 		IPhoneNumber PhoneNumberRepo { get; }
 		IWebsite WebsiteRepo { get; }
 		ICourse CourseRepo { get; }
+		ICountry CountryRepo { get; }
+		ICity CityRepo { get; }
 		public Task SaveAsync();
 
 
