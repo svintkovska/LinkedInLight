@@ -63,6 +63,10 @@ namespace BLL.Utilities
 			CreateMap<ProjectContributor, ProjectContributorVM>();
 			CreateMap<Country, CountryVM>();
 			CreateMap<City, CityVM>();
+			CreateMap<OpenToWork, OpenToWorkVM>();
+			CreateMap<OpenToWorkCity, OpenToWorkCityVM>();
+			CreateMap<OpenToWorkCountry, OpenToWorkCountryVM>();
+			CreateMap<OpenToWorkPosition, OpenToWorkPositionVM>();
 
 		}
 	}

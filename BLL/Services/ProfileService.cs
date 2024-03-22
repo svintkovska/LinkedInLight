@@ -622,5 +622,127 @@ namespace BLL.Services
 			return true;
 		}
 
+		public async Task<bool> AddOpenToWork(OpenToWorkVM openToWorkVM, string userId)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
+			user.OpenToWork = true;
+			var openToWork = _mapper.Map<OpenToWork>(openToWorkVM);
+			openToWork.ApplicationUserId= userId;
+
+			foreach (var positionVM in openToWorkVM.OpenToWorkPositions)
+			{
+				openToWork.OpenToWorkPositions.Add(new OpenToWorkPosition
+				{
+					OpenToWork = openToWork,
+					PositionId = positionVM.PositionId
+				});
+			}
+
+			foreach (var cityVM in openToWorkVM.OpenToWorkCities)
+			{
+				openToWork.OpenToWorkCities.Add(new OpenToWorkCity
+				{
+					OpenToWork = openToWork,
+					CityId = cityVM.CityId
+				});
+			}
+
+			foreach (var countryVM in openToWorkVM.OpenToWorkCountries)
+			{
+				openToWork.OpenToWorkCountries.Add(new OpenToWorkCountry
+				{
+					OpenToWork = openToWork,
+					CountryId = countryVM.CountryId
+				});
+			}
+
+			await _unitOfWork.OpenToWorkRepo.Add(openToWork);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+
+		public async Task<bool> UpdateOpenToWork(OpenToWorkVM openToWorkVM, string userId)
+		{
+			var existingOpenToWork = await _unitOfWork.OpenToWorkRepo.Get(o => o.ApplicationUserId == userId);
+			if (existingOpenToWork == null)
+			{
+				return false;
+			}
+
+			existingOpenToWork.CanStartImmediately = openToWorkVM.CanStartImmediately;
+			existingOpenToWork.FullTime = openToWorkVM.FullTime;
+			existingOpenToWork.PartTime = openToWorkVM.PartTime;
+			existingOpenToWork.Internship = openToWorkVM.Internship;
+			existingOpenToWork.Contract = openToWorkVM.Contract;
+			existingOpenToWork.Temporary = openToWorkVM.Temporary;
+			existingOpenToWork.VisibleForAll = openToWorkVM.VisibleForAll;
+
+			_unitOfWork.OpenToWorkPositionRepo.RemoveRange(existingOpenToWork.OpenToWorkPositions);
+
+			foreach (var positionVM in openToWorkVM.OpenToWorkPositions)
+			{
+				existingOpenToWork.OpenToWorkPositions.Add(new OpenToWorkPosition
+				{
+					OpenToWork = existingOpenToWork,
+					PositionId = positionVM.PositionId
+				});
+			}
+
+			_unitOfWork.OpenToWorkCityRepo.RemoveRange(existingOpenToWork.OpenToWorkCities);
+
+			foreach (var cityVM in openToWorkVM.OpenToWorkCities)
+			{
+				existingOpenToWork.OpenToWorkCities.Add(new OpenToWorkCity
+				{
+					OpenToWork = existingOpenToWork,
+					CityId = cityVM.CityId
+				});
+			}
+
+			_unitOfWork.OpenToWorkCountryRepo.RemoveRange(existingOpenToWork.OpenToWorkCountries);
+
+			foreach (var countryVM in openToWorkVM.OpenToWorkCountries)
+			{
+				existingOpenToWork.OpenToWorkCountries.Add(new OpenToWorkCountry
+				{
+					OpenToWork = existingOpenToWork,
+					CountryId = countryVM.CountryId
+				});
+			}
+
+			_unitOfWork.OpenToWorkRepo.Update(existingOpenToWork);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+
+		public async Task<bool> DeleteOpenToWork(string userId)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
+			user.OpenToWork = false;
+			var existingOpenToWork = await _unitOfWork.OpenToWorkRepo.Get(o => o.ApplicationUserId == userId, includeProperties: "OpenToWorkCities,OpenToWorkCountries,OpenToWorkPositions");
+			if (existingOpenToWork == null)
+			{
+				return false;
+			}
+
+			_unitOfWork.OpenToWorkCityRepo.RemoveRange(existingOpenToWork.OpenToWorkCities);
+			_unitOfWork.OpenToWorkCountryRepo.RemoveRange(existingOpenToWork.OpenToWorkCountries);
+			_unitOfWork.OpenToWorkPositionRepo.RemoveRange(existingOpenToWork.OpenToWorkPositions);
+			_unitOfWork.OpenToWorkRepo.Remove(existingOpenToWork);
+
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+
+		public async Task<OpenToWorkVM> GetOpenToWorkByUserId(string userId)
+		{
+			var openToWork = await _unitOfWork.OpenToWorkRepo.Get(
+				o => o.ApplicationUserId == userId,
+				includeProperties: "OpenToWorkPositions,OpenToWorkCities,OpenToWorkCountries"
+			);
+			var openToWorkVM = _mapper.Map<OpenToWorkVM>(openToWork);
+			return openToWorkVM;
+		}
+
 	}
 }

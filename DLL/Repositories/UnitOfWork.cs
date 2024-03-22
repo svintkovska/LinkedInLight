@@ -64,6 +64,7 @@ namespace DLL.Repositories
 		public IOpenToWorkCountry OpenToWorkCountryRepo { get; private set; }
 		public IOpenToWorkPosition OpenToWorkPositionRepo { get; private set; }
 		public IOpenToWork OpenToWorkRepo { get; private set; }
+		public IPosition PositionRepo { get; private set; }
 		public UnitOfWork(ApplicationDbContext db)
 		{
 			_db = db;
@@ -103,6 +104,7 @@ namespace DLL.Repositories
 			OpenToWorkCountryRepo= new OpenToWorkCountryRepository(_db);
 			OpenToWorkPositionRepo= new OpenToWorkPositionRepository(_db);
 			OpenToWorkRepo = new OpenToWorkRepository(_db);
+			PositionRepo = new PositionRepository(_db);
 		}
 		public async Task SaveAsync()
 		{

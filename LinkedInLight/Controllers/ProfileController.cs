@@ -740,6 +740,53 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+		[HttpPost("addOpenToWork")]
+		public async Task<IActionResult> AddOpenToWork(OpenToWorkVM openToWorkVM)
+		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var result = await _profileService.AddOpenToWork(openToWorkVM, userId);
+			if (result)
+			{
+				return Ok("OpenToWork added successfully");
+			}
+			return BadRequest("Failed to add OpenToWork");
+		}
+
+		[HttpPut("updateOpenToWorkVM")]
+		public async Task<IActionResult> UpdateOpenToWork(OpenToWorkVM openToWorkVM)
+		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var result = await _profileService.UpdateOpenToWork(openToWorkVM, userId);
+			if (result)
+			{
+				return Ok("OpenToWork updated successfully");
+			}
+			return BadRequest("Failed to update OpenToWork");
+		}
+
+		[HttpDelete("deleteOpenToWorkVM")]
+		public async Task<IActionResult> DeleteOpenToWork()
+		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var result = await _profileService.DeleteOpenToWork(userId);
+			if (result)
+			{
+				return Ok("OpenToWork deleted successfully");
+			}
+			return BadRequest("Failed to delete OpenToWork");
+		}
+
+		[HttpGet("getOpenToWorkVM")]
+		public async Task<IActionResult> GetOpenToWork()
+		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var openToWorkVM = await _profileService.GetOpenToWorkByUserId(userId);
+			if (openToWorkVM != null)
+			{
+				return Ok(openToWorkVM);
+			}
+			return NotFound("OpenToWork not found");
+		}
 
 	}
 }

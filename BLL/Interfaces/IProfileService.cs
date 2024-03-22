@@ -83,5 +83,14 @@ namespace BLL.Interfaces
 		public Task<bool> AddProjectWithContributors(ProjectVM projectVM);
 		public Task<bool> RemoveProject(int projectId);
 		public Task<bool> UpdateProjectWithContributors(ProjectVM projectVM);
+
+
+		public Task<bool> AddOpenToWork(OpenToWorkVM openToWorkVM, string userId);
+
+		public Task<bool> UpdateOpenToWork(OpenToWorkVM openToWorkVM, string userId);
+
+		public Task<bool> DeleteOpenToWork(string userId);
+
+		public Task<OpenToWorkVM> GetOpenToWorkByUserId(string userId);
 	}
 }
