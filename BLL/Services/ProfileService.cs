@@ -269,9 +269,10 @@ namespace BLL.Services
 
 			return list;
 		}
-		public async Task<bool> AddLanguage(LanguageVM language)
+		public async Task<bool> AddLanguage(LanguageVM language, string userid)
 		{
 			var mappedLanguage = _mapper.Map<Language>(language);
+			mappedLanguage.ApplicationUserId = userid;
 
 			await _unitOfWork.LanguageRepo.Add(mappedLanguage);
 			await _unitOfWork.SaveAsync();
