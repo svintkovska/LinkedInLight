@@ -99,11 +99,11 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpGet("experience/{id}")]
-		public async Task<IActionResult> GetExperience(int experienceId)
+		public async Task<IActionResult> GetExperience(int id)
 		{
 			try
 			{
-				var experience = await _profileService.GetExperience(experienceId);
+				var experience = await _profileService.GetExperience(id);
 				return Ok(experience);
 			}
 			catch (Exception ex)
@@ -116,7 +116,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				 await _profileService.AddExperience(experience);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _profileService.AddExperience(experience, userId);
 				return Ok(experience);
 			}
 			catch (Exception ex)
@@ -138,11 +139,11 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpDelete("experience/remove/{id}")]
-		public async Task<IActionResult> RemoveExperience(int experienceId)
+		public async Task<IActionResult> RemoveExperience(int id)
 		{
 			try
 			{
-				await _profileService.RemoveExperience(experienceId);
+				await _profileService.RemoveExperience(id);
 				return Ok("Experience deleted");
 			}
 			catch (Exception ex)
@@ -165,11 +166,11 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpGet("education/{id}")]
-		public async Task<IActionResult> GetEducation(int educationId)
+		public async Task<IActionResult> GetEducation(int id)
 		{
 			try
 			{
-				var education = await _profileService.GetEducation(educationId);
+				var education = await _profileService.GetEducation(id);
 				return Ok(education);
 			}
 			catch (Exception ex)
@@ -182,7 +183,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _profileService.AddEducation(education);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _profileService.AddEducation(education, userId);
 				return Ok(education);
 			}
 			catch (Exception ex)
@@ -204,11 +206,11 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpDelete("education/remove/{id}")]
-		public async Task<IActionResult> RemoveEducation(int educationId)
+		public async Task<IActionResult> RemoveEducation(int id)
 		{
 			try
 			{
-				await _profileService.RemoveEducation(educationId);
+				await _profileService.RemoveEducation(id);
 				return Ok("Education deleted");
 			}
 			catch (Exception ex)
@@ -343,11 +345,11 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpDelete("language/remove/{id}")]
-		public async Task<IActionResult> RemoveLanguage(int languageId)
+		public async Task<IActionResult> RemoveLanguage(int id)
 		{
 			try
 			{
-				await _profileService.RemoveLanguage(languageId);
+				await _profileService.RemoveLanguage(id);
 				return Ok("Language deleted");
 			}
 			catch (Exception ex)

@@ -29,8 +29,9 @@ namespace BLL.Utilities
 				.ForMember(dest => dest.PhoneNumbers, opt => opt.MapFrom(src => src.PhoneNumbers))
 				.ForMember(dest => dest.Websites, opt => opt.MapFrom(src => src.Websites));
 
-			CreateMap<Education, EducationVM>();
-			CreateMap<Certification, CertificationVM>();
+			CreateMap<Education, EducationVM>()
+                .ReverseMap();
+            CreateMap<Certification, CertificationVM>();
 			CreateMap<Course, CourseVM>();
 			CreateMap<Recommendation, RecommendationVM>();
 			CreateMap<VolunteerExperience, VolunteerExperienceVM>();
@@ -49,7 +50,11 @@ namespace BLL.Utilities
 			CreateMap<Experience, ExperienceVM>()
 				.ForMember(dest => dest.Industry, opt => opt.MapFrom(src => new IndustryVM { Id = src.Industry.Id, Name = src.Industry.Name }));
 
-			CreateMap<Industry, IndustryVM>();
+			CreateMap<ExperienceVM, Experience>()
+				.ForMember(dest => dest.Industry, opt => opt.Ignore());
+
+			CreateMap<Industry, IndustryVM>()
+				.ReverseMap();
 
 
 			CreateMap<Project, ProjectVM>()
