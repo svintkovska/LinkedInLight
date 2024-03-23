@@ -41,7 +41,7 @@ namespace BLL.Interfaces
 		public Task<bool> UpdateSkill(SkillVM skill);
 		
 		public Task<List<LanguageVM>> GetUserLanguages(string userid);
-		public Task<bool> AddLanguage(LanguageVM language);
+		public Task<bool> AddLanguage(LanguageVM language, string userid);
 		public Task<bool> RemoveLanguage(int languageId);
 		public Task<bool> UpdateLanguage(LanguageVM language);
 
@@ -83,5 +83,14 @@ namespace BLL.Interfaces
 		public Task<bool> AddProjectWithContributors(ProjectVM projectVM);
 		public Task<bool> RemoveProject(int projectId);
 		public Task<bool> UpdateProjectWithContributors(ProjectVM projectVM);
+
+
+		public Task<bool> AddOpenToWork(OpenToWorkVM openToWorkVM, string userId);
+
+		public Task<bool> UpdateOpenToWork(OpenToWorkVM openToWorkVM, string userId);
+
+		public Task<bool> DeleteOpenToWork(string userId);
+
+		public Task<OpenToWorkVM> GetOpenToWorkByUserId(string userId);
 	}
 }

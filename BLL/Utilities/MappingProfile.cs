@@ -39,7 +39,8 @@ namespace BLL.Utilities
 			CreateMap<Website, WebsiteVM>();
 			CreateMap<Skill, SkillVM>()
 				.ReverseMap();
-			CreateMap<Language, LanguageVM>();
+			CreateMap<Language, LanguageVM>()
+				.ReverseMap();
 			CreateMap<Comment, CommentVM>();
 			CreateMap<Like, LikeVM>();
 			CreateMap<Post, PostVM>()
@@ -67,6 +68,10 @@ namespace BLL.Utilities
 			CreateMap<ProjectContributor, ProjectContributorVM>();
 			CreateMap<Country, CountryVM>();
 			CreateMap<City, CityVM>();
+			CreateMap<OpenToWork, OpenToWorkVM>();
+			CreateMap<OpenToWorkCity, OpenToWorkCityVM>();
+			CreateMap<OpenToWorkCountry, OpenToWorkCountryVM>();
+			CreateMap<OpenToWorkPosition, OpenToWorkPositionVM>();
 
 		}
 	}
