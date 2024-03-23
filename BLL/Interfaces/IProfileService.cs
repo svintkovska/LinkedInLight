@@ -22,14 +22,14 @@ namespace BLL.Interfaces
 		public Task<List<ExperienceVM>> GetUserExperiences(string id);
 		public Task<ExperienceVM> GetExperience(int id);
 
-		public Task<bool> AddExperience(ExperienceVM experienceVM);
+		public Task<bool> AddExperience(ExperienceVM experienceVM, string userid);
 		public Task<bool> RemoveExperience(int experienceId);
 		public Task<bool> UpdateExperience(ExperienceVM experienceDTO);
 
 		public Task<List<EducationVM>> GetUserEducations(string id);
 		public Task<EducationVM> GetEducation(int id);
 
-		public Task<bool> AddEducation(EducationVM educationDTO);
+		public Task<bool> AddEducation(EducationVM educationDTO, string userid);
 		public Task<bool> RemoveEducation(int educationId);
 		public Task<bool> UpdateEducation(EducationVM educationDTO);
 		public Task<List<PostVM>> GetUserPosts(string userid);

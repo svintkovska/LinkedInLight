@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,11 +117,25 @@ namespace BLL.Services
 			var experience = _mapper.Map<ExperienceVM>(exp);
 			return experience;
 		}
-		public async Task<bool> AddExperience(ExperienceVM experience)
+		public async Task<bool> AddExperience(ExperienceVM experience, string userid)
 		{
 			var mappedExperience = _mapper.Map<Experience>(experience);
+			mappedExperience.ApplicationUserId = userid;
 
-			await _unitOfWork.ExperienceRepo.Add(mappedExperience);
+            var industry = await _unitOfWork.IndustryRepo.Get(val => val.Name == experience.Industry.Name);
+			if(industry == null)
+			{
+				var mappedIndustry = _mapper.Map<Industry>(experience.Industry);
+                await _unitOfWork.IndustryRepo.Add(mappedIndustry);
+                await _unitOfWork.SaveAsync();
+                mappedExperience.IndustryId = mappedIndustry.Id;
+            } 
+			else
+			{
+                mappedExperience.IndustryId = industry.Id;
+            }
+
+            await _unitOfWork.ExperienceRepo.Add(mappedExperience);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -146,7 +161,19 @@ namespace BLL.Services
 			existingExperience.EndDate = experience.EndDate;
 			existingExperience.CurrentlyWorking = experience.CurrentlyWorking;
 			existingExperience.ProfileHeadline = experience.ProfileHeadline;
-			existingExperience.IndustryId = experience.Industry.Id;
+
+			var industry = await _unitOfWork.IndustryRepo.Get(e => e.Name == experience.Industry.Name);
+			if(industry != null)
+			{
+                existingExperience.IndustryId = industry.Id;
+            }
+			else
+			{
+                var mappedIndustry = _mapper.Map<Industry>(experience.Industry);
+                await _unitOfWork.IndustryRepo.Add(mappedIndustry);
+                await _unitOfWork.SaveAsync();
+                existingExperience.IndustryId = mappedIndustry.Id;
+            }
 
 			_unitOfWork.ExperienceRepo.Update(existingExperience);
 			await _unitOfWork.SaveAsync();
@@ -166,11 +193,12 @@ namespace BLL.Services
 			var education = _mapper.Map<EducationVM>(edu);
 			return education;
 		}
-		public async Task<bool> AddEducation(EducationVM education)
+		public async Task<bool> AddEducation(EducationVM education, string userid)
 		{
 			var mappedEducation = _mapper.Map<Education>(education);
+			mappedEducation.ApplicationUserId = userid;
 
-			await _unitOfWork.EducationRepo.Add(mappedEducation);
+            await _unitOfWork.EducationRepo.Add(mappedEducation);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -620,6 +648,5 @@ namespace BLL.Services
 
 			return true;
 		}
-
-	}
+    }
 }
