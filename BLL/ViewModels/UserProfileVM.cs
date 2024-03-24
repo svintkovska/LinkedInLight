@@ -32,7 +32,7 @@ namespace BLL.ViewModels
 		public ICollection<ExperienceVM> Experiences { get; set; }
 		public  ICollection<EducationVM> Educations { get; set; }
 		public  ICollection<SkillVM> Skills { get; set; }
-		public  ICollection<LanguageVM> Languages { get; set; }
+		public  ICollection<UserLanguageVM> Languages { get; set; }
 		public  ICollection<PostVM> Posts { get; set; }
 		public virtual ICollection<CertificationVM> Certifications { get; set; }
 		public virtual ICollection<ProjectVM> Projects { get; set; }

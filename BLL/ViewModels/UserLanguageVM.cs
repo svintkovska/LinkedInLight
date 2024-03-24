@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace BLL.ViewModels
 {
-	public class Language
+	public class UserLanguageVM
 	{
-		[Key]
 		public int Id { get; set; }
-		public string Name { get; set; }
+		public int LanguageId { get; set; }
+		public LanguageVM Language { get; set; }
+		public string Proficiency { get; set; }
 	}
 }

@@ -18,7 +18,6 @@ namespace BLL.Utilities
 				.ForMember(dest => dest.Experiences, opt => opt.MapFrom(src => src.Experiences))
 				.ForMember(dest => dest.Educations, opt => opt.MapFrom(src => src.Educations))
 				.ForMember(dest => dest.Skills, opt => opt.MapFrom(src => src.Skills))
-				.ForMember(dest => dest.Languages, opt => opt.MapFrom(src => src.Languages))
 				.ForMember(dest => dest.Posts, opt => opt.MapFrom(src => src.Posts))
 				.ForMember(dest => dest.Certifications, opt => opt.MapFrom(src => src.Certifications))
 				.ForMember(dest => dest.Projects, opt => opt.MapFrom(src => src.Projects))
@@ -65,8 +64,18 @@ namespace BLL.Utilities
 			CreateMap<Website, WebsiteVM>();
 			CreateMap<Skill, SkillVM>()
 				.ReverseMap();
-			CreateMap<Language, LanguageVM>()
-				.ReverseMap();
+			CreateMap<UserLanguage, UserLanguageVM>() ;
+
+			CreateMap<Language, LanguageVM>();
+
+			CreateMap<UserLanguage, UserLanguageVM>()
+			.ForMember(dest => dest.Language, opt => opt.MapFrom(src =>
+				new LanguageVM
+				{
+					Id = src.Id,
+					Name = src.Language.Name,
+				}));
+
 			CreateMap<Comment, CommentVM>();
 			CreateMap<Like, LikeVM>();
 			CreateMap<Post, PostVM>()

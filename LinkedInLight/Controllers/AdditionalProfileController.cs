@@ -32,8 +32,22 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+		[HttpGet("allLanguages")]
+		public async Task<IActionResult> GetAllLanguages()
+		{
+			try
+			{
+				var list = await _additionalProfileService.GetAllLanguages();
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
 		[HttpPost("newLanguage")]
-		public async Task<IActionResult> AddLanguage(LanguageVM language)
+		public async Task<IActionResult> AddLanguage(UserLanguageVM language)
 		{
 			try
 			{
@@ -47,7 +61,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpPut("language/edit/{id}")]
-		public async Task<IActionResult> UpdateLanguage(LanguageVM language)
+		public async Task<IActionResult> UpdateLanguage(UserLanguageVM language)
 		{
 			try
 			{
@@ -64,7 +78,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _additionalProfileService.RemoveLanguage(id);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				await _additionalProfileService.RemoveLanguage(id, userId);
 				return Ok("Language deleted");
 			}
 			catch (Exception ex)

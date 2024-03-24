@@ -9,10 +9,11 @@ namespace BLL.Interfaces
 {
 	public interface IAdditionalProfileService : IProfileService
 	{
-		public Task<List<LanguageVM>> GetUserLanguages(string userid);
-		public Task<bool> AddLanguage(LanguageVM language, string userid);
-		public Task<bool> RemoveLanguage(int languageId);
-		public Task<bool> UpdateLanguage(LanguageVM language);
+		public Task<List<UserLanguageVM>> GetUserLanguages(string userid);
+		public Task<List<LanguageVM>> GetAllLanguages();
+		public Task<bool> AddLanguage(UserLanguageVM language, string userid);
+		public Task<bool> RemoveLanguage(int languageId, string userId);
+		public Task<bool> UpdateLanguage(UserLanguageVM language);
 
 
 		public Task<List<VolunteerExperienceVM>> GetUserVolunteerExperiences(string userid);

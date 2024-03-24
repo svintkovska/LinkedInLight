@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DLL.Repositories.IRepository
 {
-	public interface ILanguage: IRepository<Language>
+	public interface IUserLanguage : IRepository<UserLanguage>
 	{
 	}
 }

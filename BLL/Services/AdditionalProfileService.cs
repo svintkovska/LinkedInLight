@@ -18,43 +18,71 @@ namespace BLL.Services
 		{
 		}
 
-		public async Task<List<LanguageVM>> GetUserLanguages(string userid)
+		public async Task<List<UserLanguageVM>> GetUserLanguages(string userid)
 		{
-			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Languages");
-			var languageList = user.Languages.ToList();
-			var list = _mapper.Map<List<LanguageVM>>(languageList);
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "UserLanguages.Language");
+			var languageList = user.UserLanguages.ToList();
+			var list = _mapper.Map<List<UserLanguageVM>>(languageList);
+
 
 			return list;
-		}
-		public async Task<bool> AddLanguage(LanguageVM language, string userid)
-		{
-			var mappedLanguage = _mapper.Map<Language>(language);
-			mappedLanguage.ApplicationUserId = userid;
+		} 
 
-			await _unitOfWork.LanguageRepo.Add(mappedLanguage);
-			await _unitOfWork.SaveAsync();
-			return true;
-		}
-		public async Task<bool> RemoveLanguage(int languageId)
+		public async Task<List<LanguageVM>> GetAllLanguages()
 		{
-			var language = await _unitOfWork.LanguageRepo.Get(s => s.Id == languageId);
-			_unitOfWork.LanguageRepo.Remove(language);
-			await _unitOfWork.SaveAsync();
-			return true;
+			var languages = await _unitOfWork.LanguageRepo.GetAll(); 
+			var languageVMs = _mapper.Map<List<LanguageVM>>(languages);
+
+	     	return languageVMs;
 		}
-		public async Task<bool> UpdateLanguage(LanguageVM language)
+		public async Task<bool> AddLanguage(UserLanguageVM language, string userId)
 		{
-			var existingLanguage = await _unitOfWork.LanguageRepo.Get(e => e.Id == language.Id);
-			if (existingLanguage == null)
+			var selectedLanguage = await _unitOfWork.LanguageRepo.Get(l => l.Id == language.LanguageId);
+			if (selectedLanguage == null)
 			{
 				return false;
 			}
 
-			existingLanguage.Name = language.Name;
+			var userLanguage = new UserLanguage
+			{
+				LanguageId = selectedLanguage.Id,
+				Proficiency = language.Proficiency,
+				ApplicationUserId = userId
+			};
+			await _unitOfWork.UserLanguageRepo.Add(userLanguage);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> RemoveLanguage(int languageId, string userId)
+		{
+			var language = await _unitOfWork.UserLanguageRepo.Get(s => s.Id == languageId && s.ApplicationUserId == userId);
+			if (language == null)
+			{
+				return false;
+			}
+
+			_unitOfWork.UserLanguageRepo.Remove(language);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> UpdateLanguage(UserLanguageVM language)
+		{
+			var existingLanguage = await _unitOfWork.UserLanguageRepo.Get(e => e.Id == language.Id);
+			if (existingLanguage == null)
+			{
+				return false; 
+			}
+
+			var updatedLanguage = await _unitOfWork.LanguageRepo.Get(l => l.Id == language.LanguageId);
+			if (updatedLanguage == null)
+			{
+				return false; 
+			}
+
+			existingLanguage.LanguageId = language.LanguageId;
 			existingLanguage.Proficiency = language.Proficiency;
 
-
-			_unitOfWork.LanguageRepo.Update(existingLanguage);
+			_unitOfWork.UserLanguageRepo.Update(existingLanguage);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}

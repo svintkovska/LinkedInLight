@@ -30,6 +30,7 @@ namespace BLL.Interfaces
 
 		public Task<List<EducationVM>> GetUserEducations(string id);
 		public Task<EducationVM> GetEducation(int id);
+		public Task<List<IndustryVM>> GetAllIndustries();
 		public Task<bool> AddEducation(EducationVM educationDTO, string userid);
 		public Task<bool> RemoveEducation(int educationId);
 		public Task<bool> UpdateEducation(EducationVM educationDTO);

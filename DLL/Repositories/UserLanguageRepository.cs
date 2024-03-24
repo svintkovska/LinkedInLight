@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 
 namespace DLL.Repositories
 {
-	public class LanguageRepository: Repository<Language>, ILanguage
+	public class UserLanguageRepository : Repository<UserLanguage>, IUserLanguage
 	{
 		private readonly ApplicationDbContext _db;
-		public LanguageRepository(ApplicationDbContext db) : base(db)
+		public UserLanguageRepository(ApplicationDbContext db) : base(db)
 		{
 			_db = db;
 		}
+
+
 	}
 }

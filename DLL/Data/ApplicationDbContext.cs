@@ -39,6 +39,7 @@ namespace DLL.Data
 		public DbSet<ScreeningQuestion> ScreeningQuestions { get; set; }
 		public DbSet<ScreeningAnswer> ScreeningAnswers { get; set; }
 		public DbSet<Language> Languages { get; set; }
+		public DbSet<UserLanguage> UserLanguages { get; set; }
 		public DbSet<ProfileVisit> ProfileVisits { get; set; }
 		public DbSet<UserPrivacySettings> UserPrivacySettings { get; set; }
 		public DbSet<BlockedUser> BlockedUsers { get; set; }
@@ -350,6 +351,20 @@ namespace DLL.Data
 				.HasOne(occ => occ.Country)
 				.WithMany()
 				.HasForeignKey(occ => occ.CountryId);
+
+			modelBuilder.Entity<UserLanguage>()
+			   .HasOne(ul => ul.Language)
+			   .WithMany()
+			   .HasForeignKey(ul => ul.LanguageId)
+			   .OnDelete(DeleteBehavior.Restrict); 
+
+			modelBuilder.Entity<UserLanguage>()
+				.HasOne(ul => ul.ApplicationUser)
+				.WithMany(u => u.UserLanguages)
+				.HasForeignKey(ul => ul.ApplicationUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			base.OnModelCreating(modelBuilder);
 		}
 	}
 }

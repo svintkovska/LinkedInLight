@@ -113,6 +113,19 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+		[HttpGet("allIndustries")]
+		public async Task<IActionResult> GetAllIndustries()
+		{
+			try
+			{
+				var list = await _profileService.GetAllIndustries();
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 		[HttpPost("newExperience")]
 		public async Task<IActionResult> AddExperience(ExperienceVM experience)
 		{

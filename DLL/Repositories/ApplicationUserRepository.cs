@@ -22,7 +22,8 @@ namespace DLL.Repositories
 		{
 			return await _db.ApplicationUsers
 					.Include(u => u.Skills)
-					.Include(u => u.Languages)
+					.Include(u => u.UserLanguages)
+						.ThenInclude(l=>l.Language)
 					.Include(u=> u.Certifications)
 					.Include(u=> u.Projects)
 						.ThenInclude(e=> e.ProjectContributors)

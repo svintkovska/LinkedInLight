@@ -117,25 +117,27 @@ namespace BLL.Services
 			var experience = _mapper.Map<ExperienceVM>(exp);
 			return experience;
 		}
+		public async Task<List<IndustryVM>> GetAllIndustries()
+		{
+			var industries = await _unitOfWork.IndustryRepo.GetAll();
+			var industriesVMs = _mapper.Map<List<IndustryVM>>(industries);
+
+			return industriesVMs;
+		}
 		public async Task<bool> AddExperience(ExperienceVM experience, string userid)
 		{
 			var mappedExperience = _mapper.Map<Experience>(experience);
 			mappedExperience.ApplicationUserId = userid;
 
-            var industry = await _unitOfWork.IndustryRepo.Get(val => val.Name == experience.Industry.Name);
-			if(industry == null)
+			var industry = await _unitOfWork.IndustryRepo.Get(val => val.Name == experience.Industry.Name);
+			if (industry == null)
 			{
-				var mappedIndustry = _mapper.Map<Industry>(experience.Industry);
-                await _unitOfWork.IndustryRepo.Add(mappedIndustry);
-                await _unitOfWork.SaveAsync();
-                mappedExperience.IndustryId = mappedIndustry.Id;
-            } 
-			else
-			{
-                mappedExperience.IndustryId = industry.Id;
-            }
+				return false;
+			}
 
-            await _unitOfWork.ExperienceRepo.Add(mappedExperience);
+			mappedExperience.IndustryId = industry.Id;
+
+			await _unitOfWork.ExperienceRepo.Add(mappedExperience);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
@@ -162,18 +164,13 @@ namespace BLL.Services
 			existingExperience.CurrentlyWorking = experience.CurrentlyWorking;
 			existingExperience.ProfileHeadline = experience.ProfileHeadline;
 
-			var industry = await _unitOfWork.IndustryRepo.Get(e => e.Name == experience.Industry.Name);
-			if(industry != null)
+			var industry = await _unitOfWork.IndustryRepo.Get(val => val.Name == experience.Industry.Name);
+			if (industry == null)
 			{
-                existingExperience.IndustryId = industry.Id;
-            }
-			else
-			{
-                var mappedIndustry = _mapper.Map<Industry>(experience.Industry);
-                await _unitOfWork.IndustryRepo.Add(mappedIndustry);
-                await _unitOfWork.SaveAsync();
-                existingExperience.IndustryId = mappedIndustry.Id;
-            }
+				return false;
+			}
+
+			existingExperience.IndustryId = industry.Id;
 
 			_unitOfWork.ExperienceRepo.Update(existingExperience);
 			await _unitOfWork.SaveAsync();
