@@ -18,5 +18,7 @@ namespace Domain.Models
 		public DateTime EndDate { get; set; }
 		public bool CurrentlyVolunteering { get; set; }
 		public string Description { get; set; }
+		public string ApplicationUserId { get; set; }
+		public virtual ApplicationUser ApplicationUser { get; set; }
 	}
 }

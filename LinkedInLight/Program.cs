@@ -41,6 +41,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 builder.Services.AddScoped<IAuthService, AuthenticationService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IAdditionalProfileService, AdditionalProfileService>();
+builder.Services.AddScoped<IRecommendedProfileService, RecommendedProfileService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
