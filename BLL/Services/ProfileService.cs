@@ -344,10 +344,10 @@ namespace BLL.Services
 			var certification = _mapper.Map<CertificationVM>(crt);
 			return certification;
 		}
-		public async Task<bool> AddCertification(CertificationVM certification)
+		public async Task<bool> AddCertification(CertificationVM certification, string userId)
 		{
 			var mappedCertification = _mapper.Map<Certification>(certification);
-
+			mappedCertification.ApplicationUserId = userId;
 			await _unitOfWork.CertificationRepo.Add(mappedCertification);
 			await _unitOfWork.SaveAsync();
 			return true;
@@ -394,10 +394,10 @@ namespace BLL.Services
 			var course = _mapper.Map<CourseVM>(crs);
 			return course;
 		}
-		public async Task<bool> AddCourse(CourseVM course)
+		public async Task<bool> AddCourse(CourseVM course, string userId)
 		{
 			var mappedCourse = _mapper.Map<Course>(course);
-
+			mappedCourse.ApplicationUserId = userId;
 			await _unitOfWork.CourseRepo.Add(mappedCourse);
 			await _unitOfWork.SaveAsync();
 			return true;

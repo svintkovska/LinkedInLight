@@ -13,6 +13,6 @@ namespace BLL.ViewModels
 		public string Name { get; set; }
 		public string Number { get; set; }
 		public string AssociatedWith { get; set; }
-
+		public string ApplicationUserId { get; set; }
 	}
 }

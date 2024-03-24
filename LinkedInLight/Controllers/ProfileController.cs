@@ -391,7 +391,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _profileService.AddCertification(certification);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				await _profileService.AddCertification(certification, userId);
 				return Ok(certification);
 			}
 			catch (Exception ex)
@@ -460,7 +461,9 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _profileService.AddCourse(course);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+				await _profileService.AddCourse(course, userId);
 				return Ok(course);
 			}
 			catch (Exception ex)

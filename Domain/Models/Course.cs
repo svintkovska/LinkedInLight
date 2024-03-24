@@ -15,6 +15,7 @@ namespace Domain.Models
 		public string Name { get; set; }
 		public string Number { get; set; }
 		public string AssociatedWith { get; set; }
-
+		public string ApplicationUserId { get; set; }
+		public virtual ApplicationUser ApplicationUser { get; set; }
 	}
 }

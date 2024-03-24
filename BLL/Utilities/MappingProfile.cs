@@ -31,8 +31,10 @@ namespace BLL.Utilities
 
 			CreateMap<Education, EducationVM>()
                 .ReverseMap();
-            CreateMap<Certification, CertificationVM>();
-			CreateMap<Course, CourseVM>();
+            CreateMap<Certification, CertificationVM>()
+				.ReverseMap();
+			CreateMap<Course, CourseVM>()
+				.ReverseMap();
 			CreateMap<Recommendation, RecommendationVM>();
 			CreateMap<VolunteerExperience, VolunteerExperienceVM>();
 			CreateMap<PhoneNumber, PhoneNumberVM>();
@@ -68,6 +70,7 @@ namespace BLL.Utilities
 			CreateMap<ProjectContributor, ProjectContributorVM>();
 			CreateMap<Country, CountryVM>();
 			CreateMap<City, CityVM>();
+			CreateMap<Position, PostVM>();
 			CreateMap<OpenToWork, OpenToWorkVM>();
 			CreateMap<OpenToWorkCity, OpenToWorkCityVM>();
 			CreateMap<OpenToWorkCountry, OpenToWorkCountryVM>();

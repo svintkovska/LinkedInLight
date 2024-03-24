@@ -19,6 +19,7 @@ namespace Domain.Models
 		public DateTime ExpirationDate { get; set; }
 		public string? CredentialId { get; set; }
 		public string? CredentialURL { get; set; }
-
+		public string ApplicationUserId { get; set; }
+		public virtual ApplicationUser ApplicationUser { get; set; }
 	}
 }

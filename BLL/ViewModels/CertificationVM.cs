@@ -16,5 +16,6 @@ namespace BLL.ViewModels
 		public DateTime ExpirationDate { get; set; }
 		public string? CredentialId { get; set; }
 		public string? CredentialURL { get; set; }
+		public string ApplicationUserId { get; set; }
 	}
 }
