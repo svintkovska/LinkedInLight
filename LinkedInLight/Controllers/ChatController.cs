@@ -52,7 +52,7 @@ namespace LinkedInLight.Controllers
 
 			try
 			{
-				await _chatService.SendMessage(message.SenderId, message.ChatId, message);
+				await _chatService.SendMessage(message);
 				return Ok("Message sent.");
 			}
 			catch (Exception ex)

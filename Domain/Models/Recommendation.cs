@@ -14,10 +14,14 @@ namespace Domain.Models
 		public string PositionAtTheTime { get; set; }
 		public string Relationship { get; set; }
 		public string Content { get; set; }
-		public string GivenByUserId { get; set; }
-		public ApplicationUser GivenByUser { get; set; }
-		public string ReceivedByUserId { get; set; }
-		public ApplicationUser ReceivedByUser { get; set; }
-		public DateTime GivenAt { get; set; }
+		public string SenderId { get; set; }
+		public string RequestMessage { get; set; }
+
+		public ApplicationUser Sender { get; set; }
+		public string ReceiverId { get; set; }
+		public ApplicationUser Receiver { get; set; }
+		public DateTime DateGiven { get; set; }
+		public DateTime DateRequested { get; set; }
+		public string Status { get; set; }  
 	}
 }

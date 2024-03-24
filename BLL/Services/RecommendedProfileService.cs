@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
 using BLL.Interfaces;
+using BLL.Utilities.SignalR;
 using BLL.ViewModels;
+using DLL.Constants;
 using DLL.Repositories.IRepository;
 using Domain.Models;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +18,16 @@ namespace BLL.Services
 {
 	public class RecommendedProfileService: ProfileService, IRecommendedProfileService
 	{
-		public RecommendedProfileService(IUploadService uploadService, IUnitOfWork unitOfWork, IMapper mapper)
+		private readonly IHubContext<ChatHub> _hubContext;
+		private readonly IChatService _chatService;
+		private readonly IConfiguration _configuration;
+
+		public RecommendedProfileService(IUploadService uploadService, IUnitOfWork unitOfWork, IMapper mapper, IHubContext<ChatHub> hubContext, IChatService chatService, IConfiguration configuration )
 			: base(uploadService, unitOfWork, mapper)
 		{
+			_hubContext = hubContext;
+			_chatService = chatService;
+			_configuration = configuration;
 		}
 
 		public async Task<List<CertificationVM>> GetUserCertifications(string userid)
@@ -208,5 +220,102 @@ namespace BLL.Services
 
 			return true;
 		}
+
+
+		public async Task<RecommendationRequestVM> GETRequestRecommendation(string userId)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId, includeProperties: "Connections,Experiences");
+
+			var connections = user.Connections.Select(c => new UserVM
+			{
+				Id = c.ConnectedUserId, 
+				FirstName = c.ConnectedUser.FirstName,
+				LastName = c.ConnectedUser.LastName, 
+				AdditionalName = c.ConnectedUser.AdditionalName, 
+				Image = c.ConnectedUser.Image, 
+				LastPosition = _unitOfWork.ExperienceRepo.GetUserLastPosition(c.ConnectedUserId) 
+			}).ToList();
+
+			var request = new RecommendationRequestVM
+			{
+				Connections = connections,
+				RequestMessage = "Hi, would you write me a recommendation please?"
+			};
+
+			return request;
+		}
+		public async Task<List<RecommendationVM>> GetReceivedRecommendations(string userId)
+		{
+			var receivedRecommendations = await _unitOfWork.RecommendationRepo.GetAll(r => r.ReceiverId == userId && r.Status == RecommendationStatus.GIVEN, includeProperties:"ApplicationUsers");
+			var list = _mapper.Map<List<RecommendationVM>>(receivedRecommendations);
+			return list;
+		}
+		public async Task<List<RecommendationVM>> GetGivenRecommendations(string userId)
+		{
+			var givenRecommendations = await _unitOfWork.RecommendationRepo.GetAll(r => r.SenderId == userId && r.Status == RecommendationStatus.GIVEN, includeProperties: "ApplicationUsers");
+			var list = _mapper.Map<List<RecommendationVM>>(givenRecommendations);
+			return list;
+		}
+		public async Task<List<RecommendationVM>> GetPendingRecommendations(string userId)
+		{
+			var pendingRecommendations = await _unitOfWork.RecommendationRepo.GetAll(r => r.SenderId == userId && r.Status == RecommendationStatus.PENDING, includeProperties: "ApplicationUsers");
+			var list = _mapper.Map<List<RecommendationVM>>(pendingRecommendations);
+			return list;
+		}
+		public async Task<bool> RequestRecommendation(RecommendationVM recommendationRequest)
+		{
+			var existingRequest = await _unitOfWork.RecommendationRepo.Get(r => r.SenderId == recommendationRequest.SenderId && r.ReceiverId == recommendationRequest.ReceiverId && r.Status == RecommendationStatus.PENDING);
+
+			if (existingRequest != null)
+			{
+				return false; 
+			}
+
+			var recommendation = new Recommendation
+			{
+				SenderId = recommendationRequest.SenderId,
+				ReceiverId = recommendationRequest.ReceiverId,
+				Status = RecommendationStatus.PENDING,
+				DateRequested = DateTime.UtcNow,
+				Relationship = recommendationRequest.Relationship,
+				PositionAtTheTime = recommendationRequest.PositionAtTheTime
+				
+			};
+
+			_unitOfWork.RecommendationRepo.Add(recommendation);
+			await _unitOfWork.SaveAsync();
+
+			var sender = await _unitOfWork.UserRepo.Get(u => u.Id == recommendationRequest.SenderId);
+			var frontendURL = _configuration.GetValue<string>("FrontEndURL");
+			var callbackURL = $"{frontendURL}/giveRecommendation/{recommendationRequest.SenderId}";
+
+			var message = new MessageVM { 
+				ReceiverId = recommendationRequest.ReceiverId,
+				SenderId = recommendation.SenderId,
+				Content = recommendationRequest.RequestMessage + $"\\r\\n\\r\\nWrite {sender.FirstName} a recommendation:\\r\\n {callbackURL}"
+			};
+			await _chatService.SendMessage(message);
+
+			return true;
+		}
+		public async Task<bool> GiveRecommendation(RecommendationVM recommendation)
+		{
+			var requestedRecommendation = await _unitOfWork.RecommendationRepo.Get(r => r.Id == recommendation.Id && r.Status == RecommendationStatus.PENDING);
+
+			if (requestedRecommendation == null)
+			{
+				return false; 
+			}
+
+			requestedRecommendation.Content = recommendation.Content;
+			requestedRecommendation.Status = RecommendationStatus.GIVEN;
+			requestedRecommendation.DateGiven = DateTime.UtcNow;
+
+			_unitOfWork.RecommendationRepo.Update(requestedRecommendation);
+			await _unitOfWork.SaveAsync();
+
+			return true;
+		}
+
 	}
 }

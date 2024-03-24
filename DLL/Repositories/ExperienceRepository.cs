@@ -26,5 +26,15 @@ namespace DLL.Repositories
 				.Include(e => e.Industry)
 				.ToListAsync();
 		}
+
+		public string GetUserLastPosition(string userId)
+		{
+			var lastPosition = _db.Experiences.Where(e => e.ApplicationUserId == userId)
+											  .OrderByDescending(e => e.EndDate.HasValue ? e.EndDate : DateTime.MaxValue)
+											  .ThenByDescending(e => e.StartDate)
+											  .FirstOrDefault();
+
+			return lastPosition?.Title ?? " ";
+		}
 	}
 }

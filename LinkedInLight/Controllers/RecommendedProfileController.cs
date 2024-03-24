@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.Services;
 using BLL.ViewModels;
+using Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -225,6 +226,94 @@ namespace LinkedInLight.Controllers
 			{
 				return BadRequest(ex.Message);
 			}
+		}
+
+
+
+
+		[HttpGet("receivedRecommendations/{userId}")]
+		public async Task<ActionResult<List<RecommendationVM>>> GetReceivedRecommendations(string userId)
+		{
+			try
+			{
+				var recommendations = await _recommendedProfileService.GetReceivedRecommendations(userId);
+				return Ok(recommendations);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}		
+		}
+
+		[HttpGet("givenRecommendations/{userId}")]
+		public async Task<ActionResult<List<RecommendationVM>>> GetGivenRecommendations(string userId)
+		{
+			try
+			{
+				var recommendations = await _recommendedProfileService.GetGivenRecommendations(userId);
+				return Ok(recommendations);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}		
+		}
+
+		[HttpGet("pendingRecommendations/{userId}")]
+		public async Task<ActionResult<List<RecommendationVM>>> GetPendingRecommendations(string userId)
+		{
+			try
+			{
+				var recommendations = await _recommendedProfileService.GetPendingRecommendations(userId);
+				return Ok(recommendations);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		[HttpGet("requestRecommendation")]
+		public async Task<ActionResult<List<RecommendationVM>>> GETRequestRecommendation()
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var request = await _recommendedProfileService.GETRequestRecommendation(userId);
+				return Ok(request);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		[HttpPost("requestRecommendation")]
+		public async Task<ActionResult<bool>> RequestRecommendation(RecommendationVM recommendationRequest)
+		{
+			try
+			{
+				var success = await _recommendedProfileService.RequestRecommendation(recommendationRequest);
+				return Ok(success);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}	
+		}
+
+		[HttpPost("giveRecommendation/{requestedRemommendationId}")]
+		public async Task<ActionResult<bool>> GiveRecommendation(RecommendationVM recommendation)
+		{
+			try
+			{
+				var success = await _recommendedProfileService.GiveRecommendation(recommendation);
+				return Ok(success);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}	
 		}
 	}
 }

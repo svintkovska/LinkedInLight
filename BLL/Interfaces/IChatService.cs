@@ -12,7 +12,7 @@ namespace BLL.Interfaces
 	{
 		public  Task<List<Chat>> GetChatsForUser(string userId);
 		public Task<List<Message>> GetMessagesFromChat(int chatId, string userId);
-		public Task SendMessage(string userId, int chatId, MessageVM message);
+		public Task SendMessage(MessageVM message);
 		public Task UpdateMessage(Message message);
 		public  Task<bool> DeleteMyMessageForAll(string userId, int messageId, int chatId);
 		public Task<bool> DeleteMessageForMe(string userId, int messageId, int chatId);

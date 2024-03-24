@@ -61,7 +61,6 @@ namespace DLL.Data
 		public DbSet<OpenToWork> OpenToWorks { get; set; }
 
 
-
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
@@ -250,15 +249,15 @@ namespace DLL.Data
 				.HasForeignKey(pc => pc.ApplicationUserId);
 
 			modelBuilder.Entity<Recommendation>()
-				.HasOne(r => r.GivenByUser)
+				.HasOne(r => r.Sender)
 				.WithMany(u => u.GivenRecommendations)
-				.HasForeignKey(r => r.GivenByUserId)
+				.HasForeignKey(r => r.SenderId)
 				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<Recommendation>()
-				.HasOne(r => r.ReceivedByUser)
+				.HasOne(r => r.Receiver)
 				.WithMany(u => u.ReceivedRecommendations)
-				.HasForeignKey(r => r.ReceivedByUserId)
+				.HasForeignKey(r => r.ReceiverId)
 				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<PhoneNumber>()

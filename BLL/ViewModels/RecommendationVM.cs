@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,8 +14,13 @@ namespace BLL.ViewModels
 		public string PositionAtTheTime { get; set; }
 		public string Relationship { get; set; }
 		public string Content { get; set; }
-		public string GivenByUserId { get; set; }
-		public string ReceivedByUserId { get; set; }
-		public DateTime GivenAt { get; set; }
+		public string SenderId { get; set; }
+		public string RequestMessage { get; set; }
+		public UserVM Sender { get; set; }
+		public string ReceiverId { get; set; }
+		public UserVM Receiver { get; set; }
+		public DateTime DateGiven { get; set; }
+		public DateTime DateRequested { get; set; }
+		public string Status { get; set; }  
 	}
 }

@@ -32,9 +32,34 @@ namespace BLL.Services
 		{
 			return await _unitOfWork.MessageRepo.GetMessagesFromChat(chatId, userId);
 		}
-		public async Task SendMessage(string userId, int chatId, MessageVM message)
+		public async Task SendMessage( MessageVM message)
 		{
-		    Message msg = new Message
+
+			var existingChat = await _unitOfWork.ChatRepo.Get(c =>
+				(c.Participant1Id == message.SenderId && c.Participant2Id == message.ReceiverId) ||
+				(c.Participant1Id == message.ReceiverId && c.Participant2Id == message.SenderId));
+
+			if (existingChat == null)
+			{
+				Chat newChat = new Chat
+				{
+					Participant1Id = message.SenderId,
+					Participant2Id = message.ReceiverId,
+					IsRead = false,
+					IsDeletedForParticipant1 = false,
+					IsDeletedForParticipant2 = false,
+					Messages = new List<Message> { }
+				};
+
+				await _unitOfWork.ChatRepo.Add(newChat);
+				await _unitOfWork.SaveAsync();
+
+				existingChat = newChat; 
+			}
+
+
+
+			Message msg = new Message
 			{
 				Content = message.Content,
 				SentAt = DateTime.UtcNow,
@@ -43,19 +68,22 @@ namespace BLL.Services
 				IsDeletedForReceiver= false,
 				SenderId = message.SenderId,
 				ReceiverId = message.ReceiverId,
-				ChatId = chatId
+				ChatId = existingChat.Id
 			};
 
 			await _unitOfWork.MessageRepo.Add(msg);
 			await _unitOfWork.SaveAsync();
 
+			existingChat.LastMessageId = msg.Id;
+			existingChat.LastMessageSentAt = msg.SentAt;
+			await _unitOfWork.SaveAsync();
 
 			///
-			var chats = await GetChatsForUser(userId);
-			var messages = await GetMessagesFromChat(chatId, userId);
+			var chats = await GetChatsForUser(message.SenderId);
+			var messages = await GetMessagesFromChat(existingChat.Id, message.SenderId);
 			await _hubContext.Clients.All.SendAsync("UpdateChatList", chats);
 			await _hubContext.Clients.All.SendAsync("UpdateMessages", messages);
-			await _hubContext.Clients.All.SendAsync("ReceiveMessage", userId, msg);
+			await _hubContext.Clients.All.SendAsync("ReceiveMessage", message.SenderId, msg);
 		}
 
 		public async Task MarkMessagesAsRead(int chatId, string userId)

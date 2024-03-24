@@ -4,6 +4,7 @@ using DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DLL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240324162835_UpdateRecommendation")]
+    partial class UpdateRecommendation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1097,29 +1099,6 @@ namespace DLL.Migrations
                     b.ToTable("Skills");
                 });
 
-            modelBuilder.Entity("Domain.Models.UserPosition", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("UserPositions");
-                });
-
             modelBuilder.Entity("Domain.Models.UserPrivacySettings", b =>
                 {
                     b.Property<string>("UserId")
@@ -1270,42 +1249,42 @@ namespace DLL.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "170da758-a7ab-4acd-a34e-d748a8d7293c",
+                            ConcurrencyStamp = "d2b84db4-f4de-40ab-aaed-fd0da3c50863",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "84adf80c-7e7c-4719-a5b6-707dd70a03cf",
+                            ConcurrencyStamp = "86212030-0300-4d8b-8a47-c42446daf71a",
                             Name = "moderator",
                             NormalizedName = "MODERATOR"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "4817ad2f-11c4-4b1f-a096-0047496f7806",
+                            ConcurrencyStamp = "ca8f10c6-8280-48bc-81ac-135a5b5c8eb5",
                             Name = "authorized_user",
                             NormalizedName = "AUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "4",
-                            ConcurrencyStamp = "7795318c-4db3-404a-bbb7-29f2ef28ef09",
+                            ConcurrencyStamp = "e1869d9f-f117-48b0-a1b7-e283bee1b29b",
                             Name = "unauthorized_user",
                             NormalizedName = "UNAUTHORIZED_USER"
                         },
                         new
                         {
                             Id = "5",
-                            ConcurrencyStamp = "c4b9528d-d1f1-424b-89a2-a091bbe47c5d",
+                            ConcurrencyStamp = "07665412-fd86-4305-8bce-3d6db9ca87d2",
                             Name = "founder",
                             NormalizedName = "FOUNDER"
                         },
                         new
                         {
                             Id = "6",
-                            ConcurrencyStamp = "2e80b9f3-acf6-4205-802b-a60a6d2694f0",
+                            ConcurrencyStamp = "67f43cde-9fe0-4e89-9b2e-617010b90a89",
                             Name = "recruiter",
                             NormalizedName = "RECRUITER"
                         });
@@ -2101,17 +2080,6 @@ namespace DLL.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("Domain.Models.UserPosition", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("UserPositions")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("Domain.Models.UserPrivacySettings", b =>
                 {
                     b.HasOne("Domain.Models.ApplicationUser", "User")
@@ -2320,8 +2288,6 @@ namespace DLL.Migrations
                     b.Navigation("SentConnectionRequests");
 
                     b.Navigation("Skills");
-
-                    b.Navigation("UserPositions");
 
                     b.Navigation("UserPrivacySettings")
                         .IsRequired();

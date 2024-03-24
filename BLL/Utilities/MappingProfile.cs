@@ -29,6 +29,30 @@ namespace BLL.Utilities
 				.ForMember(dest => dest.PhoneNumbers, opt => opt.MapFrom(src => src.PhoneNumbers))
 				.ForMember(dest => dest.Websites, opt => opt.MapFrom(src => src.Websites));
 
+			CreateMap<ApplicationUser, UserVM>()
+				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+				.ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+				.ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+				.ForMember(dest => dest.AdditionalName, opt => opt.MapFrom(src => src.AdditionalName));
+
+			CreateMap<Recommendation, RecommendationVM>()
+			.ForMember(dest => dest.Sender, opt => opt.MapFrom(src =>
+				new UserVM
+				{
+					Id = src.Sender.Id,
+					FirstName = src.Sender.FirstName,
+					LastName = src.Sender.LastName,
+					AdditionalName = src.Sender.AdditionalName
+				}))
+			.ForMember(dest => dest.Receiver, opt => opt.MapFrom(src =>
+				new UserVM
+				{
+					Id = src.Receiver.Id,
+					FirstName = src.Receiver.FirstName,
+					LastName = src.Receiver.LastName,
+					AdditionalName = src.Receiver.AdditionalName
+				}));
+
 			CreateMap<Education, EducationVM>()
                 .ReverseMap();
             CreateMap<Certification, CertificationVM>()
