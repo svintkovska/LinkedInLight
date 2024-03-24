@@ -46,6 +46,7 @@ namespace DLL.Repositories
 		public IScreeningQuestion ScreeningQuestionRepo { get; private set; }
 
 		public ISkill SkillRepo { get; private set; }
+		public IUserSkill UserSkillRepo { get; private set; }
 		public ILanguage LanguageRepo { get; private set; }
 		public IUserLanguage UserLanguageRepo { get; private set; }
 		public IProfileVisit ProfileVisitRepo { get; private set; }
@@ -87,6 +88,7 @@ namespace DLL.Repositories
 			ScreeningAnswerRepo = new ScreeningAnswerRepository(_db);
 			ScreeningQuestionRepo = new ScreeningQuestionRepository(_db);
 			SkillRepo = new SkillRepository(_db);
+			UserSkillRepo = new UserSkillRepository(_db);
 			ProfileVisitRepo= new ProfileVisitRepository(_db);
 			LanguageRepo= new LanguageRepository(_db);
 			UserLanguageRepo = new UserLanguageRepository(_db);

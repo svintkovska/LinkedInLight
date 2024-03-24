@@ -28,6 +28,7 @@ namespace DLL.Repositories.IRepository
 		IScreeningAnswer ScreeningAnswerRepo { get; }
 		IScreeningQuestion ScreeningQuestionRepo { get; }
 		ISkill SkillRepo { get; }
+		IUserSkill UserSkillRepo { get; }
 		IUserLanguage UserLanguageRepo { get; }
 		ILanguage LanguageRepo { get; }
 		IProfileVisit ProfileVisitRepo { get; }

@@ -254,12 +254,15 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+
+
 		[HttpGet("userSkills")]
 		public async Task<IActionResult> GetUserSkills()
 		{
 			try
 			{
-				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e";
 				var list = await _profileService.GetUserSkills(userId);
 				return Ok(list);
 			}
@@ -273,8 +276,21 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var list = await _profileService.GetMainkills(userId);
+				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e"; var list = await _profileService.GetMainkills(userId);
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpGet("allSkills")]
+		public async Task<IActionResult> GetAllSkills()
+		{
+			try
+			{
+				var list = await _profileService.GetAllSkills();
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -283,12 +299,12 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpPost("newSkill")]
-		public async Task<IActionResult> AddSkill(SkillVM skill)
+		public async Task<IActionResult> AddSkill(UserSkillVM skill)
 		{
 			try
 			{
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _profileService.AddSkill(skill, userId);
+				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e"; await _profileService.AddSkill(skill, userId);
 				return Ok(skill);
 			}
 			catch (Exception ex)
@@ -297,7 +313,7 @@ namespace LinkedInLight.Controllers
 			}
 		}
 		[HttpPut("skill/edit/{id}")]
-		public async Task<IActionResult> UpdateSkill(SkillVM skill)
+		public async Task<IActionResult> UpdateSkill(UserSkillVM skill)
 		{
 			try
 			{
@@ -314,7 +330,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _profileService.RemoveSkill(id);
+				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e"; await _profileService.RemoveSkill(id, userId);
 				return Ok("Skill deleted");
 			}
 			catch (Exception ex)

@@ -14,10 +14,5 @@ namespace Domain.Models
 		public int Id { get; set; }
 		[Required]
 		public string Name { get; set; }
-		public bool IsMainSkill { get; set; }
-		public string ApplicationUserId { get; set; }
-		public virtual ApplicationUser ApplicationUser { get; set; }
-
-
 	}
 }

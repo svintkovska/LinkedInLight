@@ -24,7 +24,6 @@ namespace BLL.Services
 			var languageList = user.UserLanguages.ToList();
 			var list = _mapper.Map<List<UserLanguageVM>>(languageList);
 
-
 			return list;
 		} 
 

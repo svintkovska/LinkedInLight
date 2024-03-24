@@ -24,6 +24,7 @@ namespace DLL.Data
 		public DbSet<Experience> Experiences { get; set; }
 		public DbSet<Education> Educations { get; set; }
 		public DbSet<Skill> Skills { get; set; }
+		public DbSet<UserSkill> UserSkills { get; set; }
 		public DbSet<Company> Companies { get; set; }
 		public DbSet<Industry> Industries { get; set; }
 		public DbSet<Post> Posts { get; set; }
@@ -361,6 +362,18 @@ namespace DLL.Data
 			modelBuilder.Entity<UserLanguage>()
 				.HasOne(ul => ul.ApplicationUser)
 				.WithMany(u => u.UserLanguages)
+				.HasForeignKey(ul => ul.ApplicationUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<UserSkill>()
+			   .HasOne(ul => ul.Skill)
+			   .WithMany()
+			   .HasForeignKey(ul => ul.SkillId)
+			   .OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<UserSkill>()
+				.HasOne(ul => ul.ApplicationUser)
+				.WithMany(u => u.UserSkills)
 				.HasForeignKey(ul => ul.ApplicationUserId)
 				.OnDelete(DeleteBehavior.Restrict);
 

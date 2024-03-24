@@ -34,7 +34,7 @@ namespace Domain.Models
 		public virtual UserPrivacySettings UserPrivacySettings { get; set; }
 		public virtual ICollection<Experience> Experiences { get; set; }
 		public virtual ICollection<Education> Educations { get; set; }
-		public virtual ICollection<Skill> Skills { get; set; }
+		public virtual ICollection<UserSkill> UserSkills { get; set; }
 		public virtual ICollection<UserLanguage> UserLanguages { get; set; }
 
 		public virtual ICollection<Connection> Connections { get; set; }

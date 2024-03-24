@@ -237,63 +237,87 @@ namespace BLL.Services
 			return list;
 		}
 
-		public async Task<List<SkillVM>> GetUserSkills(string userid)
+		public async Task<List<UserSkillVM>> GetUserSkills(string userid)
 		{
-			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Skills");
-			var skillList = user.Skills.ToList();
-			var list  = _mapper.Map<List<SkillVM>>(skillList);
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "UserSkills.Skill");
+			var skillList = user.UserSkills.ToList();
+			var list  = _mapper.Map<List<UserSkillVM>>(skillList);
 
 			return list;
 		}
-		public async Task<List<SkillVM>> GetMainkills(string userid)
+		public async Task<List<UserSkillVM>> GetMainkills(string userid)
 		{
-			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "Skills");
-			var mainSkillList = user.Skills.Where(s => s.IsMainSkill).ToList();
-			var list = _mapper.Map<List<SkillVM>>(mainSkillList);
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "UserSkills.Skill");
+			var mainSkillList = user.UserSkills.Where(s => s.IsMainSkill).ToList();
+			var list = _mapper.Map<List<UserSkillVM>>(mainSkillList);
 			return list;
 		}
-
-        public async Task<bool> AddSkill(SkillVM skill, string userid)
+		public async Task<List<SkillVM>> GetAllSkills()
 		{
-			var mappedSkill = _mapper.Map<Skill>(skill);
-			mappedSkill.ApplicationUserId = userid;
+			var skills = await _unitOfWork.SkillRepo.GetAll();
+			var skillVMs = _mapper.Map<List<SkillVM>>(skills);
 
-			await _unitOfWork.SkillRepo.Add(mappedSkill);
+			return skillVMs;
+		}
+		public async Task<bool> AddSkill(UserSkillVM skill, string userid)
+		{
+			var selectedSkill= await _unitOfWork.SkillRepo.Get(l => l.Name.ToLower() == skill.Skill.Name.ToLower());
+			if (selectedSkill == null)
+			{
+				var newSkill = new Skill { Name = skill.Skill.Name };
+				await _unitOfWork.SkillRepo.Add(newSkill);
+				await _unitOfWork.SaveAsync();
+
+				selectedSkill = newSkill;
+			}
+
+			var userSkill = new UserSkill
+			{
+				SkillId = selectedSkill.Id,
+				ApplicationUserId = userid,
+				IsMainSkill = skill.IsMainSkill
+			};
+
+			await _unitOfWork.UserSkillRepo.Add(userSkill);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
-		public async Task<bool> RemoveSkill(int skillId)
+		public async Task<bool> RemoveSkill(int skillId, string userId)
 		{
-			var skill = await _unitOfWork.SkillRepo.Get(s => s.Id == skillId);
-			_unitOfWork.SkillRepo.Remove(skill);
+			var skill = await _unitOfWork.UserSkillRepo.Get(s => s.Id == skillId && s.ApplicationUserId == userId);
+			if (skill == null)
+			{
+				return false;
+			}
+			_unitOfWork.UserSkillRepo.Remove(skill);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
-		public async Task<bool> UpdateSkill (SkillVM skill)
+		public async Task<bool> UpdateSkill(UserSkillVM skill)
 		{
-			var existingSkill = await _unitOfWork.SkillRepo.Get(e => e.Id == skill.Id);
+			var existingSkill = await _unitOfWork.UserSkillRepo.Get(e => e.Id == skill.Id);
 			if (existingSkill == null)
 			{
 				return false;
 			}
 
-			existingSkill.Name = skill.Name;
-			existingSkill.IsMainSkill = skill.IsMainSkill;
-			
+			var updatedSkill = await _unitOfWork.SkillRepo.Get(l => l.Id == existingSkill.Id);
+			if (updatedSkill == null)
+			{
+				updatedSkill = new Skill { Name = skill.Skill.Name };
+				await _unitOfWork.SkillRepo.Add(updatedSkill);
+				await _unitOfWork.SaveAsync();
+			}
 
-			_unitOfWork.SkillRepo.Update(existingSkill);
+			existingSkill.SkillId = updatedSkill.Id;
+			existingSkill.IsMainSkill = skill.IsMainSkill;
+
+			_unitOfWork.UserSkillRepo.Update(existingSkill);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
 
-		
 
-		
-
-		
-
-
-		
 
 
 		public async Task<bool> AddOpenToWork(OpenToWorkVM openToWorkVM, string userId)

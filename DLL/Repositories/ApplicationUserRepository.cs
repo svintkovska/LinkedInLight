@@ -21,7 +21,8 @@ namespace DLL.Repositories
 		public async Task<ApplicationUser> GetUserProfileProps(string id)
 		{
 			return await _db.ApplicationUsers
-					.Include(u => u.Skills)
+					.Include(u => u.UserSkills)
+						.ThenInclude(s=>s.Skill)
 					.Include(u => u.UserLanguages)
 						.ThenInclude(l=>l.Language)
 					.Include(u=> u.Certifications)
