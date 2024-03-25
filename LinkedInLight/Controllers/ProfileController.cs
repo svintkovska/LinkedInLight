@@ -316,7 +316,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				await _profileService.UpdateSkill(skill);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				await _profileService.UpdateSkill(skill, userId);
 				return Ok("Skill updated");
 			}
 			catch (Exception ex)

@@ -262,6 +262,16 @@ namespace BLL.Services
 		public async Task<bool> AddSkill(UserSkillVM skill, string userid)
 		{
 			var selectedSkill= await _unitOfWork.SkillRepo.Get(l => l.Name.ToLower() == skill.Skill.Name.ToLower());
+			if (skill.IsMainSkill)
+			{
+				var user = await _unitOfWork.UserRepo.Get(u => u.Id == userid, includeProperties: "UserSkills");
+				var mainSkillCount = user.UserSkills.Count(s => s.IsMainSkill);
+
+				if (mainSkillCount >= 5)
+				{
+					throw new Exception("You can only have 5 main skills.");
+				}
+			}
 			if (selectedSkill == null)
 			{
 				var newSkill = new Skill { Name = skill.Skill.Name };
@@ -293,14 +303,23 @@ namespace BLL.Services
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
-		public async Task<bool> UpdateSkill(UserSkillVM skill)
+		public async Task<bool> UpdateSkill(UserSkillVM skill, string userId)
 		{
 			var existingSkill = await _unitOfWork.UserSkillRepo.Get(e => e.Id == skill.Id);
 			if (existingSkill == null)
 			{
 				return false;
 			}
+			if (skill.IsMainSkill)
+			{
+				var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId, includeProperties: "UserSkills");
+				var mainSkillCount = user.UserSkills.Count(s => s.IsMainSkill);
 
+				if (mainSkillCount >= 5)
+				{
+					throw new Exception("You can only have 5 main skills.");
+				}
+			}
 			var updatedSkill = await _unitOfWork.SkillRepo.Get(l => l.Id == existingSkill.Id);
 			if (updatedSkill == null)
 			{

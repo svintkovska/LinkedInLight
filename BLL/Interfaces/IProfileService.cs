@@ -42,7 +42,7 @@ namespace BLL.Interfaces
 		public Task<List<UserSkillVM>> GetMainkills(string userid);
 		public Task<List<SkillVM>> GetAllSkills();
 		public Task<bool> RemoveSkill(int skillId, string userId);
-		public Task<bool> UpdateSkill(UserSkillVM skill);
+		public Task<bool> UpdateSkill(UserSkillVM skill, string userId);
 		
 
 	
