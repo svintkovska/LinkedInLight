@@ -377,6 +377,12 @@ namespace DLL.Data
 				.HasForeignKey(ul => ul.ApplicationUserId)
 				.OnDelete(DeleteBehavior.Restrict);
 
+			modelBuilder.Entity<Experience>()
+			   .HasOne(e => e.Company)
+			   .WithMany()
+			   .HasForeignKey(e => e.CompanyId)
+			   .OnDelete(DeleteBehavior.Restrict);
+
 			base.OnModelCreating(modelBuilder);
 		}
 	}

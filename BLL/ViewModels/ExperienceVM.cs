@@ -12,7 +12,7 @@ namespace BLL.ViewModels
 	{
 		public int Id { get; set; }
 		public string Title { get; set; }
-		public string CompanyName { get; set; }
+		public CompanyVM Company { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 		public bool CurrentlyWorking { get; set; }

@@ -18,12 +18,13 @@ namespace DLL.Repositories
 			_db = db;
 		}
 
-		public async Task<List<Experience>> GetUserExperiencesWithIndustry(string userId)
+		public async Task<List<Experience>> GetUserExperiencesWithIndustryAndCompany(string userId)
 		{
 			return await _db.ApplicationUsers
 				.Where(u => u.Id == userId)
 				.SelectMany(u => u.Experiences)
 				.Include(e => e.Industry)
+				.Include(e => e.Company)
 				.ToListAsync();
 		}
 

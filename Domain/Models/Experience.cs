@@ -16,7 +16,8 @@ namespace Domain.Models
 		[Required]
 		public string Title { get; set; }
 		[Required]
-		public string CompanyName  { get; set; }
+		public int CompanyId  { get; set; }
+		public virtual Company Company { get; set; }
 		[Required]
 		public DateTime StartDate { get; set; }
 		public DateTime? EndDate { get; set; }

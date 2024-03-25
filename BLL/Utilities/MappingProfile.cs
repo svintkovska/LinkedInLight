@@ -89,14 +89,28 @@ namespace BLL.Utilities
 				.ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.Likes));
 
 			CreateMap<Experience, ExperienceVM>()
-				.ForMember(dest => dest.Industry, opt => opt.MapFrom(src => new IndustryVM { Id = src.Industry.Id, Name = src.Industry.Name }));
+				.ForMember(dest => dest.Industry, opt => opt.MapFrom(src => new IndustryVM { Id = src.Industry.Id, Name = src.Industry.Name }))
+				.ForMember(dest => dest.Company, opt => opt.MapFrom(src => new CompanyVM
+				{
+					Id = src.Company.Id,
+					ComanyName = src.Company.ComanyName,
+					LinkedinUrl = src.Company.LinkedinUrl,
+					WebsiteUrl = src.Company.WebsiteUrl,
+					OrganizationSize = src.Company.OrganizationSize,
+					OrganizationType = src.Company.OrganizationType,
+					LogoImg= src.Company.LogoImg,
+					ApplicationUserId = src.Company.ApplicationUserId,
+					IndustryId = src.Company.IndustryId
+				}));
 
 			CreateMap<ExperienceVM, Experience>()
-				.ForMember(dest => dest.Industry, opt => opt.Ignore());
+				.ForMember(dest => dest.Industry, opt => opt.Ignore())
+				.ForMember(dest => dest.Company, opt => opt.Ignore());
 
 			CreateMap<Industry, IndustryVM>()
 				.ReverseMap();
-
+			CreateMap<Company, CompanyVM>()
+				.ReverseMap();
 
 			CreateMap<Project, ProjectVM>()
 				.ForMember(dest => dest.ProjectContributors, opt => opt.MapFrom(src => src.ProjectContributors.Select(pc => new ProjectContributorVM

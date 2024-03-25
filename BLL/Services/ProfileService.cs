@@ -107,15 +107,23 @@ namespace BLL.Services
 
 		public async Task<List<ExperienceVM>> GetUserExperiences(string userid)
 		{
-			var experienceList = await _unitOfWork.ExperienceRepo.GetUserExperiencesWithIndustry(userid);
+			var experienceList = await _unitOfWork.ExperienceRepo.GetUserExperiencesWithIndustryAndCompany(userid);
+
 			var list = _mapper.Map<List<ExperienceVM>>(experienceList);
 			return list;
 		}
 		public async Task<ExperienceVM> GetExperience(int id)
 		{
-			var exp = await _unitOfWork.ExperienceRepo.Get(e => e.Id == id, includeProperties: "Industry");
+			var exp = await _unitOfWork.ExperienceRepo.Get(e => e.Id == id, includeProperties: "Industry,Company");
 			var experience = _mapper.Map<ExperienceVM>(exp);
 			return experience;
+		}
+		public async Task<List<CompanyVM>> GetAllCompanies()
+		{
+			var companies = await _unitOfWork.CompanyRepo.GetAll();
+			var companyVMs = _mapper.Map<List<CompanyVM>>(companies);
+
+			return companyVMs;
 		}
 		public async Task<List<IndustryVM>> GetAllIndustries()
 		{
@@ -134,8 +142,13 @@ namespace BLL.Services
 			{
 				return false;
 			}
-
+			var company = await _unitOfWork.CompanyRepo.Get(val => val.ComanyName == experience.Company.ComanyName);
+			if (company == null)
+			{
+				return false;
+			}
 			mappedExperience.IndustryId = industry.Id;
+			mappedExperience.CompanyId = company.Id;
 
 			await _unitOfWork.ExperienceRepo.Add(mappedExperience);
 			await _unitOfWork.SaveAsync();
@@ -157,7 +170,6 @@ namespace BLL.Services
 			}
 
 			existingExperience.Title = experience.Title;
-			existingExperience.CompanyName = experience.CompanyName;
 			existingExperience.Description = experience.Description;
 			existingExperience.StartDate = experience.StartDate;
 			existingExperience.EndDate = experience.EndDate;
@@ -170,7 +182,13 @@ namespace BLL.Services
 				return false;
 			}
 
+			var company = await _unitOfWork.CompanyRepo.Get(val => val.ComanyName == experience.Company.ComanyName);
+			if (company == null)
+			{
+				return false;
+			}
 			existingExperience.IndustryId = industry.Id;
+			existingExperience.CompanyId = company.Id;
 
 			_unitOfWork.ExperienceRepo.Update(existingExperience);
 			await _unitOfWork.SaveAsync();
@@ -336,7 +354,7 @@ namespace BLL.Services
 			return true;
 		}
 
-		public Task<string> GetUserUrl(string userId)
+		public async Task<string> GetUserUrl(string userId)
 		{
 			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
 			return user.ProfileUrl;

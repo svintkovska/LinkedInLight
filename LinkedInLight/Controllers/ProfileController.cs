@@ -126,6 +126,19 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+		[HttpGet("allCompanies")]
+		public async Task<IActionResult> GetAllCompanies()
+		{
+			try
+			{
+				var list = await _profileService.GetAllCompanies();
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 		[HttpPost("newExperience")]
 		public async Task<IActionResult> AddExperience(ExperienceVM experience)
 		{

@@ -24,13 +24,15 @@ namespace BLL.Interfaces
 
 		public Task<List<ExperienceVM>> GetUserExperiences(string id);
 		public Task<ExperienceVM> GetExperience(int id);
+		public Task<List<CompanyVM>> GetAllCompanies();
+		public Task<List<IndustryVM>> GetAllIndustries();
 		public Task<bool> AddExperience(ExperienceVM experienceVM, string userid);
 		public Task<bool> RemoveExperience(int experienceId);
 		public Task<bool> UpdateExperience(ExperienceVM experienceDTO);
 
 		public Task<List<EducationVM>> GetUserEducations(string id);
 		public Task<EducationVM> GetEducation(int id);
-		public Task<List<IndustryVM>> GetAllIndustries();
+	
 		public Task<bool> AddEducation(EducationVM educationDTO, string userid);
 		public Task<bool> RemoveEducation(int educationId);
 		public Task<bool> UpdateEducation(EducationVM educationDTO);
@@ -48,11 +50,6 @@ namespace BLL.Interfaces
 
 		public Task<bool> UpdateUserUrl(string url, string userId);
 		public Task<string> GetUserUrl(string userId);
-
-
-
-
-
 
 
 
