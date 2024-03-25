@@ -83,7 +83,7 @@ namespace BLL.Services
 			}
 
 			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = false, FirstName = model.FirstName, LastName = model.LastName, Country = model.Country, City = model.City };
-
+			user.ProfileUrl = await GenerateUniqueUrl(model.FirstName, model.LastName);
 			var result = await _userManager.CreateAsync(user, model.Password);
 
 			if (!result.Succeeded)
@@ -235,6 +235,8 @@ namespace BLL.Services
 						EmailConfirmed = true
 
 					};
+					user.ProfileUrl = await GenerateUniqueUrl(registrationModel.FirstName, registrationModel.LastName);
+
 					var resultCreate = await _userManager.CreateAsync(user);
 					if (!resultCreate.Succeeded)
 					{
@@ -368,6 +370,31 @@ namespace BLL.Services
 			Random random = new Random();
 			int code = random.Next(100000, 999999);
 			return code.ToString();
+		}
+
+		private async Task<string> GenerateUniqueUrl(string firstName, string lastName)
+		{
+			string urlStart = $"{firstName.ToLower()}-{lastName.ToLower()}-";
+
+			Random random = new Random();
+			string randomNumber = random.Next(10000000 , 999999999).ToString();
+			string url = urlStart+ randomNumber.ToString();
+			while (await IsUniqueUrl(url) == false)
+			{
+				randomNumber = random.Next(10000000, 999999999).ToString();
+				url = $"{urlStart}{randomNumber}";
+			}
+
+			return url;
+		}
+		private async Task<bool> IsUniqueUrl(string url)
+		{
+			var existingUrls = await _unitOfWork.UserRepo.GetAll(u => u.ProfileUrl == url);
+			if(existingUrls.Any())
+			{
+				return false;
+			}
+			return true; 
 		}
 	}
 

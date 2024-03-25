@@ -336,8 +336,32 @@ namespace BLL.Services
 			return true;
 		}
 
-
-
+		public Task<string> GetUserUrl(string userId)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
+			return user.ProfileUrl;
+		}
+		public async Task<bool> UpdateUserUrl(string url, string userId)
+		{
+			if ( await IsUniqueUrl(url))
+			{
+				var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
+				user.ProfileUrl = url;
+				_unitOfWork.UserRepo.Update(user);
+				await _unitOfWork.SaveAsync();
+				return true;
+			}
+			return false;
+		}
+		private async Task<bool> IsUniqueUrl(string url)
+		{
+			var existingUrls = await _unitOfWork.UserRepo.GetAll(u => u.ProfileUrl == url);
+			if (existingUrls.Any())
+			{
+				return false;
+			}
+			return true;
+		}
 
 		public async Task<bool> AddOpenToWork(OpenToWorkVM openToWorkVM, string userId)
 		{

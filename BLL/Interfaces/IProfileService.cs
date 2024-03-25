@@ -43,18 +43,19 @@ namespace BLL.Interfaces
 		public Task<List<SkillVM>> GetAllSkills();
 		public Task<bool> RemoveSkill(int skillId, string userId);
 		public Task<bool> UpdateSkill(UserSkillVM skill, string userId);
-		
-
-	
-
-
-		
-
-		
 
 
 
-	
+		public Task<bool> UpdateUserUrl(string url, string userId);
+		public Task<string> GetUserUrl(string userId);
+
+
+
+
+
+
+
+
 
 
 		public Task<bool> AddOpenToWork(OpenToWorkVM openToWorkVM, string userId);

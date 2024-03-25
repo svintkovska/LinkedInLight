@@ -341,7 +341,41 @@ namespace LinkedInLight.Controllers
 		}
 
 
-	
+		[HttpGet("userUrl")]
+		public async Task<IActionResult> GetUserURL()
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var url = await _profileService.GetUserUrl(userId);
+				return Ok(url);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		[HttpPut("editUrl")]
+		public async Task<IActionResult> UpdateUserURL(string newUrl)
+		{
+			try
+			{
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var result = await _profileService.UpdateUserUrl(newUrl, userId);
+				if (!result)
+				{
+					return BadRequest("Such an URL already exists");
+				}
+				return Ok("URL edited");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+
 		[HttpPost("addOpenToWork")]
 		public async Task<IActionResult> AddOpenToWork(OpenToWorkVM openToWorkVM)
 		{
