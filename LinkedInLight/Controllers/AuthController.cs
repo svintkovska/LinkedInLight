@@ -89,6 +89,10 @@ namespace LinkedInLight.Controllers
 			try
 			{
 				var result = await _authenticationService.Login(model.Email, model.Password);
+				if (result.EmailNotConfirmed)
+				{
+					return BadRequest($"Your email is not confirmed. A confirmation code was sent to {model.Email}");
+				}
 				if (result.Success)
 				{
 					

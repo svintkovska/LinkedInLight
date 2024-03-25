@@ -189,8 +189,7 @@ namespace BLL.Services
 			if (!user.EmailConfirmed)
 			{
 				await SendConfirmationCode(user.Email);
-				throw new Exception("Email not confirmed");
-
+				return new LoginResultVM { EmailNotConfirmed = true };
 			}
 			var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
 			if (!result.Succeeded)
