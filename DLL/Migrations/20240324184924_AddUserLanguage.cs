@@ -12,9 +12,6 @@ namespace DLL.Migrations
                 name: "FK_Languages_AspNetUsers_ApplicationUserId",
                 table: "Languages");
 
-            migrationBuilder.DropTable(
-                name: "UserPositions");
-
             migrationBuilder.DropIndex(
                 name: "IX_Languages_ApplicationUserId",
                 table: "Languages");

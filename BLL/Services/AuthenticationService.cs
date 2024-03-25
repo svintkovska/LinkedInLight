@@ -56,28 +56,7 @@ namespace BLL.Services
 			return true;
 		}
 
-		public async Task<string> SendConfirmationCode(string email)
-		{
-			var code = GenerateRandom6DigitCode();
-
-
-			var frontendURL = _configuration.GetValue<string>("FrontEndURL");
-			var callbackURL = $"{frontendURL}/confirmEmail?email={email}";
-
-			string basePath = AppContext.BaseDirectory;
-			string htmlFilePath = Path.Combine(basePath, "html", "message-template.html");
-			string htmlContent = System.IO.File.ReadAllText(htmlFilePath);
-
-			htmlContent = htmlContent.Replace("{{code}}", code);
-			htmlContent = htmlContent.Replace("{{email}}", email);
-			htmlContent = htmlContent.Replace("{{callbackURL}}", callbackURL);
-
-			string subject = "Confirm Your Email";
-
-			 await _sendGridService.SendEmailAsync(email, subject, htmlContent);
-
-			return code;
-		}
+		
 		public async Task<IEnumerable<CountryVM>> GetAllCountries()
 		{
 			var countries = await _unitOfWork.CountryRepo.GetAll();
@@ -93,9 +72,17 @@ namespace BLL.Services
 			var list = _mapper.Map<IEnumerable<CityVM>>(cities);
 			return list;
 		}
+
 		public async Task<bool> Register(RegisterVM model)
 		{
-			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true, FirstName = model.FirstName, LastName = model.LastName, Country = model.Country, City = model.City };
+
+			var existingUser = await _userManager.FindByEmailAsync(model.Email);
+			if (existingUser != null)
+			{
+				throw new Exception("Email already exists");
+			}
+
+			var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = false, FirstName = model.FirstName, LastName = model.LastName, Country = model.Country, City = model.City };
 
 			var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -105,7 +92,11 @@ namespace BLL.Services
 			}
 			else
 			{
-				result = _userManager.AddToRoleAsync(user, RoleConstants.AUTHORIZED_USER).Result;
+				result = await _userManager.AddToRoleAsync(user, RoleConstants.AUTHORIZED_USER);
+				var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+				var code = GenerateRandom6DigitCode();
+				user.EmailConfirmationToken = token;
+				user.EmailConfirmationCode = code;
 				await _userManager.UpdateAsync(user);
 
 				var defaultSettings = new UserPrivacySettings
@@ -124,10 +115,68 @@ namespace BLL.Services
 
 				await _unitOfWork.UserPrivacySettingsRepo.Add(defaultSettings);
 				await _unitOfWork.SaveAsync();
-
-
 			}
+
+
 			return result.Succeeded;
+		}
+		public async Task<bool> SendConfirmationCode(string email)
+		{
+			var user = await _userManager.FindByEmailAsync(email);
+			if (user == null)
+			{
+				throw new Exception("This email is not registred");
+			}
+
+
+			var frontendURL = _configuration.GetValue<string>("FrontEndURL");
+			var callbackURL = $"{frontendURL}/auth/confirm-email?email={email}&token={user.EmailConfirmationToken}";
+
+			string basePath = AppContext.BaseDirectory;
+			string htmlFilePath = Path.Combine(basePath, "html", "message-template.html");
+			string htmlContent = System.IO.File.ReadAllText(htmlFilePath);
+
+			htmlContent = htmlContent.Replace("{{code}}", user.EmailConfirmationCode);
+			htmlContent = htmlContent.Replace("{{email}}", email);
+			htmlContent = htmlContent.Replace("{{callbackURL}}", callbackURL);
+
+			string subject = "Confirm Your Email";
+
+			await _sendGridService.SendEmailAsync(email, subject, htmlContent);
+
+			return true;
+		}
+		public async Task<bool> ConfirmEmail(string userId, string code, string emailToken)
+		{
+			var user = await _userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				throw new Exception("User not found");
+			}
+			if(code== null && emailToken == null)
+			{
+				throw new Exception("Error");
+			}
+			if (code != null && code != user.EmailConfirmationCode)
+			{
+				throw new Exception("Invalid confirmation code");
+			}
+			if (emailToken != null && code != user.EmailConfirmationToken)
+			{
+				throw new Exception("Invalid confirmation token");
+			}
+			var result = await _userManager.ConfirmEmailAsync(user, user.EmailConfirmationToken);
+			if (result.Succeeded)
+			{
+				user.EmailConfirmed = true;
+				await _userManager.UpdateAsync(user);
+
+				return true;
+			}
+			else
+			{
+				throw new Exception("Failed to confirm email");
+			}
 		}
 
 		public async Task<LoginResultVM> Login(string email, string password)
@@ -137,7 +186,12 @@ namespace BLL.Services
 			{
 				return new LoginResultVM { Success = false };
 			}
+			if (!user.EmailConfirmed)
+			{
+				await SendConfirmationCode(user.Email);
+				throw new Exception("Email not confirmed");
 
+			}
 			var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
 			if (!result.Succeeded)
 			{
@@ -179,6 +233,7 @@ namespace BLL.Services
 						UserName = registrationModel.UserName,
 						FirstName = registrationModel.FirstName,
 						LastName = registrationModel.LastName,
+						EmailConfirmed = true
 
 					};
 					var resultCreate = await _userManager.CreateAsync(user);

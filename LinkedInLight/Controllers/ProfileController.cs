@@ -261,8 +261,7 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e";
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 				var list = await _profileService.GetUserSkills(userId);
 				return Ok(list);
 			}
@@ -276,8 +275,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e"; var list = await _profileService.GetMainkills(userId);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var list = await _profileService.GetMainkills(userId);
 				return Ok(list);
 			}
 			catch (Exception ex)
@@ -303,8 +302,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e"; await _profileService.AddSkill(skill, userId);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				await _profileService.AddSkill(skill, userId);
 				return Ok(skill);
 			}
 			catch (Exception ex)
@@ -330,8 +329,8 @@ namespace LinkedInLight.Controllers
 		{
 			try
 			{
-				//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e"; await _profileService.RemoveSkill(id, userId);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				await _profileService.RemoveSkill(id, userId);
 				return Ok("Skill deleted");
 			}
 			catch (Exception ex)

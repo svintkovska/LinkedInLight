@@ -20,6 +20,7 @@ namespace BLL.Interfaces
 		public  Task<bool> ForgotPassword(string email);
 		public Task<bool> SetNewPassword(NewPasswordVM model);
 		public Task<bool> IsValidEmail(string email);
-		public Task<string> SendConfirmationCode(string email);
+		public Task<bool> ConfirmEmail(string userId, string code, string emailToken);
+		public Task<bool> SendConfirmationCode(string email);
 	}
 }

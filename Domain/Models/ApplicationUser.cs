@@ -26,7 +26,11 @@ namespace Domain.Models
         public string About { get; set; }
 		public string Image { get; set; }
 		public string Background { get; set; }
-        public bool IsBanned { get; set; }  
+		public string EmailConfirmationToken { get; set; }
+		public string EmailConfirmationCode { get; set; }
+
+
+		public bool IsBanned { get; set; }  
         public bool OpenToWork { get; set; }    
         public bool OpenToHire { get; set; }
         public string ProfileUrl { get; set; } = ""; 
