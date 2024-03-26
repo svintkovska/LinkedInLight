@@ -1,4 +1,6 @@
 ﻿using Bogus;
+using Bogus.DataSets;
+using DLL.Repositories.IRepository;
 using Domain.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -15,17 +17,17 @@ namespace DLL.Data.Seeder
 {
     public static class DbSeeder
     {
-        public static void SeedData(this IApplicationBuilder app)
-        {
-            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+		public static void SeedData(this IApplicationBuilder app)
+		{
+			using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+			{
+				var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                context.Database.Migrate();
-                var faker = new Faker();
+				context.Database.Migrate();
+				var faker = new Faker();
 
-                if (!context.Countries.Any())
-                {
+				if (!context.Countries.Any())
+				{
 					string basePath = AppDomain.CurrentDomain.BaseDirectory;
 					string filePath = Path.Combine(basePath, "Data", "Seeder", "countries.json");
 
@@ -512,10 +514,25 @@ namespace DLL.Data.Seeder
 
 					context.SaveChanges();
 				}
+
+				if (!context.Positions.Any())
+				{
+					string basePath = AppDomain.CurrentDomain.BaseDirectory;
+					string filePath = Path.Combine(basePath, "Data", "Seeder", "positions.json");
+
+					var json = File.ReadAllText(filePath);
+
+					var positions = JsonConvert.DeserializeObject<List<string>>(json);
+
+					foreach (var position in positions)
+					{
+						context.Positions.Add(new Position { Name = position });
+					}
+					context.SaveChanges();
+				}
 			}
-        }
 
-
+		}
 
     }
 }

@@ -381,47 +381,81 @@ namespace BLL.Services
 			return true;
 		}
 
+
+
+		public async Task<List<PositionVM>> GetAllPositions()
+		{
+			var positions = await _unitOfWork.PositionRepo.GetAll();
+			var positionVMs = _mapper.Map<List<PositionVM>>(positions);
+
+			return positionVMs;
+		}
 		public async Task<bool> AddOpenToWork(OpenToWorkVM openToWorkVM, string userId)
 		{
 			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
+			if (user.OpenToWork)
+			{
+				throw new Exception("User is already open to work.");
+			}
 			user.OpenToWork = true;
+
 			var openToWork = _mapper.Map<OpenToWork>(openToWorkVM);
-			openToWork.ApplicationUserId= userId;
+			openToWork.ApplicationUserId = userId;
+
+			await _unitOfWork.OpenToWorkRepo.Add(openToWork);
+			_unitOfWork.UserRepo.Update(user);
+			await _unitOfWork.SaveAsync();
 
 			foreach (var positionVM in openToWorkVM.OpenToWorkPositions)
 			{
-				openToWork.OpenToWorkPositions.Add(new OpenToWorkPosition
+				var newPosition = new OpenToWorkPosition
 				{
-					OpenToWork = openToWork,
+					OpenToWorkId = openToWork.Id,
 					PositionId = positionVM.PositionId
-				});
+				};
+				var existingPosition = await _unitOfWork.OpenToWorkPositionRepo.Get(op => op.OpenToWorkId == newPosition.OpenToWorkId && op.PositionId == newPosition.PositionId);
+				if (existingPosition == null)
+				{
+					await _unitOfWork.OpenToWorkPositionRepo.Add(newPosition);
+				}
 			}
 
 			foreach (var cityVM in openToWorkVM.OpenToWorkCities)
 			{
-				openToWork.OpenToWorkCities.Add(new OpenToWorkCity
+				var newCity = new OpenToWorkCity
 				{
-					OpenToWork = openToWork,
+					OpenToWorkId = openToWork.Id,
 					CityId = cityVM.CityId
-				});
+				};
+
+				var existingCity = await _unitOfWork.OpenToWorkCityRepo.Get(oc => oc.OpenToWorkId == newCity.OpenToWorkId && oc.CityId == newCity.CityId);
+				if (existingCity == null)
+				{
+					await _unitOfWork.OpenToWorkCityRepo.Add(newCity);
+				}
 			}
 
 			foreach (var countryVM in openToWorkVM.OpenToWorkCountries)
 			{
-				openToWork.OpenToWorkCountries.Add(new OpenToWorkCountry
+				var newCountry = new OpenToWorkCountry
 				{
-					OpenToWork = openToWork,
+					OpenToWorkId = openToWork.Id,
 					CountryId = countryVM.CountryId
-				});
+				};
+
+				var existingCountry = await _unitOfWork.OpenToWorkCountryRepo.Get(oc => oc.OpenToWorkId == newCountry.OpenToWorkId && oc.CountryId == newCountry.CountryId);
+				if (existingCountry == null)
+				{
+					await _unitOfWork.OpenToWorkCountryRepo.Add(newCountry);
+				}
 			}
 
-			await _unitOfWork.OpenToWorkRepo.Add(openToWork);
 			await _unitOfWork.SaveAsync();
 			return true;
 		}
 		public async Task<bool> UpdateOpenToWork(OpenToWorkVM openToWorkVM, string userId)
 		{
-			var existingOpenToWork = await _unitOfWork.OpenToWorkRepo.Get(o => o.ApplicationUserId == userId);
+			var existingOpenToWork = await _unitOfWork.OpenToWorkRepo.Get(o => o.ApplicationUserId == userId,includeProperties: "OpenToWorkCities,OpenToWorkCountries,OpenToWorkPositions");
 			if (existingOpenToWork == null)
 			{
 				return false;
@@ -441,7 +475,7 @@ namespace BLL.Services
 			{
 				existingOpenToWork.OpenToWorkPositions.Add(new OpenToWorkPosition
 				{
-					OpenToWork = existingOpenToWork,
+					OpenToWorkId = existingOpenToWork.Id,
 					PositionId = positionVM.PositionId
 				});
 			}
@@ -452,7 +486,7 @@ namespace BLL.Services
 			{
 				existingOpenToWork.OpenToWorkCities.Add(new OpenToWorkCity
 				{
-					OpenToWork = existingOpenToWork,
+					OpenToWorkId = existingOpenToWork.Id,
 					CityId = cityVM.CityId
 				});
 			}
@@ -463,7 +497,7 @@ namespace BLL.Services
 			{
 				existingOpenToWork.OpenToWorkCountries.Add(new OpenToWorkCountry
 				{
-					OpenToWork = existingOpenToWork,
+					OpenToWorkId = existingOpenToWork.Id,
 					CountryId = countryVM.CountryId
 				});
 			}
@@ -476,6 +510,8 @@ namespace BLL.Services
 		{
 			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
 			user.OpenToWork = false;
+			_unitOfWork.UserRepo.Update(user);
+
 			var existingOpenToWork = await _unitOfWork.OpenToWorkRepo.Get(o => o.ApplicationUserId == userId, includeProperties: "OpenToWorkCities,OpenToWorkCountries,OpenToWorkPositions");
 			if (existingOpenToWork == null)
 			{

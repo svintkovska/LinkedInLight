@@ -54,7 +54,7 @@ namespace BLL.Interfaces
 
 
 
-
+		public Task<List<PositionVM>> GetAllPositions();
 		public Task<bool> AddOpenToWork(OpenToWorkVM openToWorkVM, string userId);
 		public Task<bool> UpdateOpenToWork(OpenToWorkVM openToWorkVM, string userId);
 		public Task<bool> DeleteOpenToWork(string userId);

@@ -21,7 +21,7 @@ namespace Domain.Models
 		public bool VisibleForAll { get; set; }
 
 		public string ApplicationUserId { get; set; }
-		public ApplicationUser ApplicationUser { get; set; }
+		public virtual ApplicationUser ApplicationUser { get; set; }
 		public virtual ICollection<OpenToWorkPosition> OpenToWorkPositions { get; set; }
 		public virtual ICollection<OpenToWorkCity> OpenToWorkCities { get; set; }
 		public virtual ICollection<OpenToWorkCountry> OpenToWorkCountries { get; set; }

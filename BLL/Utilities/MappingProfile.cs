@@ -111,7 +111,8 @@ namespace BLL.Utilities
 				.ReverseMap();
 			CreateMap<Company, CompanyVM>()
 				.ReverseMap();
-
+			CreateMap<Position, PositionVM>()
+				.ReverseMap();
 			CreateMap<Project, ProjectVM>()
 				.ForMember(dest => dest.ProjectContributors, opt => opt.MapFrom(src => src.ProjectContributors.Select(pc => new ProjectContributorVM
 				{
@@ -119,15 +120,22 @@ namespace BLL.Utilities
 					ApplicationUserId = pc.ApplicationUserId
 				})));
 
+			CreateMap<OpenToWorkVM, OpenToWork>()
+			   .ForMember(dest => dest.OpenToWorkPositions, opt => opt.MapFrom(src => src.OpenToWorkPositions))
+			   .ForMember(dest => dest.OpenToWorkCities, opt => opt.MapFrom(src => src.OpenToWorkCities))
+			   .ForMember(dest => dest.OpenToWorkCountries, opt => opt.MapFrom(src => src.OpenToWorkCountries))
+			   .ReverseMap();
 
 			CreateMap<ProjectContributor, ProjectContributorVM>();
 			CreateMap<Country, CountryVM>();
 			CreateMap<City, CityVM>();
 			CreateMap<Position, PostVM>();
-			CreateMap<OpenToWork, OpenToWorkVM>();
-			CreateMap<OpenToWorkCity, OpenToWorkCityVM>();
-			CreateMap<OpenToWorkCountry, OpenToWorkCountryVM>();
-			CreateMap<OpenToWorkPosition, OpenToWorkPositionVM>();
+			CreateMap<OpenToWorkCity, OpenToWorkCityVM>()
+				.ReverseMap();
+			CreateMap<OpenToWorkCountry, OpenToWorkCountryVM>()
+				.ReverseMap();
+			CreateMap<OpenToWorkPosition, OpenToWorkPositionVM>()
+				.ReverseMap();
 
 		}
 	}

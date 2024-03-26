@@ -9,9 +9,9 @@ namespace Domain.Models
 	public class OpenToWorkPosition
 	{
 		public int OpenToWorkId { get; set; }
-		public OpenToWork OpenToWork { get; set; }
+		public virtual OpenToWork OpenToWork { get; set; }
 
 		public int PositionId { get; set; }
-		public Position Position { get; set; }
+		public virtual Position Position { get; set; }
 	}
 }

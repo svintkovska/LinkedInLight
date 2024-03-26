@@ -389,6 +389,20 @@ namespace LinkedInLight.Controllers
 		}
 
 
+
+		[HttpGet("allPositions")]
+		public async Task<IActionResult> GetAllPositions()
+		{
+			try
+			{
+				var list = await _profileService.GetAllPositions();
+				return Ok(list);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 		[HttpPost("addOpenToWork")]
 		public async Task<IActionResult> AddOpenToWork(OpenToWorkVM openToWorkVM)
 		{

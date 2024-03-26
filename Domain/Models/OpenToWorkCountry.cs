@@ -9,9 +9,9 @@ namespace Domain.Models
 	public class OpenToWorkCountry
 	{
 		public int OpenToWorkId { get; set; }
-		public OpenToWork OpenToWork { get; set; }
+		public virtual OpenToWork OpenToWork { get; set; }
 
 		public int CountryId { get; set; }
-		public Country Country { get; set; }
+		public virtual Country Country { get; set; }
 	}
 }
