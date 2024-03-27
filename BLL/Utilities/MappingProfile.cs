@@ -151,6 +151,9 @@ namespace BLL.Utilities
 			CreateMap<ServicePosition, ServicePositionVM>()
 				.ReverseMap();
 
+
+			CreateMap<Message, MessageVM>()
+				.ReverseMap();
 		}
 	}
 }

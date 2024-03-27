@@ -38,7 +38,7 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpGet("{chatId}")]
-		public async Task<ActionResult<List<Message>>> GetMessagesFromChat(int chatId)
+		public async Task<ActionResult<List<MessageVM>>> GetMessagesFromChat(int chatId)
 		{
 			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var messages = await _chatService.GetMessagesFromChat(chatId, userId);
@@ -46,13 +46,13 @@ namespace LinkedInLight.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> SendMessage(MessageVM message)
+		public async Task<ActionResult> SendMessage(MessageVM message, IFormFile? attachment)
 		{
 			
 
 			try
 			{
-				await _chatService.SendMessage(message);
+				await _chatService.SendMessage(message, attachment);
 				return Ok("Message sent.");
 			}
 			catch (Exception ex)

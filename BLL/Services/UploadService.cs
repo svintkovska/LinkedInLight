@@ -34,7 +34,7 @@ namespace BLL.Services
 			{
 				return await Save(formFile);
 			}
-
+			
 			var bmp = new Bitmap(await IFormFileToBitmap(formFile));
 
 			return Save(bmp);
@@ -82,7 +82,17 @@ namespace BLL.Services
 			saveImage.Save(dirSaveImage, ImageFormat.Jpeg);
 			return fileName;
 		}
+		private async Task<string> SaveDocument(IFormFile file)
+		{
+			var fileExtension = Path.GetExtension(file.FileName);
+			var fileName = Path.GetRandomFileName() + fileExtension;
+			string dirSaveDocument = Path.Combine(Directory.GetCurrentDirectory(), "uploads", fileName);
 
+			using FileStream fs = File.Create(dirSaveDocument);
+			await file.CopyToAsync(fs);
+
+			return fileName;
+		}
 		private Bitmap CompressImage(Bitmap originalPic, int maxWidth, int maxHeight, bool transperent = false)
 		{
 			try

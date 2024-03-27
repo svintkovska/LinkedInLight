@@ -1,9 +1,11 @@
-﻿using BLL.Interfaces;
+﻿using AutoMapper;
+using BLL.Interfaces;
 using BLL.Utilities.SignalR;
 using BLL.ViewModels;
 using DLL.Repositories;
 using DLL.Repositories.IRepository;
 using Domain.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -18,21 +20,27 @@ namespace BLL.Services
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IHubContext<ChatHub> _hubContext;
+		private readonly IUploadService _uploadService;
+		private readonly IMapper _mapper;
 
-		public ChatService(IUnitOfWork unitOfWork, IHubContext<ChatHub> hubContext)
+		public ChatService(IUnitOfWork unitOfWork, IHubContext<ChatHub> hubContext, IUploadService uploadService, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
 			_hubContext = hubContext;
+			_uploadService = uploadService;
+			_mapper = mapper;
 		}
 		public async Task<List<Chat>> GetChatsForUser(string userId)
 		{
 			return await _unitOfWork.ChatRepo.GetChatsForUser(userId);
 		}
-		public async Task<List<Message>> GetMessagesFromChat(int chatId, string userId)
-		{
-			return await _unitOfWork.MessageRepo.GetMessagesFromChat(chatId, userId);
+		public async Task<List<MessageVM>> GetMessagesFromChat(int chatId, string userId)
+		{		
+			var messges =  _unitOfWork.MessageRepo.GetMessagesFromChat(chatId, userId);
+			var list = _mapper.Map<List<MessageVM>>(messges) ;
+			return list;
 		}
-		public async Task SendMessage( MessageVM message)
+		public async Task SendMessage( MessageVM message, IFormFile? attachment)
 		{
 
 			var existingChat = await _unitOfWork.ChatRepo.Get(c =>
@@ -57,8 +65,7 @@ namespace BLL.Services
 				existingChat = newChat; 
 			}
 
-
-
+			
 			Message msg = new Message
 			{
 				Content = message.Content,
@@ -71,6 +78,10 @@ namespace BLL.Services
 				ChatId = existingChat.Id
 			};
 
+			if (attachment != null && attachment.Length > 0)
+			{
+				msg.AttachedFileName = await _uploadService.SaveFileFromIFormFile(attachment);
+			}
 			await _unitOfWork.MessageRepo.Add(msg);
 			await _unitOfWork.SaveAsync();
 

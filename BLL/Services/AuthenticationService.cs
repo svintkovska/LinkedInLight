@@ -153,25 +153,34 @@ namespace BLL.Services
 			{
 				throw new Exception("User not found");
 			}
-			if(code== null && emailToken == null)
+
+
+			if(code != null && code == user.EmailConfirmationCode)
+			{
+				var result = await _userManager.ConfirmEmailAsync(user, user.EmailConfirmationToken);
+				user.EmailConfirmed = true;
+				await _userManager.UpdateAsync(user);
+				return true;
+			}
+			else if (emailToken != null  && emailToken == user.EmailConfirmationCode)
+			{
+				var result = await _userManager.ConfirmEmailAsync(user, user.EmailConfirmationToken);
+				user.EmailConfirmed = true;
+				await _userManager.UpdateAsync(user);
+				return true;
+			}
+
+			if (code == null && emailToken == null)
 			{
 				throw new Exception("Error");
 			}
-			if (code != null && code != user.EmailConfirmationCode)
+			else if (code != null && code != user.EmailConfirmationCode)
 			{
 				throw new Exception("Invalid confirmation code");
 			}
-			if (emailToken != null && code != user.EmailConfirmationToken)
+			else if (emailToken != null && emailToken != user.EmailConfirmationToken)
 			{
 				throw new Exception("Invalid confirmation token");
-			}
-			var result = await _userManager.ConfirmEmailAsync(user, user.EmailConfirmationToken);
-			if (result.Succeeded)
-			{
-				user.EmailConfirmed = true;
-				await _userManager.UpdateAsync(user);
-
-				return true;
 			}
 			else
 			{
