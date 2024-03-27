@@ -39,13 +39,31 @@ namespace LinkedInLight.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+		[HttpPost("confirm-email")]
+		public async Task<IActionResult> ConfirmEmail(string email, string code, string emailToken)
+		{
+			try
+			{
+				var result = await _authenticationService.ConfirmEmail(email, code, emailToken);
+				if (result)
+				{
+					return Ok();
+				}
+				return BadRequest("Failed to confirm email");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
 		[HttpPost("send-code")]
 		public async Task<IActionResult> SendConfirmationCode(string email)
 		{
 			try
 			{
 				var code = await _authenticationService.SendConfirmationCode(email);
-				return Ok(code);
+				return Ok();
 			}
 			catch (Exception ex)
 			{

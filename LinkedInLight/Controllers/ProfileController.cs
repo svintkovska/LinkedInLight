@@ -456,8 +456,7 @@ namespace LinkedInLight.Controllers
 		[HttpPost("addServices")]
 		public async Task<IActionResult> AddServices(ServiceVM serviceVM)
 		{
-			//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e";
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var result = await _profileService.AddServices(serviceVM, userId);
 			if (result)
 			{
@@ -469,8 +468,7 @@ namespace LinkedInLight.Controllers
 		[HttpPut("updateServices")]
 		public async Task<IActionResult> UpdateServices(ServiceVM serviceVM)
 		{
-			//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e"; ;
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var result = await _profileService.UpdateServices(serviceVM, userId);
 			if (result)
 			{
@@ -482,8 +480,7 @@ namespace LinkedInLight.Controllers
 		[HttpDelete("deleteServices")]
 		public async Task<IActionResult> DeleteServices()
 		{
-			//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e";
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var result = await _profileService.DeleteServices(userId);
 			if (result)
 			{
@@ -495,8 +492,7 @@ namespace LinkedInLight.Controllers
 		[HttpGet("getServices")]
 		public async Task<IActionResult> GetServices()
 		{
-			//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var userId = "36d795ca-7aa1-44cf-88fd-f752302a584e";
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var servicesVM = await _profileService.GetServicesByUserId(userId);
 			if (servicesVM != null)
 			{

@@ -13,7 +13,7 @@ namespace Domain.Models
 		public int Id { get; set; }
 
 		public string Content { get; set; }
-
+		public string AttachedFileName { get; set; }
 		public DateTime SentAt { get; set; }
 
 		public bool IsRead { get; set; }
@@ -24,7 +24,7 @@ namespace Domain.Models
 
 		public string ReceiverId { get; set; }
 		public virtual ApplicationUser Receiver { get; set; }
-		public int? ChatId { get; set; } 
+		public int ChatId { get; set; } 
 		public virtual Chat Chat { get; set; } 
 
 	}

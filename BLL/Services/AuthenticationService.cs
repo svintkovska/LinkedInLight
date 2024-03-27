@@ -146,9 +146,9 @@ namespace BLL.Services
 
 			return true;
 		}
-		public async Task<bool> ConfirmEmail(string userId, string code, string emailToken)
+		public async Task<bool> ConfirmEmail(string email, string code, string emailToken)
 		{
-			var user = await _userManager.FindByIdAsync(userId);
+			var user = await _unitOfWork.UserRepo.Get(u=> u.Email == email);
 			if (user == null)
 			{
 				throw new Exception("User not found");
