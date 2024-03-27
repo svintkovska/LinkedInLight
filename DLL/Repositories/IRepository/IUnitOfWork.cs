@@ -49,6 +49,10 @@ namespace DLL.Repositories.IRepository
 		IOpenToWorkCity OpenToWorkCityRepo { get; }
 		IOpenToWorkCountry OpenToWorkCountryRepo { get; }
 		IPosition PositionRepo { get; }
+		IServiceCity ServiceCityRepo { get; }
+		IServiceCountry ServiceCountryRepo { get; }
+		IServicePosition ServicePositionRepo { get; }
+		IService ServiceRepo { get; }
 		public Task SaveAsync();
 
 

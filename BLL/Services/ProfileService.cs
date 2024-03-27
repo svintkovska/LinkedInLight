@@ -390,6 +390,8 @@ namespace BLL.Services
 
 			return positionVMs;
 		}
+
+
 		public async Task<bool> AddOpenToWork(OpenToWorkVM openToWorkVM, string userId)
 		{
 			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
@@ -536,6 +538,148 @@ namespace BLL.Services
 			return openToWorkVM;
 		}
 
+
+		public async Task<bool> AddServices(ServiceVM serviceVM, string userId)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
+			if (user.OpenToServices)
+			{
+				throw new Exception("User is already open to ervices.");
+			}
+			user.OpenToServices = true;
+
+			var openToServices = _mapper.Map<Service>(serviceVM);
+			openToServices.ApplicationUserId = userId;
+
+			await _unitOfWork.ServiceRepo.Add(openToServices);
+			_unitOfWork.UserRepo.Update(user);
+			await _unitOfWork.SaveAsync();
+
+			foreach (var positionVM in openToServices.ServicePositions)
+			{
+				var newPosition = new ServicePosition
+				{
+					ServiceId = openToServices.Id,
+					PositionId = positionVM.PositionId
+				};
+				var existingPosition = await _unitOfWork.ServicePositionRepo.Get(op => op.ServiceId == newPosition.ServiceId && op.PositionId == newPosition.PositionId);
+				if (existingPosition == null)
+				{
+					await _unitOfWork.ServicePositionRepo.Add(newPosition);
+				}
+			}
+
+			foreach (var cityVM in openToServices.ServiceCities)
+			{
+				var newCity = new ServiceCity
+				{
+					ServiceId = openToServices.Id,
+					CityId = cityVM.CityId
+				};
+
+				var existingCity = await _unitOfWork.ServiceCityRepo.Get(oc => oc.ServiceId == newCity.ServiceId && oc.CityId == newCity.CityId);
+				if (existingCity == null)
+				{
+					await _unitOfWork.ServiceCityRepo.Add(newCity);
+				}
+			}
+
+			foreach (var countryVM in openToServices.ServiceCountries)
+			{
+				var newCountry = new ServiceCountry
+				{
+					ServiceId = openToServices.Id,
+					CountryId = countryVM.CountryId
+				};
+
+				var existingCountry = await _unitOfWork.ServiceCountryRepo.Get(oc => oc.ServiceId == newCountry.ServiceId && oc.CountryId == newCountry.CountryId);
+				if (existingCountry == null)
+				{
+					await _unitOfWork.ServiceCountryRepo.Add(newCountry);
+				}
+			}
+
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> UpdateServices(ServiceVM serviceVM, string userId)
+		{
+			var existingServices = await _unitOfWork.ServiceRepo.Get(o => o.ApplicationUserId == userId, includeProperties: "ServiceCities,ServiceCountries,ServicePositions");
+			if (existingServices == null)
+			{
+				return false;
+			}
+			existingServices.GeneralInformation= serviceVM.GeneralInformation;
+			existingServices.Currency = serviceVM.Currency;
+			existingServices.Salary = serviceVM.Salary;
+			existingServices.IsRemoteOk = serviceVM.IsRemoteOk;
+
+			_unitOfWork.ServicePositionRepo.RemoveRange(existingServices.ServicePositions);
+
+			foreach (var positionVM in serviceVM.ServicePositions)
+			{
+				existingServices.ServicePositions.Add(new ServicePosition
+				{
+					ServiceId = existingServices.Id,
+					PositionId = positionVM.PositionId
+				});
+			}
+
+			_unitOfWork.ServiceCityRepo.RemoveRange(existingServices.ServiceCities);
+
+			foreach (var cityVM in serviceVM.ServiceCities)
+			{
+				existingServices.ServiceCities.Add(new ServiceCity
+				{
+					ServiceId = existingServices.Id,
+					CityId = cityVM.CityId
+				});
+			}
+
+			_unitOfWork.ServiceCountryRepo.RemoveRange(existingServices.ServiceCountries);
+
+			foreach (var countryVM in serviceVM.ServiceCountries)
+			{
+				existingServices.ServiceCountries.Add(new ServiceCountry
+				{
+					ServiceId = existingServices.Id,
+					CountryId = countryVM.CountryId
+				});
+			}
+
+			_unitOfWork.ServiceRepo.Update(existingServices);
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<bool> DeleteServices(string userId)
+		{
+			var user = await _unitOfWork.UserRepo.Get(u => u.Id == userId);
+			user.OpenToServices = false;
+			_unitOfWork.UserRepo.Update(user);
+
+			var existingServices = await _unitOfWork.ServiceRepo.Get(o => o.ApplicationUserId == userId, includeProperties: "ServiceCities,ServiceCountries,ServicePositions");
+			if (existingServices == null)
+			{
+				return false;
+			}
+
+			_unitOfWork.ServiceCityRepo.RemoveRange(existingServices.ServiceCities);
+			_unitOfWork.ServiceCountryRepo.RemoveRange(existingServices.ServiceCountries);
+			_unitOfWork.ServicePositionRepo.RemoveRange(existingServices.ServicePositions);
+			_unitOfWork.ServiceRepo.Remove(existingServices);
+
+			await _unitOfWork.SaveAsync();
+			return true;
+		}
+		public async Task<ServiceVM> GetServicesByUserId(string userId)
+		{
+			var services = await _unitOfWork.ServiceRepo.Get(
+				o => o.ApplicationUserId == userId,
+				includeProperties: "ServiceCities,ServiceCountries,ServicePositions"
+			);
+			var servicesVM = _mapper.Map<ServiceVM>(services);
+			return servicesVM;
+		}
 	}
 
 }

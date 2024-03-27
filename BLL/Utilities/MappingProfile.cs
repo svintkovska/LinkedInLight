@@ -126,15 +126,29 @@ namespace BLL.Utilities
 			   .ForMember(dest => dest.OpenToWorkCountries, opt => opt.MapFrom(src => src.OpenToWorkCountries))
 			   .ReverseMap();
 
+			CreateMap<ServiceVM, Service>()
+			   .ForMember(dest => dest.ServicePositions, opt => opt.MapFrom(src => src.ServicePositions))
+			   .ForMember(dest => dest.ServiceCities, opt => opt.MapFrom(src => src.ServiceCities))
+			   .ForMember(dest => dest.ServiceCountries, opt => opt.MapFrom(src => src.ServiceCountries))
+			   .ReverseMap();
+
 			CreateMap<ProjectContributor, ProjectContributorVM>();
 			CreateMap<Country, CountryVM>();
 			CreateMap<City, CityVM>();
-			CreateMap<Position, PostVM>();
+			CreateMap<Position, PositionVM>();
+
 			CreateMap<OpenToWorkCity, OpenToWorkCityVM>()
 				.ReverseMap();
 			CreateMap<OpenToWorkCountry, OpenToWorkCountryVM>()
 				.ReverseMap();
 			CreateMap<OpenToWorkPosition, OpenToWorkPositionVM>()
+				.ReverseMap();
+
+			CreateMap<ServiceCity, ServiceCityVM>()
+				.ReverseMap();
+			CreateMap<ServiceCountry, ServiceCountryVM>()
+				.ReverseMap();
+			CreateMap<ServicePosition, ServicePositionVM>()
 				.ReverseMap();
 
 		}

@@ -25,6 +25,7 @@ namespace BLL.ViewModels
 		public bool IsBanned { get; set; }
 		public bool OpenToWork { get; set; }
 		public bool OpenToHire { get; set; }
+		public bool OpenToServices { get; set; }
 		public string ProfileUrl { get; set; }
 		public DateTime Birthday { get; set; }
 		public bool IsRecruiter { get; set; }

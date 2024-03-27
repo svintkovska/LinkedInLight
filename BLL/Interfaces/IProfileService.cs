@@ -59,5 +59,11 @@ namespace BLL.Interfaces
 		public Task<bool> UpdateOpenToWork(OpenToWorkVM openToWorkVM, string userId);
 		public Task<bool> DeleteOpenToWork(string userId);
 		public Task<OpenToWorkVM> GetOpenToWorkByUserId(string userId);
+
+
+		public Task<bool> AddServices(ServiceVM serviceVM, string userId);
+		public Task<bool> UpdateServices(ServiceVM serviceVM, string userId);
+		public Task<bool> DeleteServices(string userId);
+		public Task<ServiceVM> GetServicesByUserId(string userId);
 	}
 }

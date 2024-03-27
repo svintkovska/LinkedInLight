@@ -4,15 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace BLL.ViewModels
 {
-	public class ServiceCity
+	public class ServiceCityVM
 	{
 		public int ServiceId { get; set; }
-		public virtual Service Service { get; set; }
-
 		public int CityId { get; set; }
-		public virtual City City { get; set; }
 	}
 
 }
